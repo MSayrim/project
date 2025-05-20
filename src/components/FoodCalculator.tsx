@@ -46,11 +46,16 @@ const FoodCalculator: React.FC = () => {
   };
 
   const handleDiscountChange = (value: number) => {
-    setDiscount(Math.min(value, totalAmount));
+    // Ensure discount cannot exceed paid amount
+    setDiscount(Math.min(value, paidAmount));
   };
 
   const handlePaidAmountChange = (value: number) => {
     setPaidAmount(value);
+    // Adjust discount if it exceeds new paid amount
+    if (discount > value) {
+      setDiscount(value);
+    }
   };
 
   const handleCalculatePrice = async () => {
@@ -91,7 +96,7 @@ const FoodCalculator: React.FC = () => {
         {/* Payment Information Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
           <h2 className="text-lg font-semibold mb-4">{t('food.calculation.paymentInfo')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('food.calculation.selectService')}
@@ -132,14 +137,35 @@ const FoodCalculator: React.FC = () => {
               <input
                 type="number"
                 min="0"
-                max={totalAmount}
+                max={paidAmount}
                 step="0.01"
                 value={discount}
                 onChange={(e) => handleDiscountChange(Number(e.target.value))}
                 className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2"
               />
             </div>
+
+            <div className="flex items-end">
+              <button
+                onClick={handleCalculatePrice}
+                disabled={calculating}
+                className={`w-full ${
+                  calculating 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-green-500 hover:bg-green-600'
+                } text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2`}
+              >
+                <ShoppingCart size={18} />
+                {calculating ? t('food.calculation.calculating') : t('food.calculation.calculate')}
+              </button>
+            </div>
           </div>
+          
+          {calculationError && (
+            <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+              {calculationError}
+            </div>
+          )}
         </div>
 
         {/* Food Items Section */}
@@ -275,25 +301,6 @@ const FoodCalculator: React.FC = () => {
                 </span>
               </div>
             </div>
-
-            <button
-              onClick={handleCalculatePrice}
-              disabled={calculating}
-              className={`w-full ${
-                calculating 
-                  ? 'bg-gray-400 cursor-not-allowed' 
-                  : 'bg-green-500 hover:bg-green-600'
-              } text-white font-medium py-3 px-4 rounded-lg mt-6 transition-colors flex items-center justify-center gap-2`}
-            >
-              <ShoppingCart size={18} />
-              {calculating ? t('food.calculation.calculating') : t('food.calculation.save')}
-            </button>
-
-            {calculationError && (
-              <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
-                {calculationError}
-              </div>
-            )}
           </>
         ) : (
           <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500 dark:text-gray-400">

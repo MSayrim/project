@@ -5,6 +5,8 @@ import { CalcItem } from '../types';
 import QuantitySelector from './QuantitySelector';
 import { ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
 import { usePriceContext } from '../contexts/PriceContext';
+import Advertisement from "./Advertisement.tsx";
+import advertisementImage2 from '../assets/images.png';
 
 const FoodCalculator: React.FC = () => {
   const { t } = useTranslation();
@@ -85,7 +87,7 @@ const FoodCalculator: React.FC = () => {
   };
 
   const totalCommissions = calculatedResult
-    ? calculatedResult.tax + calculatedResult.commission + calculatedResult.communicationCommission + 
+    ? calculatedResult.tax + calculatedResult.commission + calculatedResult.communicationCommission +
       (calculatedResult.discountCommission || 0)
     : 0;
 
@@ -160,7 +162,7 @@ const FoodCalculator: React.FC = () => {
               </button>
             </div>
           </div>
-          
+
           {calculationError && (
             <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
               {calculationError}

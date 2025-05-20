@@ -13,7 +13,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Calculator className="h-8 w-8 text-green-400" />
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight">CalcMaster</h1>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight">ParamCebimdenp</h1>
         </div>
         
         <div className="md:hidden">

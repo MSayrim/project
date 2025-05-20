@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { foodItems } from '../data/foodItems';
 import { CalcItem } from '../types';
 import QuantitySelector from './QuantitySelector';
-import { ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShoppingCart, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { usePriceContext } from '../contexts/PriceContext';
 
 const FoodCalculator: React.FC = () => {
@@ -46,13 +46,11 @@ const FoodCalculator: React.FC = () => {
   };
 
   const handleDiscountChange = (value: number) => {
-    // Ensure discount cannot exceed paid amount
     setDiscount(Math.min(value, paidAmount));
   };
 
   const handlePaidAmountChange = (value: number) => {
     setPaidAmount(value);
-    // Adjust discount if it exceeds new paid amount
     if (discount > value) {
       setDiscount(value);
     }
@@ -61,11 +59,6 @@ const FoodCalculator: React.FC = () => {
   const handleCalculatePrice = async () => {
     if (!selectedFirm) {
       alert(t('food.calculation.selectFirm'));
-      return;
-    }
-
-    if (selectedItems.length === 0) {
-      alert(t('food.calculation.addItems'));
       return;
     }
 
@@ -88,6 +81,12 @@ const FoodCalculator: React.FC = () => {
     ? calculatedResult.tax + calculatedResult.commission + calculatedResult.communicationCommission + 
       (calculatedResult.discountCommission || 0)
     : 0;
+
+  const priceDifference = calculatedResult 
+    ? Math.abs(calculatedResult.fullPrice - totalAmount)
+    : 0;
+
+  const showPriceDifference = calculatedResult && totalAmount > 0;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
@@ -148,9 +147,9 @@ const FoodCalculator: React.FC = () => {
             <div className="flex items-end">
               <button
                 onClick={handleCalculatePrice}
-                disabled={calculating}
+                disabled={calculating || !selectedFirm || !paidAmount}
                 className={`w-full ${
-                  calculating 
+                  calculating || !selectedFirm || !paidAmount
                     ? 'bg-gray-400 cursor-not-allowed' 
                     : 'bg-green-500 hover:bg-green-600'
                 } text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2`}
@@ -164,6 +163,22 @@ const FoodCalculator: React.FC = () => {
           {calculationError && (
             <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
               {calculationError}
+            </div>
+          )}
+
+          {/* Price Comparison Section */}
+          {showPriceDifference && (
+            <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <div className="flex items-start gap-2">
+                <AlertTriangle size={20} className="text-yellow-600 dark:text-yellow-400 mt-1" />
+                <div>
+                  <h3 className="font-medium text-yellow-800 dark:text-yellow-200">Price Difference Detected</h3>
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                    There is a difference of {priceDifference.toFixed(2)}₺ between the calculated price ({calculatedResult.fullPrice.toFixed(2)}₺) 
+                    and the total of selected items ({totalAmount.toFixed(2)}₺).
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -222,7 +237,7 @@ const FoodCalculator: React.FC = () => {
           <span className="text-sm text-gray-500 dark:text-gray-400">{t('calculator.types.food')}</span>
         </div>
 
-        {selectedItems.length > 0 ? (
+        {selectedItems.length > 0 && (
           <>
             <div className="space-y-4 mb-6">
               {selectedItems.map(item => (
@@ -240,56 +255,58 @@ const FoodCalculator: React.FC = () => {
               ))}
             </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-gray-600 dark:text-gray-400">{t('food.calculation.subtotal')}</span>
                 <span className="font-medium">{totalAmount.toFixed(2)}₺</span>
               </div>
+            </div>
+          </>
+        )}
 
-              {calculatedResult && (
-                <>
-                  <div className="flex justify-between items-center mb-2">
-                    <button
-                      onClick={() => setShowDetails(!showDetails)}
-                      className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-                    >
-                      <span>Total Commissions</span>
-                      {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                    </button>
-                    <span className="font-medium">{totalCommissions.toFixed(2)}₺</span>
+        {calculatedResult && (
+          <>
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <div className="flex justify-between items-center mb-2">
+                <button
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                >
+                  <span>Total Commissions</span>
+                  {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                <span className="font-medium">{totalCommissions.toFixed(2)}₺</span>
+              </div>
+
+              {showDetails && (
+                <div className="space-y-2 ml-4 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {t('food.calculation.tax')} ({calculatedResult.firm.tax}%)
+                    </span>
+                    <span className="font-medium">{calculatedResult.tax.toFixed(2)}₺</span>
                   </div>
-
-                  {showDetails && (
-                    <div className="space-y-2 ml-4 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {t('food.calculation.tax')} ({calculatedResult.firm.tax}%)
-                        </span>
-                        <span className="font-medium">{calculatedResult.tax.toFixed(2)}₺</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {t('food.calculation.commission')} ({calculatedResult.firm.commission}%)
-                        </span>
-                        <span className="font-medium">{calculatedResult.commission.toFixed(2)}₺</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {t('food.calculation.communicationCommission')} ({calculatedResult.firm.communicationCommission}%)
-                        </span>
-                        <span className="font-medium">{calculatedResult.communicationCommission.toFixed(2)}₺</span>
-                      </div>
-                      {discount > 0 && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            {t('food.calculation.discountCommission')} ({calculatedResult.firm.discountCommission}%)
-                          </span>
-                          <span className="font-medium">{calculatedResult.discountCommission.toFixed(2)}₺</span>
-                        </div>
-                      )}
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {t('food.calculation.commission')} ({calculatedResult.firm.commission}%)
+                    </span>
+                    <span className="font-medium">{calculatedResult.commission.toFixed(2)}₺</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {t('food.calculation.communicationCommission')} ({calculatedResult.firm.communicationCommission}%)
+                    </span>
+                    <span className="font-medium">{calculatedResult.communicationCommission.toFixed(2)}₺</span>
+                  </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        {t('food.calculation.discountCommission')} ({calculatedResult.firm.discountCommission}%)
+                      </span>
+                      <span className="font-medium">{calculatedResult.discountCommission.toFixed(2)}₺</span>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
 
@@ -297,16 +314,18 @@ const FoodCalculator: React.FC = () => {
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg text-gray-800 dark:text-white">{t('food.calculation.total')}</span>
                 <span className="font-bold text-xl text-green-600 dark:text-green-400">
-                  {calculatedResult ? calculatedResult.fullPrice.toFixed(2) : ((totalAmount - discount)).toFixed(2)}₺
+                  {calculatedResult.fullPrice.toFixed(2)}₺
                 </span>
               </div>
             </div>
           </>
-        ) : (
+        )}
+
+        {!selectedItems.length && !calculatedResult && (
           <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500 dark:text-gray-400">
             <ShoppingCart size={48} className="text-gray-300 dark:text-gray-600 mb-4" />
             <p className="mb-2">{t('food.calculation.empty')}</p>
-            <p className="text-sm">{t('food.calculation.addItems')}</p>
+            <p className="text-sm">{t('food.calculation.optional')}</p>
           </div>
         )}
       </div>

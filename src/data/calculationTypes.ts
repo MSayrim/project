@@ -9,41 +9,6 @@ export const calculationTypes: CalculationType[] = [
     description: 'Calculate food costs for meals, parties, or events'
   },
   {
-    id: 'finance',
-    name: 'calculator.types.finance',
-    icon: 'Calculator',
-    available: false,
-    description: 'Coming soon - Price and commission calculations'
-  },
-  {
-    id: 'travel',
-    name: 'calculator.types.travel',
-    icon: 'Plane',
-    available: false,
-    description: 'Coming soon - Travel cost estimations'
-  },
-  {
-    id: 'home',
-    name: 'calculator.types.home',
-    icon: 'Home',
-    available: false,
-    description: 'Coming soon - Home maintenance calculations'
-  },
-  {
-    id: 'medical',
-    name: 'calculator.types.medical',
-    icon: 'Medical',
-    available: false,
-    description: 'Coming soon - Health cost estimates'
-  },
-  {
-    id: 'shopping',
-    name: 'calculator.types.shopping',
-    icon: 'ShoppingBag',
-    available: false,
-    description: 'Coming soon - Shopping budget calculator'
-  },
-  {
     id: 'carwash',
     name: 'calculator.types.carwash',
     icon: 'Car',
@@ -81,5 +46,19 @@ export const calculationTypes: CalculationType[] = [
     keywords: ['araç', 'yakıt', 'elektrikli', 'benzin', 'dizel', 'karşılaştırma', 'maliyet'],
     isActive: true,
     available: true
-  }
+  },
+  {
+    id: 'finance',
+    name: 'calculator.types.finance',
+    icon: 'Calculator',
+    available: false,
+    description: 'Coming soon - Price and commission calculations'
+  },
+  {
+    id: 'travel',
+    name: 'calculator.types.travel',
+    icon: 'Plane',
+    available: false,
+    description: 'Coming soon - Travel cost estimations'
+  },
 ];

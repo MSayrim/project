@@ -38,62 +38,62 @@ const VehicleFuelComparison: React.FC = () => {
   };
 
   return (
-      <div className="max-w-xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-center text-violet-700 dark:text-violet-300">Araç Yakıt Karşılaştırma</h2>
+      <div className="max-w-xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl mt-6 border-2 border-violet-200 dark:border-violet-900/30">
+        <h2 className="text-2xl font-extrabold mb-4 text-center text-violet-700 dark:text-violet-300 tracking-tight drop-shadow">Araç Yakıt Karşılaştırma</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Toplam Mesafe (km)</label>
-            <input type="number" min={1} className="w-full p-2 rounded border" value={km} onChange={e => setKm(Number(e.target.value))} />
+            <label className="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-200">Toplam Mesafe (km)</label>
+            <input type="number" min={1} className="w-full p-2 rounded-lg border-2 border-violet-200 dark:border-violet-900/40 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-violet-400 transition" value={km} onChange={e => setKm(Number(e.target.value))} />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           {/* Elektrik */}
-          <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-            <div className="font-bold text-blue-800 dark:text-blue-200 mb-2">Elektrikli Araç</div>
-            <label className="block text-xs mb-1">Tüketim (kWh/100km)</label>
-            <input type="number" min={1} step={0.1} className="w-full p-1 rounded border mb-2" value={electricityConsumption} onChange={e => setElectricityConsumption(Number(e.target.value))} />
-            <label className="block text-xs mb-1">Elektrik Fiyatı (TL/kWh)</label>
-            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded border" value={electricityPrice} onChange={e => setElectricityPrice(Number(e.target.value))} />
+          <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-xl shadow flex flex-col gap-1 border-2 border-blue-200 dark:border-blue-900/40">
+            <div className="font-bold text-blue-800 dark:text-blue-200 mb-2 text-lg flex items-center gap-2"><span>🔌</span>Elektrikli Araç</div>
+            <label className="block text-xs font-semibold mb-1">Tüketim (kWh/100km)</label>
+            <input type="number" min={1} step={0.1} className="w-full p-1 rounded-lg border-2 border-blue-200 dark:border-blue-900/40 bg-white dark:bg-blue-950 focus:ring-2 focus:ring-blue-400 transition mb-2" value={electricityConsumption} onChange={e => setElectricityConsumption(Number(e.target.value))} />
+            <label className="block text-xs font-semibold mb-1">Elektrik Fiyatı (TL/kWh)</label>
+            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded-lg border-2 border-blue-200 dark:border-blue-900/40 bg-white dark:bg-blue-950 focus:ring-2 focus:ring-blue-400 transition" value={electricityPrice} onChange={e => setElectricityPrice(Number(e.target.value))} />
           </div>
           {/* Benzin */}
-          <div className="p-4 bg-red-50 dark:bg-red-900 rounded-lg">
-            <div className="font-bold text-red-800 dark:text-red-200 mb-2">Benzinli Araç</div>
-            <label className="block text-xs mb-1">Tüketim (L/100km)</label>
-            <input type="number" min={1} step={0.1} className="w-full p-1 rounded border mb-2" value={gasolineConsumption} onChange={e => setGasolineConsumption(Number(e.target.value))} />
-            <label className="block text-xs mb-1">Benzin Fiyatı (TL/L)</label>
-            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded border" value={gasolinePrice} onChange={e => setGasolinePrice(Number(e.target.value))} />
+          <div className="p-4 bg-red-50 dark:bg-red-900 rounded-xl shadow flex flex-col gap-1 border-2 border-red-200 dark:border-red-900/40">
+            <div className="font-bold text-red-800 dark:text-red-200 mb-2 text-lg flex items-center gap-2"><span>⛽</span>Benzinli Araç</div>
+            <label className="block text-xs font-semibold mb-1">Tüketim (L/100km)</label>
+            <input type="number" min={1} step={0.1} className="w-full p-1 rounded-lg border-2 border-red-200 dark:border-red-900/40 bg-white dark:bg-red-950 focus:ring-2 focus:ring-red-400 transition mb-2" value={gasolineConsumption} onChange={e => setGasolineConsumption(Number(e.target.value))} />
+            <label className="block text-xs font-semibold mb-1">Benzin Fiyatı (TL/L)</label>
+            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded-lg border-2 border-red-200 dark:border-red-900/40 bg-white dark:bg-red-950 focus:ring-2 focus:ring-red-400 transition" value={gasolinePrice} onChange={e => setGasolinePrice(Number(e.target.value))} />
           </div>
           {/* Dizel */}
-          <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-            <div className="font-bold text-gray-800 dark:text-gray-200 mb-2">Dizel Araç</div>
-            <label className="block text-xs mb-1">Tüketim (L/100km)</label>
-            <input type="number" min={1} step={0.1} className="w-full p-1 rounded border mb-2" value={dieselConsumption} onChange={e => setDieselConsumption(Number(e.target.value))} />
-            <label className="block text-xs mb-1">Dizel Fiyatı (TL/L)</label>
-            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded border" value={dieselPrice} onChange={e => setDieselPrice(Number(e.target.value))} />
+          <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-xl shadow flex flex-col gap-1 border-2 border-gray-300 dark:border-gray-800/40">
+            <div className="font-bold text-gray-800 dark:text-gray-200 mb-2 text-lg flex items-center gap-2"><span>🚗</span>Dizel Araç</div>
+            <label className="block text-xs font-semibold mb-1">Tüketim (L/100km)</label>
+            <input type="number" min={1} step={0.1} className="w-full p-1 rounded-lg border-2 border-gray-300 dark:border-gray-800/40 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-gray-400 transition mb-2" value={dieselConsumption} onChange={e => setDieselConsumption(Number(e.target.value))} />
+            <label className="block text-xs font-semibold mb-1">Dizel Fiyatı (TL/L)</label>
+            <input type="number" min={0.01} step={0.01} className="w-full p-1 rounded-lg border-2 border-gray-300 dark:border-gray-800/40 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-gray-400 transition" value={dieselPrice} onChange={e => setDieselPrice(Number(e.target.value))} />
           </div>
         </div>
-        <hr className="my-4" />
-        <h3 className="text-lg font-bold mb-2 text-center">Toplam Tüketim ve Maliyet</h3>
+        <hr className="my-4 border-violet-200 dark:border-violet-900/30" />
+        <h3 className="text-lg font-extrabold mb-2 text-center text-violet-700 dark:text-violet-300 tracking-tight">Toplam Tüketim ve Maliyet</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-800">
-            <div className="font-bold text-blue-700 dark:text-blue-200">Elektrikli</div>
+          <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-800 shadow border-2 border-blue-200 dark:border-blue-900/40">
+            <div className="font-bold text-blue-700 dark:text-blue-200 text-base flex items-center justify-center gap-1">🔌 Elektrikli</div>
             <div className="text-sm mt-1">{electricTotalKwh.toFixed(2)} kWh</div>
             <div className="text-xl font-bold mt-1">{electricTotalCost.toLocaleString('tr-TR', {maximumFractionDigits: 2})} TL</div>
           </div>
-          <div className="p-3 rounded-lg bg-red-100 dark:bg-red-800">
-            <div className="font-bold text-red-700 dark:text-red-200">Benzinli</div>
+          <div className="p-3 rounded-xl bg-red-100 dark:bg-red-800 shadow border-2 border-red-200 dark:border-red-900/40">
+            <div className="font-bold text-red-700 dark:text-red-200 text-base flex items-center justify-center gap-1">⛽ Benzinli</div>
             <div className="text-sm mt-1">{gasolineTotalLt.toFixed(2)} L</div>
             <div className="text-xl font-bold mt-1">{gasolineTotalCost.toLocaleString('tr-TR', {maximumFractionDigits: 2})} TL</div>
           </div>
-          <div className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700">
-            <div className="font-bold text-gray-700 dark:text-gray-200">Dizel</div>
+          <div className="p-3 rounded-xl bg-gray-200 dark:bg-gray-700 shadow border-2 border-gray-300 dark:border-gray-800/40">
+            <div className="font-bold text-gray-700 dark:text-gray-200 text-base flex items-center justify-center gap-1">🚗 Dizel</div>
             <div className="text-sm mt-1">{dieselTotalLt.toFixed(2)} L</div>
             <div className="text-xl font-bold mt-1">{dieselTotalCost.toLocaleString('tr-TR', {maximumFractionDigits: 2})} TL</div>
           </div>
         </div>
         <div className="flex justify-center mt-6">
           <button
-              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition"
+              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-6 rounded-lg shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition"
               onClick={() => setShowShareModal(true)}
           >
             Sonucumu Paylaş

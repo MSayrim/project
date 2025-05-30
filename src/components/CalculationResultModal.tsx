@@ -211,6 +211,135 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
     }
   };
 
+  const shareToWhatsApp = async () => {
+    if (slipCardRef.current) {
+      try {
+        // Geçici olarak slip kartının arka planını düz renge çevirelim
+        const isDark = document.documentElement.classList.contains('dark');
+        const originalStyle = slipCardRef.current.getAttribute('style');
+        slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+        
+        const canvas = await html2canvas(slipCardRef.current, {
+          backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+          scale: 2, // Daha yüksek çözünürlük
+          logging: false,
+          useCORS: true,
+          allowTaint: true
+        });
+        
+        // Orijinal stili geri yükle
+        if (originalStyle) {
+          slipCardRef.current.setAttribute('style', originalStyle);
+        } else {
+          slipCardRef.current.removeAttribute('style');
+        }
+        
+        const image = canvas.toDataURL('image/png');
+        const blob = await (await fetch(image)).blob();
+        const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        } else {
+          const link = document.createElement('a');
+          link.href = image;
+          link.download = 'ParamCebimde-Hesaplama.png';
+          link.click();
+          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+        }
+      } catch (error) {
+        console.error('Resim oluşturulamadı:', error);
+        alert('Resim oluşturulurken bir hata oluştu.');
+      }
+    }
+  };
+
+  const shareToFacebook = async () => {
+    if (slipCardRef.current) {
+      try {
+        // Geçici olarak slip kartının arka planını düz renge çevirelim
+        const isDark = document.documentElement.classList.contains('dark');
+        const originalStyle = slipCardRef.current.getAttribute('style');
+        slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+        
+        const canvas = await html2canvas(slipCardRef.current, {
+          backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+          scale: 2, // Daha yüksek çözünürlük
+          logging: false,
+          useCORS: true,
+          allowTaint: true
+        });
+        
+        // Orijinal stili geri yükle
+        if (originalStyle) {
+          slipCardRef.current.setAttribute('style', originalStyle);
+        } else {
+          slipCardRef.current.removeAttribute('style');
+        }
+        
+        const image = canvas.toDataURL('image/png');
+        const blob = await (await fetch(image)).blob();
+        const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        } else {
+          const link = document.createElement('a');
+          link.href = image;
+          link.download = 'ParamCebimde-Hesaplama.png';
+          link.click();
+          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+        }
+      } catch (error) {
+        console.error('Resim oluşturulamadı:', error);
+        alert('Resim oluşturulurken bir hata oluştu.');
+      }
+    }
+  };
+
+  const shareToTwitter = async () => {
+    if (slipCardRef.current) {
+      try {
+        // Geçici olarak slip kartının arka planını düz renge çevirelim
+        const isDark = document.documentElement.classList.contains('dark');
+        const originalStyle = slipCardRef.current.getAttribute('style');
+        slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+        
+        const canvas = await html2canvas(slipCardRef.current, {
+          backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+          scale: 2, // Daha yüksek çözünürlük
+          logging: false,
+          useCORS: true,
+          allowTaint: true
+        });
+        
+        // Orijinal stili geri yükle
+        if (originalStyle) {
+          slipCardRef.current.setAttribute('style', originalStyle);
+        } else {
+          slipCardRef.current.removeAttribute('style');
+        }
+        
+        const image = canvas.toDataURL('image/png');
+        const blob = await (await fetch(image)).blob();
+        const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        } else {
+          const link = document.createElement('a');
+          link.href = image;
+          link.download = 'ParamCebimde-Hesaplama.png';
+          link.click();
+          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+        }
+      } catch (error) {
+        console.error('Resim oluşturulamadı:', error);
+        alert('Resim oluşturulurken bir hata oluştu.');
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 w-full max-w-md relative animate-fadeInUp border-2 border-violet-200 dark:border-violet-800">
@@ -473,7 +602,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 </div>
                 <div className="grid grid-cols-3 gap-2 items-center max-w-md mx-auto">
                   {/* Ödenen Tutar Kutusu */}
-                  <div className={`relative flex flex-col items-center p-3 rounded-xl transition-all duration-300
+                  <div className={`relative flex flex-col items-center p-3 rounded-lg transition-all duration-300
                     ${((paidAmount ?? 0) - (result?.discount ?? 0)) < (homemadeTotal ?? 0)
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
@@ -494,7 +623,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     <div className="h-8 w-0.5 bg-gradient-to-b from-green-300 via-gray-300 to-green-300 dark:from-green-700 dark:via-gray-700 dark:to-green-700 opacity-70"></div>
                   </div>
                   {/* Evde Yapsan Kutusu */}
-                  <div className={`relative flex flex-col items-center p-3 rounded-xl transition-all duration-300
+                  <div className={`relative flex flex-col items-center p-3 rounded-lg transition-all duration-300
                     ${((paidAmount ?? 0) - (result?.discount ?? 0)) >= (homemadeTotal ?? 0)
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
@@ -520,48 +649,27 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
               ParamCebimde ile hesaplandı • {new Date().toLocaleTimeString('tr-TR')}
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-full">
-            <button 
-              onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-base w-full"
-            >
-              <Share2 size={18}/> Hızlı Paylaş
-            </button>
-            <button 
-              onClick={downloadAsImage}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-bold text-base w-full"
-            >
-              <Download size={18}/> Resim Olarak İndir
-            </button>
+          <div className="flex flex-col gap-2 w-full mt-4">
+            <div className="flex gap-2 w-full">
+              <button onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
+                <Share2 size={18}/> Hızlı Paylaş
+              </button>
+              <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
+                <Download size={18}/> Resim Olarak İndir
+              </button>
+            </div>
+            
             <div className="flex gap-3 justify-center w-full mt-2">
-              <button 
-                onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))}
-                className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full flex items-center justify-center text-xl"
-                title="WhatsApp'ta paylaş"
-              >
+              <button onClick={shareToWhatsApp} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title="WhatsApp'ta paylaş">
                 <FaWhatsapp/>
               </button>
-              <button 
-                onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))}
-                className="bg-black hover:bg-gray-800 text-white p-2 rounded-full flex items-center justify-center text-xl"
-                title="X'te paylaş"
-              >
+              <button onClick={shareToTwitter} className="bg-black hover:bg-gray-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="X'te paylaş">
                 <FaXTwitter/>
               </button>
-              <button 
-                onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))}
-                className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-full flex items-center justify-center text-xl"
-                title="Facebook'ta paylaş"
-              >
+              <button onClick={shareToFacebook} className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title="Facebook'ta paylaş">
                 <FaFacebook/>
               </button>
-              <button
-                onClick={() => {
-                  copyImageToClipboard(slipCardRef, document.documentElement.classList.contains('dark'));
-                }}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-full flex items-center justify-center text-xl"
-                title="Kopyala"
-              >
+              <button onClick={() => copyImageToClipboard(slipCardRef, document.documentElement.classList.contains('dark'))} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="Kopyala">
                 <Copy size={20}/>
               </button>
             </div>

@@ -71,6 +71,158 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     }, 'image/png');
   };
 
+  // WhatsApp'ta paylaşım fonksiyonu
+  const shareToWhatsApp = async () => {
+    if (!slipCardRef.current) return;
+    try {
+      const isDark = document.documentElement.classList.contains('dark');
+      const originalStyle = slipCardRef.current.getAttribute('style');
+      slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+      
+      const canvas = await html2canvas(slipCardRef.current, {
+        backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+      
+      if (originalStyle) {
+        slipCardRef.current.setAttribute('style', originalStyle);
+      } else {
+        slipCardRef.current.removeAttribute('style');
+      }
+      
+      const image = canvas.toDataURL('image/png');
+      const blob = await (await fetch(image)).blob();
+      const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+      } else {
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'ParamCebimde-Hesaplama.png';
+        link.click();
+        alert('Resim indirildi. Lütfen indirilen resmi WhatsApp\'ta paylaşın.');
+      }
+    } catch (error) {
+      console.error('Resim oluşturulamadı:', error);
+      alert('Resim oluşturulurken bir hata oluştu.');
+    }
+  };
+
+  // Facebook'ta paylaşım fonksiyonu
+  const shareToFacebook = async () => {
+    if (!slipCardRef.current) return;
+    try {
+      const isDark = document.documentElement.classList.contains('dark');
+      const originalStyle = slipCardRef.current.getAttribute('style');
+      slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+      
+      const canvas = await html2canvas(slipCardRef.current, {
+        backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+      
+      if (originalStyle) {
+        slipCardRef.current.setAttribute('style', originalStyle);
+      } else {
+        slipCardRef.current.removeAttribute('style');
+      }
+      
+      const image = canvas.toDataURL('image/png');
+      const blob = await (await fetch(image)).blob();
+      const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+      } else {
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'ParamCebimde-Hesaplama.png';
+        link.click();
+        alert('Resim indirildi. Lütfen indirilen resmi Facebook\'ta paylaşın.');
+      }
+    } catch (error) {
+      console.error('Resim oluşturulamadı:', error);
+      alert('Resim oluşturulurken bir hata oluştu.');
+    }
+  };
+
+  // Twitter'da paylaşım fonksiyonu
+  const shareToTwitter = async () => {
+    if (!slipCardRef.current) return;
+    try {
+      const isDark = document.documentElement.classList.contains('dark');
+      const originalStyle = slipCardRef.current.getAttribute('style');
+      slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+      
+      const canvas = await html2canvas(slipCardRef.current, {
+        backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+      
+      if (originalStyle) {
+        slipCardRef.current.setAttribute('style', originalStyle);
+      } else {
+        slipCardRef.current.removeAttribute('style');
+      }
+      
+      const image = canvas.toDataURL('image/png');
+      const blob = await (await fetch(image)).blob();
+      const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+      } else {
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'ParamCebimde-Hesaplama.png';
+        link.click();
+        alert('Resim indirildi. Lütfen indirilen resmi X\'te paylaşın.');
+      }
+    } catch (error) {
+      console.error('Resim oluşturulamadı:', error);
+      alert('Resim oluşturulurken bir hata oluştu.');
+    }
+  };
+
+  // Resim olarak indirme fonksiyonu
+  const downloadAsImage = async () => {
+    if (!slipCardRef.current) return;
+    try {
+      const isDark = document.documentElement.classList.contains('dark');
+      const originalStyle = slipCardRef.current.getAttribute('style');
+      slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+      
+      const canvas = await html2canvas(slipCardRef.current, {
+        backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+      
+      if (originalStyle) {
+        slipCardRef.current.setAttribute('style', originalStyle);
+      } else {
+        slipCardRef.current.removeAttribute('style');
+      }
+      
+      const image = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = 'ParamCebimde-Hesaplama.png';
+      link.click();
+    } catch (error) {
+      console.error('Resim oluşturulamadı:', error);
+      alert('Resim oluşturulurken bir hata oluştu.');
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full p-0 relative">
@@ -188,23 +340,25 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
             )}
           </div>
           <div className="flex flex-col gap-2 w-full mt-4">
-            <button onClick={shareAsImage} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
-              <Share2 size={18}/> Hızlı Paylaş
-            </button>
-            <button onClick={shareAsImage} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
-              <Download size={18}/> Resim Olarak İndir
-            </button>
+            <div className="flex gap-2 w-full">
+              <button onClick={shareAsImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
+                <Share2 size={18}/> Hızlı Paylaş
+              </button>
+              <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
+                <Download size={18}/> Resim Olarak İndir
+              </button>
+            </div>
             <div className="flex gap-3 justify-center w-full mt-2">
-              <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title="WhatsApp'ta paylaş">
+              <button onClick={shareToWhatsApp} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title="WhatsApp'ta paylaş">
                 <FaWhatsapp/>
               </button>
-              <button className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-full flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title="Facebook'ta paylaş">
+              <button onClick={shareToFacebook} className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title="Facebook'ta paylaş">
                 <FaFacebook/>
               </button>
-              <button className="bg-black hover:bg-gray-800 text-white p-2 rounded-full flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="X'te paylaş">
+              <button onClick={shareToTwitter} className="bg-black hover:bg-gray-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="X'te paylaş">
                 <FaXTwitter/>
               </button>
-              <button onClick={copyImageToClipboard} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-full flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="Kopyala">
+              <button onClick={copyImageToClipboard} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="Kopyala">
                 <Copy size={20}/>
               </button>
             </div>

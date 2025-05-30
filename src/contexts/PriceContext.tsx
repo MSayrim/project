@@ -8,7 +8,7 @@ interface PriceContextType {
   error: string | null;
   selectedFirm: Firm | null;
   setSelectedFirm: (firm: Firm | null) => void;
-  calculatePrices: (fullPrice: number, discount: number) => Promise<PriceCalculationResponse>;
+  calculatePrices: (fullPrice: number, discount: number, joker?: boolean) => Promise<PriceCalculationResponse>;
 }
 
 const PriceContext = createContext<PriceContextType | undefined>(undefined);
@@ -64,7 +64,7 @@ export const PriceProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     loadFirms();
   }, []);
 
-  const calculatePrices = async (fullPrice: number, discount: number): Promise<PriceCalculationResponse> => {
+  const calculatePrices = async (fullPrice: number, discount: number, joker?: boolean): Promise<PriceCalculationResponse> => {
     if (!selectedFirm) {
       throw new Error('No firm selected');
     }
@@ -75,7 +75,8 @@ export const PriceProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       firm: {
         name: selectedFirm.name,
         code: selectedFirm.code
-      }
+      },
+      ...(typeof joker === 'boolean' ? { joker } : {}) // Joker'i isteğe ekle
     };
 
     try {

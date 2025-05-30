@@ -61,3 +61,43 @@ body {
 .animate-pulse-light {
   animation: pulse 2s infinite;
 }
+
+/* Custom Animations */
+@keyframes pulse-light {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+  }
+}
+
+.animate-pulse-light {
+  animation: pulse-light 2s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+/* 2000px altında reklamları küçültmek için yardımcı sınıf */
+@media (max-width: 2000px) {
+  .ad-w-2000 {
+    width: 220px !important;
+  }
+}
+@media (max-width: 1536px) {
+  .ad-w-2xl {
+    width: 120px !important;
+  }
+}

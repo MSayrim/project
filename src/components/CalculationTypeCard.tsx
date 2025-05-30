@@ -27,23 +27,13 @@ const CalculationTypeCard: React.FC<CalculationTypeCardProps> = ({
           ? (isSelected 
             ? 'bg-green-500 text-white shadow-lg scale-105' 
             : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700')
-          : 'bg-gray-200 dark:bg-gray-800 opacity-75 cursor-not-allowed'
-        }
-        flex flex-col items-center justify-center gap-2 min-h-[120px]
+          : 'bg-gray-300 dark:bg-gray-900 opacity-50 select-none'}
       `}
     >
-      <div className={`
-        rounded-full p-3
-        ${isSelected 
-          ? 'bg-green-400 text-white' 
-          : 'bg-white dark:bg-gray-700 text-green-500'
-        }
-      `}>
-        {IconComponent && <IconComponent size={24} />}
-      </div>
-      
-      <p className="font-medium text-center">{t(calcType.name)}</p>
-      
+      {IconComponent && <IconComponent size={24} />}
+      <p className="font-medium text-center mt-2">{
+        typeof calcType.name === 'function' ? calcType.name(t) : t(calcType.name)
+      }</p>
       {!calcType.available && (
         <div className="absolute inset-0 rounded-lg flex items-center justify-center backdrop-blur-sm bg-black/20">
           <div className="bg-gray-900/80 text-white px-3 py-1 rounded-full flex items-center">

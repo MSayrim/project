@@ -4,18 +4,82 @@
 
 :root {
   color-scheme: light;
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
 }
 
 :root.dark {
   color-scheme: dark;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 body {
   @apply transition-colors duration-200;
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+  touch-action: manipulation;
 }
 
 .dark body {
   @apply bg-gray-900 text-white;
+}
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+  input, select, textarea, button {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .mobile-padding {
+    padding: 0.75rem !important;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem !important;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem !important;
+  }
+  
+  .mobile-hide {
+    display: none !important;
+  }
+}
+
+/* iOS specific adjustments */
+@supports (-webkit-touch-callout: none) {
+  .ios-padding-bottom {
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+  
+  .ios-fixed-bottom {
+    position: fixed;
+    bottom: var(--safe-area-inset-bottom);
+    left: 0;
+    right: 0;
+  }
 }
 
 @keyframes fadeInUp {
@@ -90,6 +154,7 @@ body {
   animation: spin-slow 4s linear infinite;
 }
 
+/* Responsive adjustments */
 /* 2000px altında reklamları küçültmek için yardımcı sınıf */
 @media (max-width: 2000px) {
   .ad-w-2000 {
@@ -99,5 +164,38 @@ body {
 @media (max-width: 1536px) {
   .ad-w-2xl {
     width: 120px !important;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+  .tablet-text-center {
+    text-align: center !important;
+  }
+  
+  .tablet-w-full {
+    width: 100% !important;
+  }
+  
+  .tablet-mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 375px) {
+  .xs-text-xs {
+    font-size: 0.75rem !important;
+  }
+  
+  .xs-py-1 {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  
+  .xs-px-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
   }
 }

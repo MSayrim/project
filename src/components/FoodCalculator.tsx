@@ -79,7 +79,11 @@ const FoodCalculator: React.FC = () => {
       .then(res => res.json())
       .then(data => {
         const responseData = data.responseData || {};
-        setRecipes(responseData.content || []);
+        if (page === 0) {
+          setRecipes(responseData.content || []);
+        } else {
+          setRecipes(prev => [...prev, ...(responseData.content || [])]);
+        }
         setTotalPages(responseData.totalPages || 0);
         setTotalElements(responseData.totalElements || 0);
       })
@@ -95,9 +99,10 @@ const FoodCalculator: React.FC = () => {
     console.log('Redux firms state:', firms);
   }, [firms]);
 
-  // Arama veya foodType değişince ilk sayfaya dön
+  // Arama veya foodType değişince ilk sayfaya dön ve yemekleri sıfırla
   useEffect(() => {
     setPage(0);
+    setRecipes([]);
   }, [searchQuery, foodType]);
 
   // Currency symbol based on language
@@ -342,7 +347,7 @@ const FoodCalculator: React.FC = () => {
             </div>
           )}
 
-          {/* Food Items Section */}
+          {/* Food Items Section - Mobilde sadece 3 kartlık yükseklik ve infinite scroll */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-2 sm:p-6 relative overflow-x-auto">
             {/* Search + Categories in one row, horizontally scrollable */}
             <div className="mb-2 overflow-x-auto whitespace-nowrap pb-1 hide-scrollbar" style={{ display: 'flex', gap: 4 }}>
@@ -417,7 +422,19 @@ const FoodCalculator: React.FC = () => {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 block sm:grid"
+                style={{
+                  maxHeight: '540px', // 3 kart yüksekliği (mobil)
+                  overflowY: 'auto',
+                }}
+                onScroll={e => {
+                  const el = e.currentTarget;
+                  if (el.scrollTop + el.clientHeight >= el.scrollHeight - 20 && !loading && page < totalPages - 1) {
+                    setPage(page + 1);
+                  }
+                }}
+              >
                 {recipes.map(item => (
                   <div
                     key={item.id}

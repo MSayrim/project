@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { calculationTypes } from '../data/calculationTypes';
 import CalculationTypeCard from './CalculationTypeCard';
 import { useTranslation } from 'react-i18next';
@@ -13,12 +13,17 @@ const CalculationTypesGrid: React.FC<CalculationTypesGridProps> = ({
   onSelectType
 }) => {
   const { t } = useTranslation();
+  const [showAll, setShowAll] = useState(false);
 
-  // Açık olanlar başa, çok yakında olanlar sona gelsin
-  const sortedTypes = [...calculationTypes].sort((a, b) => {
-    if (a.available === b.available) return 0;
-    return a.available ? -1 : 1;
-  });
+  // Seçili kartı başa al
+  const sortedTypes = [
+    ...calculationTypes.filter(c => c.id === selectedType),
+    ...calculationTypes.filter(c => c.id !== selectedType)
+  ];
+
+  // Mobilde sadece seçili kart veya tümünü göster
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const visibleTypes = isMobile && !showAll ? [sortedTypes[0]] : sortedTypes;
 
   return (
     <div className="mt-8">
@@ -26,7 +31,17 @@ const CalculationTypesGrid: React.FC<CalculationTypesGridProps> = ({
         {t('calculator.types.title')}
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {sortedTypes.map(calcType => (
+        {/* Mobilde butonu grid'e kart gibi ekle */}
+        {isMobile && (
+          <button
+            className="rounded-lg p-4 transition-all duration-300 font-bold text-base bg-green-500 text-white shadow-lg col-span-1 flex items-center justify-center"
+            style={{ minHeight: 88 }}
+            onClick={() => setShowAll(v => !v)}
+          >
+            {showAll ? 'Daralt' : 'Tümünü Göster'}
+          </button>
+        )}
+        {visibleTypes.map(calcType => (
           <CalculationTypeCard
             key={calcType.id}
             calcType={calcType}

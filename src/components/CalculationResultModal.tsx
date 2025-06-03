@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { X, Share2, Copy, Users, Download, CheckCircle } from 'lucide-react';
 import { FaWhatsapp, FaXTwitter, FaFacebook } from 'react-icons/fa6';
 import html2canvas from 'html2canvas';
+import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
 
 interface CalculationResultModalProps {
   open: boolean;
@@ -18,36 +20,68 @@ interface CalculationResultModalProps {
 const shareAsImage = async (cardRef: React.RefObject<HTMLDivElement>, isDark = false) => {
   if (!cardRef.current) return;
   
-  // Geçici olarak slip kartının arka planını düz renge çevirelim
-  const originalStyle = cardRef.current.getAttribute('style');
-  cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-  
-  const canvas = await html2canvas(cardRef.current, {
-    backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-    scale: 2,
-    useCORS: true,
-    allowTaint: true
-  });
-  
-  // Orijinal stili geri yükle
-  if (originalStyle) {
-    cardRef.current.setAttribute('style', originalStyle);
-  } else {
-    cardRef.current.removeAttribute('style');
-  }
-  
-  const image = canvas.toDataURL('image/png');
-  const blob = await (await fetch(image)).blob();
-  const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+  try {
+    // Geçici olarak slip kartının arka planını düz renge çevirelim
+    const originalStyle = cardRef.current.getAttribute('style');
+    cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+    
+    const canvas = await html2canvas(cardRef.current, {
+      backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true
+    });
+    
+    // Orijinal stili geri yükle
+    if (originalStyle) {
+      cardRef.current.setAttribute('style', originalStyle);
+    } else {
+      cardRef.current.removeAttribute('style');
+    }
+    
+    const image = canvas.toDataURL('image/png');
+    const blob = await (await fetch(image)).blob();
+    
+    // Mobil uygulamada Capacitor Share ile paylaş
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = async () => {
+          const base64data = reader.result as string;
+          await Share.share({
+            title: 'ParamCebimde Hesaplama Sonucu',
+            text: 'Hesaplama sonucunu sen de paylaş!',
+            url: base64data,
+            dialogTitle: 'Uygulamada paylaş'
+          });
+        };
+        return;
+      } catch (e) {
+        console.error('Capacitor Share hatası:', e);
+        // Fallback - indirme
+      }
+    }
 
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
-  } else {
+    // Web'de navigator.share varsa kullan
+    try {
+      const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        return;
+      }
+    } catch (e) {
+      console.error('Web Share API hatası:', e);
+    }
+    
+    // Son çare: indir
     const link = document.createElement('a');
     link.href = image;
     link.download = 'ParamCebimde-Hesaplama.png';
     link.click();
-    alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+  } catch (error) {
+    console.error('Resim oluşturma hatası:', error);
+    alert('Resim oluşturulurken bir hata oluştu.');
   }
 };
 
@@ -236,8 +270,25 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
         
         const image = canvas.toDataURL('image/png');
         const blob = await (await fetch(image)).blob();
+        // --- Mobil uygulama için doğrudan paylaş ---
+        if (Capacitor.isNativePlatform()) {
+          try {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              const base64data = reader.result as string;
+              await Share.share({
+                title: 'ParamCebimde Hesaplama Sonucu',
+                text: 'Hesaplama sonucunu sen de paylaş!',
+                url: base64data,
+                dialogTitle: 'Uygulamada paylaş'
+              });
+            };
+            reader.readAsDataURL(blob);
+            return;
+          } catch (e) {}
+        }
+        // --- Web için mevcut davranış ---
         const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
-
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
         } else {
@@ -279,8 +330,25 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
         
         const image = canvas.toDataURL('image/png');
         const blob = await (await fetch(image)).blob();
+        // --- Mobil uygulama için doğrudan paylaş ---
+        if (Capacitor.isNativePlatform()) {
+          try {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              const base64data = reader.result as string;
+              await Share.share({
+                title: 'ParamCebimde Hesaplama Sonucu',
+                text: 'Hesaplama sonucunu sen de paylaş!',
+                url: base64data,
+                dialogTitle: 'Uygulamada paylaş'
+              });
+            };
+            reader.readAsDataURL(blob);
+            return;
+          } catch (e) {}
+        }
+        // --- Web için mevcut davranış ---
         const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
-
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
         } else {
@@ -322,8 +390,25 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
         
         const image = canvas.toDataURL('image/png');
         const blob = await (await fetch(image)).blob();
+        // --- Mobil uygulama için doğrudan paylaş ---
+        if (Capacitor.isNativePlatform()) {
+          try {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              const base64data = reader.result as string;
+              await Share.share({
+                title: 'ParamCebimde Hesaplama Sonucu',
+                text: 'Hesaplama sonucunu sen de paylaş!',
+                url: base64data,
+                dialogTitle: 'Uygulamada paylaş'
+              });
+            };
+            reader.readAsDataURL(blob);
+            return;
+          } catch (e) {}
+        }
+        // --- Web için mevcut davranış ---
         const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
-
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
         } else {

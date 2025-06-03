@@ -17,6 +17,13 @@ const FoodCalculator: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { firms, selectedFirm } = useSelector((state: RootState) => state.price);
 
+  console.log('Redux firms state:', firms);
+  if (!firms || !Array.isArray(firms)) {
+    console.warn('firms array yok veya yanlış:', firms);
+  } else {
+    console.log('Comboboxa giden firmalar:', firms.map(f => ({id: f.id, name: f.name})));
+  }
+
   // Sabit değişkenleri useTranslation hook'u kullanıldıktan sonra tanımlıyoruz
   const FOOD_TYPE_OPTIONS = [
     { value: 'all', label: t('food.types.all') },
@@ -226,7 +233,7 @@ const FoodCalculator: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-4 mt-2 tracking-tight text-center">{t('food.title')}</h2>
+      <h2 className="text-lg sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-2 mt-1 tracking-tight text-center">{t('food.title')}</h2>
 
       {/* Tarif Modalı */}
       {selectedRecipe && (
@@ -247,21 +254,22 @@ const FoodCalculator: React.FC = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-6 mt-2 sm:mt-6">
         {/* Left Section: Payment Info and Food Items */}
         <div className="lg:col-span-2 space-y-6">
           {/* Payment Information Section */}
-          <div className="bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-xl p-4 md:p-6 mb-6 border border-green-100 dark:border-gray-700 w-full max-w-4xl">
+          <div className="bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-xl p-2 sm:p-4 md:p-6 mb-2 sm:mb-6 border border-green-100 dark:border-gray-700 w-full max-w-full sm:max-w-4xl">
             <div className="flex items-center gap-3 mb-8">
               <ShoppingCart className="h-8 w-8 text-green-500" />
               <h2 className="text-3xl font-extrabold text-gray-800 dark:text-white tracking-tight">{t('food.calculation.paymentInfo')}</h2>
             </div>
             <form onSubmit={e => { e.preventDefault(); handleCalculatePrice(); }}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
                 {/* Satır 1: Servis ve Ödenen Tutar */}
-                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-3 py-2 w-full h-[54px] focus-within:ring-2 focus-within:ring-green-400 transition">
+                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-2 py-2 w-full h-[44px] focus-within:ring-2 focus-within:ring-green-400 transition">
                   <CreditCard className="text-green-400 mr-2" size={20} />
                   <select
+                    id="firm-select-debug"
                     value={selectedFirm?.id || ''}
                     onChange={(e) => dispatch(setSelectedFirm(firms.find(f => f.id === e.target.value) || null))}
                     className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none border-none w-full text-base placeholder-gray-400 dark:placeholder-gray-500 focus:ring-0 transition-colors"
@@ -269,6 +277,9 @@ const FoodCalculator: React.FC = () => {
                   >
                     {/* Servis seçeneği sadece placeholder olarak kullanılacak, option olarak listede yer almayacak */}
                     <option value="" className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">{t('food.calculation.service')}</option>
+                    {firms && Array.isArray(firms) && firms.length === 0 && (
+                      <option disabled value="no-firm">Hiç firma bulunamadı</option>
+                    )}
                     {firms.map((firm) => (
                       <option key={firm.id} value={firm.id} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                         {firm.name}
@@ -276,7 +287,7 @@ const FoodCalculator: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-3 py-2 w-full h-[54px] focus-within:ring-2 focus-within:ring-green-400 transition">
+                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-2 py-2 w-full h-[44px] focus-within:ring-2 focus-within:ring-green-400 transition">
                   <DollarSign className="text-green-400 mr-2" size={20} />
                   <input
                     type="text"
@@ -287,7 +298,7 @@ const FoodCalculator: React.FC = () => {
                   />
                 </div>
                 {/* Satır 2: İndirim, Joker ve Hesapla */}
-                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-3 py-2 w-full h-[54px] focus-within:ring-2 focus-within:ring-green-400 transition">
+                <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm px-2 py-2 w-full h-[44px] focus-within:ring-2 focus-within:ring-green-400 transition">
                   <Tag className="text-green-400 mr-2" size={20} />
                   <input
                     type="text"
@@ -297,7 +308,7 @@ const FoodCalculator: React.FC = () => {
                     placeholder={`${t('food.calculation.discount')} (${currencySymbol})`}
                   />
                 </div>
-                <div className="flex gap-2 items-center w-full h-[54px]">
+                <div className="flex gap-1 items-center w-full h-[44px]">
                   <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
@@ -310,7 +321,7 @@ const FoodCalculator: React.FC = () => {
                   <button
                     type="submit"
                     disabled={calculating || !selectedFirm || !paidAmount}
-                    className={`flex-1 w-full h-[44px] flex items-center justify-center gap-3 text-white font-semibold text-base rounded-xl shadow-md transition-all duration-200 px-6
+                    className={`flex-1 w-full h-[36px] flex items-center justify-center gap-2 text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 px-3
                       ${calculating || !selectedFirm || !paidAmount
                         ? 'bg-gray-400 cursor-not-allowed'
                         : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 active:scale-105'}
@@ -332,19 +343,19 @@ const FoodCalculator: React.FC = () => {
           )}
 
           {/* Food Items Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 relative">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-2 sm:p-6 relative overflow-x-auto">
             {/* Search + Categories in one row, horizontally scrollable */}
-            <div className="mb-4 overflow-x-auto whitespace-nowrap pb-2 hide-scrollbar" style={{ display: 'flex', gap: 8 }}>
+            <div className="mb-2 overflow-x-auto whitespace-nowrap pb-1 hide-scrollbar" style={{ display: 'flex', gap: 4 }}>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder={t('food.searchPlaceholder')}
-                className="min-w-[180px] px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 shadow transition placeholder-gray-400 text-base font-medium flex-shrink-0"
+                className="min-w-[120px] px-2 py-1 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 shadow transition placeholder-gray-400 text-sm font-medium flex-shrink-0"
               />
               <button
                 onClick={() => setSearchQuery('')}
-                className="px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold shadow transition text-base flex-shrink-0"
+                className="px-2 py-1 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold shadow transition text-sm flex-shrink-0"
                 type="button"
                 disabled={!searchQuery}
               >
@@ -354,7 +365,7 @@ const FoodCalculator: React.FC = () => {
                 <button
                   key={type}
                   onClick={() => setFoodType(type === 'ALL' ? '' : type)}
-                  className={`px-4 py-2 rounded-xl font-bold text-base border border-gray-200 dark:border-gray-700 transition flex-shrink-0 ${foodType === type || (type === 'ALL' && !foodType) ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900'}`}
+                  className={`px-2 py-1 rounded-xl font-bold text-sm border border-gray-200 dark:border-gray-700 transition flex-shrink-0 ${foodType === type || (type === 'ALL' && !foodType) ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900'}`}
                   type="button"
                 >
                   {t(`food.types.${type.toLowerCase()}`)}
@@ -362,7 +373,7 @@ const FoodCalculator: React.FC = () => {
               ))}
               <button
                 onClick={() => setHideImages(v => !v)}
-                className={`px-4 py-2 rounded-xl font-bold text-base border transition flex-shrink-0 ${hideImages ? 'bg-gray-300 text-gray-700' : 'bg-green-500 text-white hover:bg-green-600'}`}
+                className={`px-2 py-1 rounded-xl font-bold text-sm border transition flex-shrink-0 ${hideImages ? 'bg-gray-300 text-gray-700' : 'bg-green-500 text-white hover:bg-green-600'}`}
                 type="button"
               >
                 {hideImages ? t('food.showImages') : t('food.hideImages')}
@@ -406,7 +417,7 @@ const FoodCalculator: React.FC = () => {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {recipes.map(item => (
                   <div
                     key={item.id}
@@ -487,7 +498,7 @@ const FoodCalculator: React.FC = () => {
               </div>
               
               {/* Toplam ürün bilgisi - sağ alt köşede */}
-              <div className="absolute right-0 bottom-0">
+              <div className="absolute right-0 bottom-0 hidden sm:block">
                 <div className="bg-green-600 text-white px-3 py-2 rounded-lg shadow-md text-sm font-medium">
                   {totalElements} {t('common.product')}
                 </div>
@@ -666,8 +677,8 @@ const FoodCalculator: React.FC = () => {
 
       {/* Seçilen ürünlerin toplam fiyatı - sayfanın sağ alt köşesinde sabit pozisyonda */}
       {Object.values(quantities).some(q => q > 0) && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="bg-green-600/90 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2">
+        <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 w-[96vw] max-w-xs sm:max-w-sm">
+          <div className="bg-green-600/90 text-white px-2 py-2 sm:px-4 sm:py-3 rounded-xl shadow-lg flex items-center gap-2 w-full text-sm">
             <ShoppingCart size={20} />
             <div>
               <div className="font-bold">{Object.values(quantities).reduce((sum, q) => sum + q, 0)} {t('common.selectedProducts')}</div>

@@ -32,6 +32,7 @@ export const calculatePrices = createAsyncThunk(
       const state = thunkAPI.getState() as { price: PriceState };
       const firm = state.price.selectedFirm;
       
+      console.log('API İsteği (calculate):', `${API_ROOT}${API_URLS.calculate}`);
       const response = await fetch(`${API_ROOT}${API_URLS.calculate}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,13 +56,22 @@ export const calculatePrices = createAsyncThunk(
 
 export const fetchFirms = createAsyncThunk(
   'price/fetchFirms',
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
+      console.log('API İsteği (firmalar):', `${API_ROOT}${API_URLS.price}`);
       const response = await fetch(`${API_ROOT}${API_URLS.price}`);
+      console.log('API fetch sonrası:', response);
       const data = await response.json();
+      console.log('API Yanıtı (firmalar):', data);
+      // API yanıtı kontrolü
+      if (!data || !data.responseData || !Array.isArray(data.responseData)) {
+        console.error('API yanıtı beklenen formatta değil:', data);
+        return [];
+      }
       return data.responseData || data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error) {
+      console.error('API Hatası (firmalar):', error);
+      return rejectWithValue('Firmalar yüklenirken bir hata oluştu.');
     }
   }
 );
@@ -108,6 +118,7 @@ const priceSlice = createSlice({
       })
       .addCase(fetchFirms.fulfilled, (state, action: PayloadAction<Firm[]>) => {
         state.firms = action.payload;
+        console.log('firms state:', state.firms);
       });
   },
 });

@@ -685,7 +685,7 @@ const FoodCalculator: React.FC = () => {
           {calculatedResult && (
             <div className="flex justify-end mt-2">
               <button onClick={handleShowSlip} className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-bold shadow">
-                Son Hesabı Gör / Paylaş
+                {t('food.calculation.viewShare')}
               </button>
             </div>
           )}

@@ -38,7 +38,7 @@ const CalculationTypesGrid: React.FC<CalculationTypesGridProps> = ({
             style={{ minHeight: 88 }}
             onClick={() => setShowAll(v => !v)}
           >
-            {showAll ? 'Daralt' : 'Tümünü Göster'}
+            {showAll ? t('common.collapse') : t('common.showAll')}
           </button>
         )}
         {visibleTypes.map(calcType => (

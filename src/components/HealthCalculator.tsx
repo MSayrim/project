@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
 import CalculationResultModal from './CalculationResultModal';
+import { useTranslation } from 'react-i18next';
 
 // BMI kategorileri ve açıklamaları
 const BMI_CATEGORIES = [
@@ -23,6 +24,8 @@ const ACTIVITY_LEVELS = [
 ];
 
 const HealthCalculator: React.FC = () => {
+  const { t } = useTranslation();
+
   // BMI hesaplama state'leri
   const [height, setHeight] = useState<string>('');
   const [weight, setWeight] = useState<string>('');
@@ -57,7 +60,7 @@ const HealthCalculator: React.FC = () => {
     const weightInKg = parseFloat(weight);
 
     if (isNaN(heightInMeters) || isNaN(weightInKg) || heightInMeters <= 0 || weightInKg <= 0) {
-      alert('Lütfen geçerli boy ve kilo değerleri girin.');
+      alert(t('health.invalid_height_weight'));
       return;
     }
 
@@ -82,7 +85,7 @@ const HealthCalculator: React.FC = () => {
 
     if (isNaN(heightInCm) || isNaN(waistInCm) || isNaN(neckInCm) ||
         heightInCm <= 0 || waistInCm <= 0 || neckInCm <= 0) {
-      alert('Lütfen tüm değerleri doğru şekilde girin.');
+      alert(t('health.invalid_measurements'));
       return;
     }
 
@@ -100,7 +103,7 @@ const HealthCalculator: React.FC = () => {
       const hipInCm = parseFloat(hip);
 
       if (isNaN(hipInCm) || hipInCm <= 0) {
-        alert('Lütfen geçerli bir kalça ölçüsü girin.');
+        alert(t('health.invalid_hip_measurement'));
         return;
       }
 
@@ -113,17 +116,17 @@ const HealthCalculator: React.FC = () => {
 
     // Vücut yağ oranı kategorisini belirle
     if (gender === 'male') {
-      if (bodyFat < 6) setBodyFatCategory('Temel Yağ');
-      else if (bodyFat < 14) setBodyFatCategory('Atletik');
-      else if (bodyFat < 18) setBodyFatCategory('Fitness');
-      else if (bodyFat < 25) setBodyFatCategory('Normal');
-      else setBodyFatCategory('Fazla Yağlı');
+      if (bodyFat < 6) setBodyFatCategory(t('health.essential_fat'));
+      else if (bodyFat < 14) setBodyFatCategory(t('health.athletic'));
+      else if (bodyFat < 18) setBodyFatCategory(t('health.fitness'));
+      else if (bodyFat < 25) setBodyFatCategory(t('health.normal'));
+      else setBodyFatCategory(t('health.overweight'));
     } else {
-      if (bodyFat < 16) setBodyFatCategory('Temel Yağ');
-      else if (bodyFat < 24) setBodyFatCategory('Atletik');
-      else if (bodyFat < 31) setBodyFatCategory('Fitness');
-      else if (bodyFat < 36) setBodyFatCategory('Normal');
-      else setBodyFatCategory('Fazla Yağlı');
+      if (bodyFat < 16) setBodyFatCategory(t('health.essential_fat'));
+      else if (bodyFat < 24) setBodyFatCategory(t('health.athletic'));
+      else if (bodyFat < 31) setBodyFatCategory(t('health.fitness'));
+      else if (bodyFat < 36) setBodyFatCategory(t('health.normal'));
+      else setBodyFatCategory(t('health.overweight'));
     }
   };
 
@@ -137,7 +140,7 @@ const HealthCalculator: React.FC = () => {
 
     if (isNaN(ageValue) || isNaN(heightValue) || isNaN(weightValue) ||
         ageValue <= 0 || heightValue <= 0 || weightValue <= 0) {
-      alert('Lütfen tüm değerleri doğru şekilde girin.');
+      alert(t('health.invalid_input'));
       return;
     }
 
@@ -159,7 +162,7 @@ const HealthCalculator: React.FC = () => {
   return (
       <div className="max-w-4xl mx-auto p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
         <h2 className="text-2xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-6">
-          <BarChart3 className="inline-block mr-2" /> Sağlık Hesaplayıcı
+          <BarChart3 className="inline-block mr-2" /> {t('health.calculator')}
         </h2>
 
         {/* Tab Seçimi */}
@@ -172,7 +175,7 @@ const HealthCalculator: React.FC = () => {
               }`}
               onClick={() => setActiveTab('bmi')}
           >
-            <BarChart3 className="mr-2 h-5 w-5" /> Vücut Kitle İndeksi
+            <BarChart3 className="mr-2 h-5 w-5" /> {t('health.bmi')}
           </button>
           <button
               className={`flex-1 py-2 rounded-lg flex items-center justify-center ${
@@ -182,7 +185,7 @@ const HealthCalculator: React.FC = () => {
               }`}
               onClick={() => setActiveTab('calories')}
           >
-            <BarChart3 className="mr-2 h-5 w-5" /> Kalori İhtiyacı
+            <BarChart3 className="mr-2 h-5 w-5" /> {t('health.calorie_need')}
           </button>
         </div>
 
@@ -199,7 +202,7 @@ const HealthCalculator: React.FC = () => {
                     onClick={() => setShowAdvancedBmi(!showAdvancedBmi)}
                 >
                   <BarChart3 className="mr-1 h-4 w-4" />
-                  {showAdvancedBmi ? 'Basit Hesaplama' : 'Gelişmiş Hesaplama'}
+                  {showAdvancedBmi ? t('health.simple_calculation') : t('health.advanced_calculation')}
                 </button>
               </div>
 
@@ -208,21 +211,21 @@ const HealthCalculator: React.FC = () => {
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Boy (cm)</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.height')}</label>
                         <input
                             type="number"
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 175"
+                            placeholder={t('health.height_placeholder')}
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Kilo (kg)</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.weight')}</label>
                         <input
                             type="number"
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 70"
+                            placeholder={t('health.weight_placeholder')}
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                         />
@@ -233,7 +236,7 @@ const HealthCalculator: React.FC = () => {
                         className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
                         onClick={calculateBMI}
                     >
-                      Vücut Kitle İndeksini Hesapla
+                      {t('health.calculate_bmi')}
                     </button>
                   </>
               ) : (
@@ -241,260 +244,250 @@ const HealthCalculator: React.FC = () => {
                   <>
                     <div className="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-lg mb-4">
                       <p className="text-sm text-indigo-700 dark:text-indigo-300">
-                        Gelişmiş hesaplama, ABD Donanması formülü kullanarak vücut yağ oranınızı tahmin eder.
-                        Bu hesaplama, standart BMI'dan daha doğru sonuçlar verebilir.
+                        {t('health.body_fat_description')}
                       </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Boy (cm)</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.height')}</label>
                         <input
                             type="number"
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 175"
+                            placeholder={t('health.height_placeholder')}
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Kilo (kg)</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.weight')}</label>
                         <input
                             type="number"
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 70"
+                            placeholder={t('health.weight_placeholder')}
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-2 mb-4">
-                      <label className="block text-gray-700 dark:text-gray-300 font-medium">Cinsiyet</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                            className={`py-2 rounded-lg ${
-                                gender === 'male'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                            }`}
-                            onClick={() => setGender('male')}
-                        >
-                          Erkek
-                        </button>
-                        <button
-                            className={`py-2 rounded-lg ${
-                                gender === 'female'
-                                    ? 'bg-pink-500 text-white'
-                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                            }`}
-                            onClick={() => setGender('female')}
-                        >
-                          Kadın
-                        </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="space-y-2">
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.gender')}</label>
+                        <div className="flex space-x-4">
+                          <label className="inline-flex items-center">
+                            <input
+                                type="radio"
+                                className="form-radio text-indigo-600"
+                                name="gender"
+                                value="male"
+                                checked={gender === 'male'}
+                                onChange={() => setGender('male')}
+                            />
+                            <span className="ml-2 text-gray-700 dark:text-gray-300">{t('health.male')}</span>
+                          </label>
+                          <label className="inline-flex items-center">
+                            <input
+                                type="radio"
+                                className="form-radio text-indigo-600"
+                                name="gender"
+                                value="female"
+                                checked={gender === 'female'}
+                                onChange={() => setGender('female')}
+                            />
+                            <span className="ml-2 text-gray-700 dark:text-gray-300">{t('health.female')}</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.neck')}</label>
+                        <input
+                            type="number"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                            placeholder={t('health.neck_placeholder')}
+                            value={neck}
+                            onChange={(e) => setNeck(e.target.value)}
+                        />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Boyun Çevresi (cm)</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.waist')}</label>
                         <input
                             type="number"
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 35"
-                            value={neck}
-                            onChange={(e) => setNeck(e.target.value)}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="block text-gray-700 dark:text-gray-300 font-medium">Bel Çevresi (cm)</label>
-                        <input
-                            type="number"
-                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Örn: 85"
+                            placeholder={t('health.waist_placeholder')}
                             value={waist}
                             onChange={(e) => setWaist(e.target.value)}
                         />
                       </div>
+                      {gender === 'female' && (
+                          <div className="space-y-2">
+                            <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.hip')}</label>
+                            <input
+                                type="number"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                placeholder={t('health.hip_placeholder')}
+                                value={hip}
+                                onChange={(e) => setHip(e.target.value)}
+                            />
+                          </div>
+                      )}
                     </div>
-
-                    {gender === 'female' && (
-                        <div className="space-y-2 mb-4">
-                          <label className="block text-gray-700 dark:text-gray-300 font-medium">Kalça Çevresi (cm)</label>
-                          <input
-                              type="number"
-                              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                              placeholder="Örn: 95"
-                              value={hip}
-                              onChange={(e) => setHip(e.target.value)}
-                          />
-                        </div>
-                    )}
 
                     <button
                         className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
                         onClick={calculateAdvancedBMI}
                     >
-                      Vücut Yağ Oranını Hesapla
+                      {t('health.calculate_body_fat')}
                     </button>
                   </>
               )}
 
+              {/* BMI Sonucu */}
               {bmi !== null && bmiCategory && !showAdvancedBmi && (
-                  <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                  >
-                    <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
-                    <div className="flex flex-col items-center">
-                      <div className="text-5xl font-bold mb-2">{bmi}</div>
-                      <div className={`text-xl font-semibold ${bmiCategory.color}`}>
-                        {bmiCategory.name}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                >
+                  <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
+                  <div className="flex flex-col items-center">
+                    <div className="text-5xl font-bold mb-2">{bmi}</div>
+                    <div className={`text-xl font-semibold ${bmiCategory.color}`}>{bmiCategory.name}</div>
+                    <p className="text-gray-600 dark:text-gray-300 text-center mt-4">{bmiCategory.description}</p>
+
+                    {/* BMI Çizelgesi/Barı */}
+                    <div className="w-full mt-6">
+                      <div className="relative h-8 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                        {BMI_CATEGORIES.map((category, index) => {
+                          const width = index === 0 
+                            ? (Math.min(category.range[1], 50) / 50) * 100
+                            : ((Math.min(category.range[1], 50) - category.range[0]) / 50) * 100;
+                          const categoryWidth = category.range[1] === Infinity 
+                            ? 100 - ((category.range[0] / 50) * 100)
+                            : width;
+                          return (
+                            <div
+                              key={index}
+                              className={`absolute h-full transition-all duration-300`}
+                              style={{
+                                left: `${(category.range[0] / 50) * 100}%`,
+                                width: `${categoryWidth}%`,
+                                backgroundColor: category.color.replace('text-', 'bg-')
+                              }}
+                            />
+                          );
+                        })}
+                        {/* BMI göstergesi */}
+                        {bmi && (
+                          <div 
+                            className="absolute w-4 h-8 bg-white border-2 border-gray-800 rounded-full"
+                            style={{ 
+                              left: `${Math.min((bmi / 50) * 100, 100)}%`, 
+                              transform: 'translateX(-50%)' 
+                            }}
+                          />
+                        )}
                       </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-center mt-4">
-                        {bmiCategory.description}
-                      </p>
-
-                      <div className="w-full mt-6">
-                        <div className="relative h-8 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                          {BMI_CATEGORIES.map((category, index) => {
-                            const width = index === 0
-                                ? (Math.min(category.range[1], 50) / 50) * 100
-                                : ((Math.min(category.range[1], 50) - category.range[0]) / 50) * 100;
-
-                            // Eğer bu kategori sonsuz ise, kalan alanı kapla
-                            const categoryWidth = category.range[1] === Infinity
-                                ? 100 - ((category.range[0] / 50) * 100)
-                                : width;
-
-                            return (
-                                <div
-                                    key={index}
-                                    className={`absolute h-full transition-all duration-300`}
-                                    style={{
-                                      left: `${(category.range[0] / 50) * 100}%`,
-                                      width: `${categoryWidth}%`,
-                                      backgroundColor: category.color.replace('text-', 'bg-')
-                                    }}
-                                />
-                            );
-                          })}
-
-                          {/* BMI göstergesi */}
-                          {bmi && (
-                              <div
-                                  className="absolute w-4 h-8 bg-white border-2 border-gray-800 rounded-full"
-                                  style={{
-                                    left: `${Math.min((bmi / 50) * 100, 100)}%`,
-                                    transform: 'translateX(-50%)'
-                                  }}
-                              />
-                          )}
-                        </div>
-
-                        <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
-                          <span>0</span>
-                          <span>10</span>
-                          <span>20</span>
-                          <span>30</span>
-                          <span>40</span>
-                          <span>50+</span>
-                        </div>
+                      <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        <span>0</span>
+                        <span>10</span>
+                        <span>20</span>
+                        <span>30</span>
+                        <span>40</span>
+                        <span>50+</span>
                       </div>
-
-                      {/* Sonucu Paylaş Butonu */}
-                      <button
-                          onClick={() => setShowShareModal(true)}
-                          className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
-                      >
-                        <span className="mr-2">Sonucumu Paylaş</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-                      </button>
                     </div>
-                  </motion.div>
+
+                    {/* Sonucu Paylaş Butonu */}
+                    <button
+                      onClick={() => setShowShareModal(true)}
+                      className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
+                    >
+                      <span className="mr-2">Sonucumu Paylaş</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                    </button>
+                  </div>
+                </motion.div>
               )}
-
               {bmi !== null && bmiCategory && showAdvancedBmi && bodyFatPercentage !== null && (
-                  <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                  >
-                    <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
-                    <div className="flex flex-col items-center">
-                      <div className="mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg w-full">
-                        <h4 className="text-lg font-semibold text-center mb-2">Vücut Yağ Oranı</h4>
-                        <div className="flex flex-col items-center">
-                          <div className="text-5xl font-bold mb-1 text-indigo-600 dark:text-indigo-400">
-                            %{bodyFatPercentage}
-                          </div>
-                          <div className="text-xl font-medium text-indigo-700 dark:text-indigo-300">
-                            {bodyFatCategory}
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-4">
-                            Bu değer, ABD Donanması formülü kullanılarak hesaplanmıştır ve yaklaşık bir tahmindir.
-                          </p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                >
+                  <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
+                  <div className="flex flex-col items-center">
+                    <div className="mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg w-full">
+                      <h4 className="text-lg font-semibold text-center mb-2">Vücut Yağ Oranı</h4>
+                      <div className="flex flex-col items-center">
+                        <div className="text-5xl font-bold mb-1 text-indigo-600 dark:text-indigo-400">
+                          %{bodyFatPercentage}
                         </div>
+                        <div className="text-xl font-medium text-indigo-700 dark:text-indigo-300">
+                          {bodyFatCategory}
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-4">
+                          Bu değer, ABD Donanması formülü kullanılarak hesaplanmıştır ve yaklaşık bir tahmindir.
+                        </p>
                       </div>
-
-                      <div className="w-full mt-6">
-                        <div className="relative h-8 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                          {BMI_CATEGORIES.map((category, index) => {
-                            const width = index === 0
-                                ? (Math.min(category.range[1], 50) / 50) * 100
-                                : ((Math.min(category.range[1], 50) - category.range[0]) / 50) * 100;
-
-                            // Eğer bu kategori sonsuz ise, kalan alanı kapla
-                            const categoryWidth = category.range[1] === Infinity
-                                ? 100 - ((category.range[0] / 50) * 100)
-                                : width;
-
-                            return (
-                                <div
-                                    key={index}
-                                    className={`absolute h-full transition-all duration-300`}
-                                    style={{
-                                      left: `${(category.range[0] / 50) * 100}%`,
-                                      width: `${categoryWidth}%`,
-                                      backgroundColor: category.color.replace('text-', 'bg-')
-                                    }}
-                                />
-                            );
-                          })}
-
-                          {/* BMI göstergesi */}
-                          {bmi && (
-                              <div
-                                  className="absolute w-4 h-8 bg-white border-2 border-gray-800 rounded-full"
-                                  style={{
-                                    left: `${Math.min((bmi / 50) * 100, 100)}%`,
-                                    transform: 'translateX(-50%)'
-                                  }}
-                              />
-                          )}
-                        </div>
-
-                        <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
-                          <span>0</span>
-                          <span>10</span>
-                          <span>20</span>
-                          <span>30</span>
-                          <span>40</span>
-                          <span>50+</span>
-                        </div>
-                      </div>
-
-                      {/* Sonucu Paylaş Butonu */}
-                      <button
-                          onClick={() => setShowShareModal(true)}
-                          className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
-                      >
-                        <span className="mr-2">Sonucumu Paylaş</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-                      </button>
                     </div>
-                  </motion.div>
+
+                    {/* BMI Çizelgesi/Barı */}
+                    <div className="w-full mt-6">
+                      <div className="relative h-8 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                        {BMI_CATEGORIES.map((category, index) => {
+                          const width = index === 0 
+                            ? (Math.min(category.range[1], 50) / 50) * 100
+                            : ((Math.min(category.range[1], 50) - category.range[0]) / 50) * 100;
+                          const categoryWidth = category.range[1] === Infinity 
+                            ? 100 - ((category.range[0] / 50) * 100)
+                            : width;
+                          return (
+                            <div
+                              key={index}
+                              className={`absolute h-full transition-all duration-300`}
+                              style={{
+                                left: `${(category.range[0] / 50) * 100}%`,
+                                width: `${categoryWidth}%`,
+                                backgroundColor: category.color.replace('text-', 'bg-')
+                              }}
+                            />
+                          );
+                        })}
+                        {/* BMI göstergesi */}
+                        {bmi && (
+                          <div 
+                            className="absolute w-4 h-8 bg-white border-2 border-gray-800 rounded-full"
+                            style={{ 
+                              left: `${Math.min((bmi / 50) * 100, 100)}%`, 
+                              transform: 'translateX(-50%)' 
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        <span>0</span>
+                        <span>10</span>
+                        <span>20</span>
+                        <span>30</span>
+                        <span>40</span>
+                        <span>50+</span>
+                      </div>
+                    </div>
+
+                    {/* Sonucu Paylaş Butonu */}
+                    <button
+                      onClick={() => setShowShareModal(true)}
+                      className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
+                    >
+                      <span className="mr-2">Sonucumu Paylaş</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                    </button>
+                  </div>
+                </motion.div>
               )}
             </div>
         )}
@@ -504,59 +497,61 @@ const HealthCalculator: React.FC = () => {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-gray-700 dark:text-gray-300 font-medium">Yaş</label>
+                  <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.age')}</label>
                   <input
                       type="number"
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="Örn: 30"
+                      placeholder={t('health.age_placeholder')}
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-gray-700 dark:text-gray-300 font-medium">Cinsiyet</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                        className={`py-2 rounded-lg ${
-                            gender === 'male'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                        }`}
-                        onClick={() => setGender('male')}
-                    >
-                      Erkek
-                    </button>
-                    <button
-                        className={`py-2 rounded-lg ${
-                            gender === 'female'
-                                ? 'bg-pink-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                        }`}
-                        onClick={() => setGender('female')}
-                    >
-                      Kadın
-                    </button>
+                  <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.gender')}</label>
+                  <div className="flex space-x-4">
+                    <label className="inline-flex items-center">
+                      <input
+                          type="radio"
+                          className="form-radio text-indigo-600"
+                          name="gender-calorie"
+                          value="male"
+                          checked={gender === 'male'}
+                          onChange={() => setGender('male')}
+                      />
+                      <span className="ml-2 text-gray-700 dark:text-gray-300">{t('health.male')}</span>
+                    </label>
+                    <label className="inline-flex items-center">
+                      <input
+                          type="radio"
+                          className="form-radio text-indigo-600"
+                          name="gender-calorie"
+                          value="female"
+                          checked={gender === 'female'}
+                          onChange={() => setGender('female')}
+                      />
+                      <span className="ml-2 text-gray-700 dark:text-gray-300">{t('health.female')}</span>
+                    </label>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-gray-700 dark:text-gray-300 font-medium">Boy (cm)</label>
+                  <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.height')}</label>
                   <input
                       type="number"
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="Örn: 175"
+                      placeholder={t('health.height_placeholder')}
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-gray-700 dark:text-gray-300 font-medium">Kilo (kg)</label>
+                  <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.weight')}</label>
                   <input
                       type="number"
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="Örn: 70"
+                      placeholder={t('health.weight_placeholder')}
                       value={weight}
                       onChange={(e) => setWeight(e.target.value)}
                   />
@@ -564,13 +559,13 @@ const HealthCalculator: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-gray-700 dark:text-gray-300 font-medium">Aktivite Seviyesi</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium">{t('health.activity_level')}</label>
                 <select
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
                     value={activityLevel}
                     onChange={(e) => setActivityLevel(e.target.value)}
                 >
-                  {ACTIVITY_LEVELS.map(level => (
+                  {ACTIVITY_LEVELS.map((level) => (
                       <option key={level.id} value={level.id}>
                         {level.name} - {level.description}
                       </option>
@@ -582,99 +577,65 @@ const HealthCalculator: React.FC = () => {
                   className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
                   onClick={calculateCalories}
               >
-                Günlük Kalori İhtiyacını Hesapla
+                {t('health.calculate_calories')}
               </button>
 
+              {/* Kalori Sonucu */}
               {calories !== null && (
                   <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow"
                   >
-                    <h3 className="text-xl font-bold text-center mb-4">Günlük Kalori İhtiyacınız</h3>
-                    <div className="flex flex-col items-center">
-                      <div className="text-5xl font-bold mb-2 text-indigo-600 dark:text-indigo-400">
-                        {calories} kcal
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-center mt-4">
-                        Bu değer, vücut ağırlığınızı korumak için gereken günlük kalori miktarıdır.
-                      </p>
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">{t('health.daily_calorie_need')}</h3>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                      <div>
+                        <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                          {calories} kcal
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
+                          {t('health.calorie_need_description')}
+                        </p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mt-6">
-                        <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg text-center">
-                          <div className="font-bold text-green-700 dark:text-green-300">Kilo Vermek</div>
-                          <div className="text-xl font-bold text-green-800 dark:text-green-200">
-                            {Math.round(calories * 0.8)} kcal
+                        <div className="mt-4 grid grid-cols-3 gap-2">
+                          <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded text-center">
+                            <p className="text-sm font-medium text-green-800 dark:text-green-300">{t('health.lose_weight')}</p>
+                            <p className="text-lg font-bold text-green-600 dark:text-green-400">{Math.round(calories * 0.8)} kcal</p>
                           </div>
-                          <div className="text-xs text-green-600 dark:text-green-400">%20 kalori açığı</div>
-                        </div>
-
-                        <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg text-center">
-                          <div className="font-bold text-blue-700 dark:text-blue-300">Kilo Korumak</div>
-                          <div className="text-xl font-bold text-blue-800 dark:text-blue-200">
-                            {calories} kcal
+                          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded text-center">
+                            <p className="text-sm font-medium text-blue-800 dark:text-blue-300">{t('health.maintain_weight')}</p>
+                            <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{calories} kcal</p>
                           </div>
-                          <div className="text-xs text-blue-600 dark:text-blue-400">Mevcut kalori</div>
-                        </div>
-
-                        <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg text-center">
-                          <div className="font-bold text-purple-700 dark:text-purple-300">Kilo Almak</div>
-                          <div className="text-xl font-bold text-purple-800 dark:text-purple-200">
-                            {Math.round(calories * 1.15)} kcal
+                          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded text-center">
+                            <p className="text-sm font-medium text-purple-800 dark:text-purple-300">{t('health.gain_weight')}</p>
+                            <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{Math.round(calories * 1.2)} kcal</p>
                           </div>
-                          <div className="text-xs text-purple-600 dark:text-purple-400">%15 kalori fazlası</div>
                         </div>
                       </div>
-
-                      {/* Sonucu Paylaş Butonu */}
                       <button
-                          onClick={() => {
-                            console.log('Kalori paylaş butonuna tıklandı');
-                            setShowShareModal(true);
-                          }}
-                          className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
+                          className="mt-4 md:mt-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center"
+                          onClick={() => setShowShareModal(true)}
                       >
-                        <span className="mr-2">Sonucumu Paylaş</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                        <BarChart3 className="mr-2 h-4 w-4" />
+                        {t('health.share_result')}
                       </button>
+                    </div>
+                    <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+                      <p>{t('health.disclaimer')}</p>
+                      <p>{t('health.consult_doctor')}</p>
                     </div>
                   </motion.div>
               )}
             </div>
         )}
 
-        <div className="mt-8 text-sm text-gray-500 dark:text-gray-400 text-center">
-          <p>Bu hesaplamalar yaklaşık değerlerdir ve sadece bilgi amaçlıdır.</p>
-          <p>Sağlık durumunuzla ilgili kararlar için lütfen bir sağlık uzmanına danışın.</p>
-        </div>
-
-        {/* Paylaşım Modalı - Bileşenin en dışında, her iki sekme için de erişilebilir */}
-        {showShareModal && (
-            <CalculationResultModal
-                open={showShareModal}
-                onClose={() => setShowShareModal(false)}
-                result={
-                  activeTab === 'calories' && calories !== null
-                      ? {
-                        calories,
-                        caloriesForLoss: Math.round(calories * 0.8),
-                        caloriesForGain: Math.round(calories * 1.15)
-                      }
-                      : activeTab === 'bmi' && showAdvancedBmi && bodyFatPercentage !== null
-                          ? { bodyFatPercentage, bodyFatCategory }
-                          : activeTab === 'bmi' && bmi !== null && bmiCategory
-                              ? { bmi, bmiCategory: bmiCategory?.name }
-                              : {}
-                }
-                slipTitle={
-                  activeTab === 'calories'
-                      ? 'Günlük Kalori İhtiyacı Hesaplama'
-                      : showAdvancedBmi
-                          ? 'Vücut Yağ Oranı Hesaplama'
-                          : 'BMI Hesaplama'
-                }
-            />
-        )}
+        {/* Paylaşım Modalı */}
+        <CalculationResultModal
+            open={showShareModal}
+            onClose={() => setShowShareModal(false)}
+            result={activeTab === 'bmi' ? { bmi, category: bmiCategory?.name, bodyFatPercentage, bodyFatCategory } : { calories }}
+            slipTitle={activeTab === 'bmi' ? (bodyFatPercentage ? 'Vücut Yağ Oranı Hesaplama' : 'BMI Hesaplama') : 'Kalori İhtiyacı Hesaplama'}
+        />
       </div>
   );
 };

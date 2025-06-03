@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { X, Share2, Download, Copy } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { FaFacebook, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 
 interface CarWashResultModalProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface CarWashResultModalProps {
 
 const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, result, slipTitle, selectedServices, paidAmount, homemadeTotal }) => {
   const slipCardRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
   if (!open) return null;
 
   // Görsel olarak paylaşım fonksiyonu
@@ -97,17 +99,17 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        await navigator.share({ files: [file], title: t('common.calculationResult') });
       } else {
         const link = document.createElement('a');
         link.href = image;
         link.download = 'ParamCebimde-Hesaplama.png';
         link.click();
-        alert('Resim indirildi. Lütfen indirilen resmi WhatsApp\'ta paylaşın.');
+        alert(t('share.downloadAndShareWhatsapp'));
       }
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
-      alert('Resim oluşturulurken bir hata oluştu.');
+      alert(t('share.imageCreationError'));
     }
   };
 
@@ -137,17 +139,17 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        await navigator.share({ files: [file], title: t('common.calculationResult') });
       } else {
         const link = document.createElement('a');
         link.href = image;
         link.download = 'ParamCebimde-Hesaplama.png';
         link.click();
-        alert('Resim indirildi. Lütfen indirilen resmi Facebook\'ta paylaşın.');
+        alert(t('share.downloadAndShareFacebook'));
       }
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
-      alert('Resim oluşturulurken bir hata oluştu.');
+      alert(t('share.imageCreationError'));
     }
   };
 
@@ -177,17 +179,17 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const file = new File([blob], 'ParamCebimde-Hesaplama.png', { type: 'image/png' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'ParamCebimde Hesaplama Sonucu' });
+        await navigator.share({ files: [file], title: t('common.calculationResult') });
       } else {
         const link = document.createElement('a');
         link.href = image;
         link.download = 'ParamCebimde-Hesaplama.png';
         link.click();
-        alert('Resim indirildi. Lütfen indirilen resmi X\'te paylaşın.');
+        alert(t('share.downloadAndShareTwitter'));
       }
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
-      alert('Resim oluşturulurken bir hata oluştu.');
+      alert(t('share.imageCreationError'));
     }
   };
 
@@ -219,7 +221,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       link.click();
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
-      alert('Resim oluşturulurken bir hata oluştu.');
+      alert(t('share.imageCreationError'));
     }
   };
 
@@ -235,27 +237,27 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
               <span className="text-base font-bold text-indigo-600">ParamCebimde</span>
               <span className="text-xs text-gray-400">{new Date().toLocaleDateString('tr-TR')}</span>
             </div>
-            <h2 className="text-center text-lg font-bold text-gray-800 dark:text-white mb-2">Araç Yıkama Sonucu</h2>
+            <h2 className="text-center text-lg font-bold text-gray-800 dark:text-white mb-2">{t('carwash.resultTitle')}</h2>
             <div className="bg-gray-100 dark:bg-gray-800/80 rounded p-3 mb-3">
               <div className="flex justify-between mb-1">
-                <span className="font-medium text-gray-700 dark:text-gray-300">Ödenen Tutar:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">{t('common.paidAmount')}:</span>
                 <span className="font-bold text-green-600 dark:text-green-400">{paidAmount?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
               </div>
               {result?.discount !== undefined && (
                 <div className="flex justify-between mb-1 text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">İndirim:</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('common.discount')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">-{result.discount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
               )}
               {result?.tax !== undefined && (
                 <div className="flex justify-between mb-1 text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">KDV:</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('common.tax')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">{result.tax.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
               )}
               {result?.commission !== undefined && (
                 <div className="flex justify-between mb-1 text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Komisyon:</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('common.commission')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">{result.commission.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
               )}
@@ -264,7 +266,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
             <div className="flex flex-col md:flex-row gap-4 mt-3 mb-3">
               {/* Alınan Hizmetler */}
               <div className="flex-1 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-sm p-3 border border-gray-200 dark:border-gray-700">
-                <span className="font-bold text-gray-700 dark:text-gray-300 block mb-2 text-sm">Alınan Hizmetler</span>
+                <span className="font-bold text-gray-700 dark:text-gray-300 block mb-2 text-sm">{t('carwash.services')}</span>
                 <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300 text-xs md:text-sm space-y-1">
                   {selectedServices?.map((service, i) => (
                     <li key={i} className="flex justify-between"><span>{service.name}</span> <span className="font-semibold">{service.price?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span></li>
@@ -273,20 +275,20 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
               </div>
               {/* Kendin Yaparsan */}
               <div className="flex-1 bg-blue-50 dark:bg-blue-900/30 rounded-xl shadow-sm p-3 border border-blue-200 dark:border-blue-700">
-                <span className="font-bold text-blue-700 dark:text-blue-200 block mb-2 text-sm">Kendin Yaparsan</span>
+                <span className="font-bold text-blue-700 dark:text-blue-200 block mb-2 text-sm">{t('carwash.diySection')}</span>
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs md:text-sm text-blue-700 dark:text-blue-200">Toplam Maliyet</span>
+                  <span className="text-xs md:text-sm text-blue-700 dark:text-blue-200">{t('common.totalCost')}</span>
                   <span className="font-bold text-blue-700 dark:text-blue-200 text-base">{homemadeTotal?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
                 {result?.waterUsed !== undefined && (
                   <div className="flex justify-between text-xs md:text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Su Tüketimi</span>
-                    <span className="text-gray-700 dark:text-gray-300">{result.waterUsed} Litre</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('carwash.waterUsage')}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{result.waterUsed} {t('carwash.liter')}</span>
                   </div>
                 )}
                 {result?.electricityUsed !== undefined && (
                   <div className="flex justify-between text-xs md:text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Elektrik Tüketimi</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('carwash.electricityUsage')}</span>
                     <span className="text-gray-700 dark:text-gray-300">{result.electricityUsed} kWh</span>
                   </div>
                 )}
@@ -294,14 +296,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
             </div>
             {(paidAmount !== undefined && homemadeTotal !== undefined) && (
               <div className="mt-5">
-                <div className="text-center font-bold text-gray-700 dark:text-gray-200 mb-2 text-base border-b border-gray-200 dark:border-gray-700 pb-1">Fiyat Karşılaştırması</div>
+                <div className="text-center font-bold text-gray-700 dark:text-gray-200 mb-2 text-base border-b border-gray-200 dark:border-gray-700 pb-1">{t('common.priceComparison')}</div>
                 <div className="flex items-center justify-center gap-6 mt-2 mb-1">
                   {/* Ödenen Tutar */}
                   <div className={`relative flex flex-col items-center p-3 rounded-xl transition-all duration-300
                     ${paidAmount < homemadeTotal
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400 border border-green-500 dark:border-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Ödenen Tutar</span>
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('common.paidAmount')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">{paidAmount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                     {paidAmount < homemadeTotal && (
                       <span className="absolute -left-3 -bottom-3">
@@ -318,7 +320,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
                     ${homemadeTotal < paidAmount
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400 border border-green-500 dark:border-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Kendin Yaparsan</span>
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('carwash.diySection')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">{homemadeTotal.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                     {homemadeTotal < paidAmount && (
                       <span className="absolute -left-3 -bottom-3">
@@ -328,7 +330,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 mt-4">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Fark:</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{t('common.difference')}:</span>
                   <div className={`px-3 py-1 rounded-lg font-bold text-base
                     ${(paidAmount - homemadeTotal) < 0
                       ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
@@ -342,23 +344,23 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
           <div className="flex flex-col gap-2 w-full mt-4">
             <div className="flex gap-2 w-full">
               <button onClick={shareAsImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
-                <Share2 size={18}/> Hızlı Paylaş
+                <Share2 size={18}/> {t('share.quickShare')}
               </button>
               <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
-                <Download size={18}/> Resim Olarak İndir
+                <Download size={18}/> {t('share.downloadAsImage')}
               </button>
             </div>
             <div className="flex gap-3 justify-center w-full mt-2">
-              <button onClick={shareToWhatsApp} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title="WhatsApp'ta paylaş">
+              <button onClick={shareToWhatsApp} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title={t('share.shareOnWhatsapp')}>
                 <FaWhatsapp/>
               </button>
-              <button onClick={shareToFacebook} className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title="Facebook'ta paylaş">
+              <button onClick={shareToFacebook} className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title={t('share.shareOnFacebook')}>
                 <FaFacebook/>
               </button>
-              <button onClick={shareToTwitter} className="bg-black hover:bg-gray-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="X'te paylaş">
+              <button onClick={shareToTwitter} className="bg-black hover:bg-gray-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title={t('share.shareOnTwitter')}>
                 <FaXTwitter/>
               </button>
-              <button onClick={copyImageToClipboard} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title="Kopyala">
+              <button onClick={copyImageToClipboard} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title={t('common.copy')}>
                 <Copy size={20}/>
               </button>
             </div>

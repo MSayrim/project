@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calculator, Heart } from 'lucide-react';
 
+const APP_NAME = 'ParamCebimde';
+
 const Footer: React.FC = () => {
   const { t } = useTranslation();
   
@@ -11,11 +13,11 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <Calculator className="h-6 w-6 text-green-400" />
-            <span className="text-lg font-bold text-white">CalcMaster</span>
+            <span className="text-lg font-bold text-white">{APP_NAME}</span>
           </div>
           
           <div className="text-center md:text-left">
-            <p>&copy; {new Date().getFullYear()} CalcMaster. {t('footer.rights')}</p>
+            <p>&copy; {new Date().getFullYear()} {APP_NAME}. {t('footer.rights')}</p>
             <p className="text-sm mt-1">{t('footer.description')}</p>
           </div>
           

@@ -1,6 +1,7 @@
 import React, { forwardRef, useRef } from 'react';
 import { X, Download, Share2, CheckCircle } from 'lucide-react';
 import { FaWhatsapp, FaXTwitter, FaFacebook } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 
 const shareUrl = window.location.href;
 
@@ -11,8 +12,9 @@ const SubscriptionShareModal = forwardRef(({
   onClose,
   onDownloadImage
 }, ref) => {
+  const { t } = useTranslation();
   const cardRef = ref || useRef();
-  const shareText = `Online Abonelik Hesaplama\nAylık: ${totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺\nYıllık: ${totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺`;
+  const shareText = `${t('subscription.title')}\n${t('subscription.monthly')}: ${totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺\n${t('subscription.yearly')}: ${totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺`;
 
   // Görsel oluşturma fonksiyonu
   const generateImage = async () => {
@@ -36,7 +38,7 @@ const SubscriptionShareModal = forwardRef(({
       const file = new File([blob], 'abonelik-ozeti.png', { type: 'image/png' });
       return { image, file };
     } catch (err) {
-      console.error('Görsel oluşturulurken hata:', err);
+      console.error(t('subscription.share.imageCreationError'), err);
       return null;
     }
   };
@@ -46,20 +48,20 @@ const SubscriptionShareModal = forwardRef(({
     try {
       const imageData = await generateImage();
       if (!imageData) {
-        alert('Görsel oluşturulamadı.');
+        alert(t('subscription.share.imageCreationError'));
         return;
       }
       
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageData.file] })) {
         await navigator.share({ 
           files: [imageData.file], 
-          title: 'ParamCebimde Abonelik Özeti'
+          title: t('subscription.share.title')
         });
       } else {
-        alert('Cihazınız görsel paylaşımını desteklemiyor. Lütfen resmi indirip uygulama üzerinden paylaşın.');
+        alert(t('subscription.share.deviceNotSupported'));
       }
     } catch (err) {
-      alert('Görsel paylaşılırken bir hata oluştu.');
+      alert(t('subscription.share.sharingError'));
     }
   };
 
@@ -68,7 +70,7 @@ const SubscriptionShareModal = forwardRef(({
     try {
       const imageData = await generateImage();
       if (!imageData) {
-        alert('Görsel oluşturulamadı.');
+        alert(t('subscription.share.imageCreationError'));
         return;
       }
       
@@ -77,7 +79,7 @@ const SubscriptionShareModal = forwardRef(({
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageData.file] })) {
         await navigator.share({ 
           files: [imageData.file], 
-          title: 'ParamCebimde Abonelik Özeti',
+          title: t('subscription.share.title'),
           text: shareText
         });
       } else {
@@ -95,7 +97,7 @@ const SubscriptionShareModal = forwardRef(({
     try {
       const imageData = await generateImage();
       if (!imageData) {
-        alert('Görsel oluşturulamadı.');
+        alert(t('subscription.share.imageCreationError'));
         return;
       }
       
@@ -106,7 +108,7 @@ const SubscriptionShareModal = forwardRef(({
         win.document.write(`
           <html>
             <head>
-              <title>X için Paylaşım Görseli</title>
+              <title>${t('subscription.share.twitterImageTitle')}</title>
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <style>
                 body { margin: 0; padding: 20px; font-family: Arial, sans-serif; text-align: center; background-color: #f8f9fa; }
@@ -118,17 +120,17 @@ const SubscriptionShareModal = forwardRef(({
               </style>
             </head>
             <body>
-              <h2>X için Paylaşım Görseli</h2>
-              <img src="${imageData.image}" alt="ParamCebimde Abonelik Özeti" />
+              <h2>${t('subscription.share.twitterImageTitle')}</h2>
+              <img src="${imageData.image}" alt="${t('subscription.share.title')}" />
               <div class="instructions">
-                <h3>Nasıl Paylaşılır:</h3>
+                <h3>${t('subscription.share.howToShare')}:</h3>
                 <ol>
-                  <li>Yukarıdaki görsele sağ tıklayıp "Resmi Farklı Kaydet" seçeneğini seçin</li>
-                  <li>X'e gidin ve yeni bir post oluşturun</li>
-                  <li>Post oluşturma alanında resim ikonuna tıklayın</li>
-                  <li>Kaydettiğiniz görseli seçin ve paylaşın</li>
+                  <li>${t('subscription.share.twitterStep1')}</li>
+                  <li>${t('subscription.share.twitterStep2')}</li>
+                  <li>${t('subscription.share.twitterStep3')}</li>
+                  <li>${t('subscription.share.twitterStep4')}</li>
                 </ol>
-                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}" target="_blank" class="button">X'i Aç</a>
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}" target="_blank" class="button">${t('subscription.share.openTwitter')}</a>
               </div>
             </body>
           </html>
@@ -149,7 +151,7 @@ const SubscriptionShareModal = forwardRef(({
     try {
       const imageData = await generateImage();
       if (!imageData) {
-        alert('Görsel oluşturulamadı.');
+        alert(t('subscription.share.imageCreationError'));
         return;
       }
       
@@ -157,7 +159,7 @@ const SubscriptionShareModal = forwardRef(({
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageData.file] })) {
         await navigator.share({ 
           files: [imageData.file], 
-          title: 'ParamCebimde Abonelik Özeti',
+          title: t('subscription.share.title'),
           text: shareText
         });
       } else {
@@ -194,11 +196,11 @@ const SubscriptionShareModal = forwardRef(({
               <div className="text-xs text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('tr-TR')}</div>
             </div>
             <h2 className="text-center text-indigo-700 dark:text-indigo-300 font-extrabold text-2xl mb-5 border-b border-gray-200 dark:border-gray-700 pb-2 bg-indigo-50 dark:bg-indigo-900 -mx-6 px-6 py-2 rounded-t-xl">
-              Online Abonelik Hesaplama Özeti
+              {t('subscription.share.summary')}
             </h2>
             {/* Abonelikler */}
             <div className="mb-4">
-              <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1">Abonelikler:</div>
+              <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1">{t('subscription.subscriptions')}:</div>
               <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                 {subscriptions.map((sub, i) => (
                   <li key={i} className="flex justify-between items-center py-2 text-base">
@@ -214,12 +216,12 @@ const SubscriptionShareModal = forwardRef(({
             </div>
             {/* Toplamlar */}
             <div className="rounded-xl p-5 text-center mb-2 bg-indigo-50 dark:bg-indigo-900 border border-indigo-200 dark:border-indigo-800">
-              <div className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Aylık</div>
+              <div className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{t('subscription.monthly')}</div>
               <div className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-300 mb-1 tracking-tight drop-shadow">{totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
-              <div className="text-lg font-bold text-indigo-600 mb-1">Yıllık: {totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
+              <div className="text-lg font-bold text-indigo-600 mb-1">{t('subscription.yearly')}: {totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
             </div>
             <div className="text-center text-xs text-gray-400 mt-2">
-              ParamCebimde ile hesaplandı • {new Date().toLocaleTimeString('tr-TR')}
+              {t('subscription.calculatedWith')} • {new Date().toLocaleTimeString('tr-TR')}
             </div>
           </div>
           {/* Paylaşım ve indirme butonları */}
@@ -229,16 +231,16 @@ const SubscriptionShareModal = forwardRef(({
               onClick={onDownloadImage}
               type="button"
             >
-              <Download size={20}/> Resim Olarak İndir
+              <Download size={20}/> {t('subscription.share.downloadAsImage')}
             </button>
             <div className="flex flex-row gap-3 justify-center mt-1">
-              <button onClick={handleWebShare} className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title="Resim olarak paylaş"><Share2 size={20}/></button>
-              <button onClick={handleWhatsAppShare} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title="WhatsApp'ta paylaş"><FaWhatsapp/></button>
-              <button onClick={handleTwitterShare} className="bg-black hover:bg-gray-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title="X'te paylaş"><FaXTwitter/></button>
-              <button onClick={handleFacebookShare} className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title="Facebook'ta paylaş"><FaFacebook/></button>
-              <button onClick={handleCopy} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-full flex items-center justify-center text-xl" title="Kopyala"><CheckCircle size={20}/></button>
+              <button onClick={handleWebShare} className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareAsImage')}><Share2 size={20}/></button>
+              <button onClick={handleWhatsAppShare} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnWhatsapp')}><FaWhatsapp/></button>
+              <button onClick={handleTwitterShare} className="bg-black hover:bg-gray-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnTwitter')}><FaXTwitter/></button>
+              <button onClick={handleFacebookShare} className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnFacebook')}><FaFacebook/></button>
+              <button onClick={handleCopy} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-full flex items-center justify-center text-xl" title={t('common.copy')}><CheckCircle size={20}/></button>
             </div>
-            <div className="text-xs text-center text-gray-400 mt-2">Sosyal medya butonları, destekleyen cihazlarda resim olarak paylaşım yapar. Desteklenmiyorsa metin olarak paylaşılır.</div>
+            <div className="text-xs text-center text-gray-400 mt-2">{t('subscription.share.socialMediaNote')}</div>
           </div>
         </div>
       </div>

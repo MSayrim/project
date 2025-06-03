@@ -22,7 +22,7 @@ const PriceCalculator: React.FC = () => {
     try {
       await dispatch(calculatePrices({ fullPrice, discount }));
     } catch (err) {
-      setCalculationError('Failed to calculate price. Please try again.');
+      setCalculationError(t('calculator.price.calculationError'));
       console.error('Calculation failed:', err);
     }
   };
@@ -39,7 +39,7 @@ const PriceCalculator: React.FC = () => {
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
       <div className="flex items-center gap-2 mb-6">
         <Calculator className="h-6 w-6 text-green-500" />
-        <h2 className="text-xl font-bold">Price Calculator</h2>
+        <h2 className="text-xl font-bold">{t('calculator.price.title')}</h2>
       </div>
 
       {error && (
@@ -58,7 +58,7 @@ const PriceCalculator: React.FC = () => {
       <form onSubmit={handleCalculate} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Select Firm
+            {t('calculator.price.selectFirm')}
           </label>
           <select
             className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2"
@@ -68,7 +68,7 @@ const PriceCalculator: React.FC = () => {
               dispatch(setSelectedFirm(firm));
             }}
           >
-            <option value="">Select a firm</option>
+            <option value="">{t('calculator.price.selectFirmOption')}</option>
             {firms.map(firm => (
               <option key={firm.id} value={firm.id}>{firm.name}</option>
             ))}

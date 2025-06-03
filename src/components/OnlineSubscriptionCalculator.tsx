@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import SubscriptionShareModal from './SubscriptionShareModal';
+import { useTranslation } from 'react-i18next';
 
 const POPULAR = [
   {
@@ -55,6 +56,7 @@ const periods = [
 ];
 
 export default function OnlineSubscriptionCalculator() {
+  const { t } = useTranslation();
   const [subscriptions, setSubscriptions] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState('');
   const [selectedType, setSelectedType] = useState('');
@@ -129,8 +131,8 @@ export default function OnlineSubscriptionCalculator() {
 
   return (
     <div className="max-w-lg mx-auto bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-2xl border-2 border-indigo-200 dark:border-indigo-900/30 mt-6">
-      <h2 className="text-2xl font-extrabold mb-2 text-center text-indigo-700 dark:text-indigo-300 tracking-tight drop-shadow">Online Abonelik Hesaplama</h2>
-      <p className="text-center text-gray-600 dark:text-gray-300 mb-4 text-sm">Sahip olduğun tüm online abonelikleri ekle, toplam aylık ve yıllık maliyetini anında gör!</p>
+      <h2 className="text-2xl font-extrabold mb-2 text-center text-indigo-700 dark:text-indigo-300 tracking-tight drop-shadow">{t('subscription.title')}</h2>
+      <p className="text-center text-gray-600 dark:text-gray-300 mb-4 text-sm">{t('subscription.description')}</p>
       <div className="flex gap-2 mb-2 flex-wrap items-end">
         <select
           className="flex-1 border-2 border-indigo-200 dark:border-indigo-900/40 rounded-lg px-3 py-2 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-indigo-400 transition"
@@ -140,7 +142,7 @@ export default function OnlineSubscriptionCalculator() {
             setSelectedType('');
           }}
         >
-          <option value="">Abonelik seçin</option>
+          <option value="">{t('subscription.selectSubscription')}</option>
           {POPULAR.map(b => (
             <option key={b.name} value={b.name}>{b.icon} {b.name}</option>
           ))}
@@ -151,7 +153,7 @@ export default function OnlineSubscriptionCalculator() {
           onChange={e => setSelectedType(e.target.value)}
           disabled={!selectedBrand}
         >
-          <option value="">Üyelik tipi</option>
+          <option value="">{t('subscription.membershipType')}</option>
           {brandObj?.types.map(t => (
             <option key={t.label} value={t.label}>{t.label}</option>
           ))}
@@ -159,7 +161,7 @@ export default function OnlineSubscriptionCalculator() {
         <input
           ref={inputRef}
           className="w-24 border-2 border-indigo-200 dark:border-indigo-900/40 rounded-lg px-3 py-2 bg-white dark:bg-indigo-950 focus:ring-2 focus:ring-indigo-400 transition"
-          placeholder="Tutar"
+          placeholder={t('subscription.amount')}
           type="number"
           value={newPrice}
           onChange={e => setNewPrice(e.target.value)}
@@ -181,25 +183,25 @@ export default function OnlineSubscriptionCalculator() {
           max={10}
           value={newPeople}
           onChange={e => setNewPeople(Number(e.target.value))}
-          title="Kaç kişiyle paylaşıyorsun?"
-          placeholder="Kişi"
+          title={t('subscription.peopleSharing')}
+          placeholder={t('subscription.people')}
         />
         <button
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition"
           onClick={addSubscription}
           type="button"
-        >Ekle</button>
+        >{t('common.add')}</button>
       </div>
       <input
         className="w-full border-2 border-indigo-200 dark:border-indigo-900/40 rounded-lg px-3 py-2 mb-4 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-indigo-400 transition"
-        placeholder="Açıklama (isteğe bağlı)"
+        placeholder={t('subscription.noteOptional')}
         value={newNote}
         onChange={e => setNewNote(e.target.value)}
         onKeyDown={handleKeyDown}
       />
       <div className="divide-y divide-gray-200 dark:divide-gray-700 mb-6">
         {subscriptions.length === 0 && (
-          <div className="py-8 text-gray-400 text-center text-sm">Henüz abonelik eklemediniz.</div>
+          <div className="py-8 text-gray-400 text-center text-sm">{t('subscription.noSubscriptions')}</div>
         )}
         {subscriptions.map((sub, idx) => (
           <div key={idx} className="flex items-center justify-between py-3 group">
@@ -208,30 +210,30 @@ export default function OnlineSubscriptionCalculator() {
               <span className="font-semibold text-gray-800 dark:text-gray-100">{sub.name}</span>
               <span className="text-xs text-gray-500">{sub.type && <>(
                 {sub.type})</>}</span>
-              {sub.people > 1 && <span className="ml-2 text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-100 px-2 rounded">{sub.people} kişiyle</span>}
+              {sub.people > 1 && <span className="ml-2 text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-100 px-2 rounded">{t('subscription.withPeople', { count: sub.people })}</span>}
               {sub.note && <span className="ml-2 text-xs text-gray-400 italic">({sub.note})</span>}
             </div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-indigo-600 dark:text-indigo-200">{getMonthly(sub).toLocaleString('tr-TR', {minimumFractionDigits:2})}₺/ay</span>
-              <button className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeSubscription(idx)} title="Sil">Sil</button>
+              <button className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeSubscription(idx)} title={t('common.delete')}>{t('common.delete')}</button>
             </div>
           </div>
         ))}
       </div>
       <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-6 text-center shadow border-2 border-indigo-200 dark:border-indigo-900/40">
-        <div className="text-lg font-bold text-gray-800 dark:text-gray-100">Toplam Aylık:</div>
+        <div className="text-lg font-bold text-gray-800 dark:text-gray-100">{t('subscription.totalMonthly')}:</div>
         <div className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-300 mb-1 tracking-tight">{totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
-        <div className="text-sm text-gray-500 mb-2">Yıllık karşılığı: <span className="font-bold text-indigo-600 dark:text-indigo-300">{totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</span></div>
-        <div className="text-base font-semibold text-indigo-700 dark:text-indigo-300">Kişi başı aylık: {totalMonthlyPerPerson.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
-        <div className="text-xs text-gray-400">(Paylaşımlı aboneliklerde kişi sayısına göre otomatik hesaplanır)</div>
-        <div className="text-sm text-gray-500 mt-2 italic">Aboneliklerinizi gözden geçirin, gerekirse iptal edin ve bütçenizi koruyun!</div>
+        <div className="text-sm text-gray-500 mb-2">{t('subscription.yearlyEquivalent')}: <span className="font-bold text-indigo-600 dark:text-indigo-300">{totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</span></div>
+        <div className="text-base font-semibold text-indigo-700 dark:text-indigo-300">{t('subscription.monthlyPerPerson')}: {totalMonthlyPerPerson.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
+        <div className="text-xs text-gray-400">({t('subscription.autoCalculatedByPeople')})</div>
+        <div className="text-sm text-gray-500 mt-2 italic">{t('subscription.reviewTip')}</div>
       </div>
       <div className="flex justify-end mt-4">
         <button
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition"
           onClick={() => setShowShare(true)}
         >
-          Paylaş
+          {t('common.share')}
         </button>
       </div>
       {showShare && (

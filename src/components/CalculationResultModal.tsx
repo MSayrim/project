@@ -4,6 +4,7 @@ import { FaWhatsapp, FaXTwitter, FaFacebook } from 'react-icons/fa6';
 import html2canvas from 'html2canvas';
 import { Share } from '@capacitor/share';
 import { Capacitor } from '@capacitor/core';
+import { useTranslation } from 'react-i18next';
 
 interface CalculationResultModalProps {
   open: boolean;
@@ -196,6 +197,7 @@ function formatHealthSlip(result: any, slipTitle?: string) {
 const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, onClose, result, slipTitle, homemadeTotal, selectedRecipes, quantities, paidAmount }) => {
   if (!open) return null;
   
+  const { t } = useTranslation();
   console.log('Modal açılıyor', { result, slipTitle, isCalorieCalculation: slipTitle?.includes('Kalori') });
   
   const slipCardRef = useRef<HTMLDivElement>(null);
@@ -240,7 +242,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
         link.click();
       } catch (error) {
         console.error('Resim oluşturulamadı:', error);
-        alert('Resim oluşturulurken bir hata oluştu.');
+        alert(t('health.image_error', 'Resim oluşturulurken bir hata oluştu.'));
       }
     }
   };
@@ -296,11 +298,11 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
           link.href = image;
           link.download = 'ParamCebimde-Hesaplama.png';
           link.click();
-          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+          alert(t('health.download_image', 'Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.'));
         }
       } catch (error) {
         console.error('Resim oluşturulamadı:', error);
-        alert('Resim oluşturulurken bir hata oluştu.');
+        alert(t('health.image_error', 'Resim oluşturulurken bir hata oluştu.'));
       }
     }
   };
@@ -356,11 +358,11 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
           link.href = image;
           link.download = 'ParamCebimde-Hesaplama.png';
           link.click();
-          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+          alert(t('health.download_image', 'Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.'));
         }
       } catch (error) {
         console.error('Resim oluşturulamadı:', error);
-        alert('Resim oluşturulurken bir hata oluştu.');
+        alert(t('health.image_error', 'Resim oluşturulurken bir hata oluştu.'));
       }
     }
   };
@@ -416,11 +418,11 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
           link.href = image;
           link.download = 'ParamCebimde-Hesaplama.png';
           link.click();
-          alert('Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.');
+          alert(t('health.download_image', 'Resim indirildi. Lütfen indirilen resmi paylaşım uygulamasında paylaşın.'));
         }
       } catch (error) {
         console.error('Resim oluşturulamadı:', error);
-        alert('Resim oluşturulurken bir hata oluştu.');
+        alert(t('health.image_error', 'Resim oluşturulurken bir hata oluştu.'));
       }
     }
   };
@@ -432,9 +434,9 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-2 mb-2">
             <Users className="text-violet-500" size={22}/>
-            <h3 className="text-lg font-extrabold text-violet-700 dark:text-violet-200">Arkadaşlarınla Paylaş!</h3>
+            <h3 className="text-lg font-extrabold text-violet-700 dark:text-violet-200">{t('health.share_with_friends')}</h3>
           </div>
-          <p className="text-gray-500 dark:text-gray-300 text-sm mb-3">Son hesaplama slipini kolayca paylaşabilirsin 👇</p>
+          <p className="text-gray-500 dark:text-gray-300 text-sm mb-3">{t('health.share_result')}</p>
           {/* Görsel Slip Kartı */}
           <div 
             ref={slipCardRef}
@@ -444,14 +446,14 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
             <div className="flex justify-between items-center mb-3">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-violet-600 rounded-full flex items-center justify-center text-white font-bold text-xs">PC</div>
-                <h3 className="ml-2 text-violet-800 dark:text-violet-200 font-bold">ParamCebimde</h3>
+                <h3 className="ml-2 text-violet-800 dark:text-violet-200 font-bold">{t('health.paramcebinde')}</h3>
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('tr-TR')}</div>
             </div>
             
             {/* Başlık */}
             <h2 className="text-center text-violet-600 dark:text-violet-400 font-bold text-xl mb-4 border-b border-gray-200 dark:border-gray-700 pb-2 bg-gray-50 dark:bg-gray-900 -mx-5 px-5 py-2">
-              {slipTitle || 'Hesaplama Sonucu'}
+              {slipTitle || t('health.calculation_result')}
             </h2>
             
             {/* Sağlık Hesaplama Sonuçları */}
@@ -460,7 +462,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* BMI Sonucu - Sadece BMI hesaplaması için göster */}
                 {!isCalorieCalculation && result.bmi !== undefined && (
                   <div className="flex justify-between items-center mb-2 bg-gray-100 dark:bg-gray-800/80 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">BMI:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.bmi')}:</span>
                     <span className="text-indigo-600 dark:text-indigo-400 font-bold">{result.bmi}</span>
                   </div>
                 )}
@@ -468,7 +470,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* BMI Kategorisi - Sadece BMI hesaplaması için göster */}
                 {!isCalorieCalculation && result.bmiCategory && (
                   <div className="flex justify-between items-center mb-2 bg-gray-100 dark:bg-gray-800/80 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Kategori:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.category')}:</span>
                     <span className="text-indigo-600 dark:text-indigo-400 font-bold">{result.bmiCategory}</span>
                   </div>
                 )}
@@ -476,7 +478,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Vücut Yağ Oranı - Sadece vücut yağ oranı hesaplaması için göster */}
                 {!isCalorieCalculation && result.bodyFatPercentage !== undefined && (
                   <div className="flex justify-between items-center mb-2 bg-indigo-50 dark:bg-indigo-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Vücut Yağ Oranı:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.body_fat_percentage')}:</span>
                     <span className="text-indigo-600 dark:text-indigo-400 font-bold">%{result.bodyFatPercentage}</span>
                   </div>
                 )}
@@ -484,7 +486,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Vücut Yağ Kategorisi - Sadece vücut yağ oranı hesaplaması için göster */}
                 {!isCalorieCalculation && result.bodyFatCategory && (
                   <div className="flex justify-between items-center mb-2 bg-indigo-50 dark:bg-indigo-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Kategori:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.category')}:</span>
                     <span className="text-indigo-600 dark:text-indigo-400 font-bold">{result.bodyFatCategory}</span>
                   </div>
                 )}
@@ -492,7 +494,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Kalori İhtiyacı - Sadece kalori hesaplaması için göster */}
                 {isCalorieCalculation && result.calories !== undefined && (
                   <div className="flex justify-between items-center mb-2 bg-green-50 dark:bg-green-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Günlük Kalori İhtiyacı:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.daily_calorie_need')}:</span>
                     <span className="text-green-600 dark:text-green-400 font-bold">{result.calories} kcal</span>
                   </div>
                 )}
@@ -500,7 +502,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Kilo Vermek İçin Kalori - Sadece kalori hesaplaması için göster */}
                 {isCalorieCalculation && result.caloriesForLoss !== undefined && (
                   <div className="flex justify-between items-center mb-2 bg-green-50 dark:bg-green-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Kilo Vermek İçin:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.lose_weight')}:</span>
                     <span className="text-green-600 dark:text-green-400 font-bold">{result.caloriesForLoss} kcal</span>
                   </div>
                 )}
@@ -508,14 +510,14 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Kilo Almak İçin Kalori - Sadece kalori hesaplaması için göster */}
                 {isCalorieCalculation && result.caloriesForGain !== undefined && (
                   <div className="flex justify-between items-center mb-2 bg-green-50 dark:bg-green-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Kilo Almak İçin:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.gain_weight')}:</span>
                     <span className="text-green-600 dark:text-green-400 font-bold">{result.caloriesForGain} kcal</span>
                   </div>
                 )}
                 
                 {/* Bilgilendirme Notu */}
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded">
-                  Bu hesaplamalar yaklaşık değerlerdir ve sadece bilgi amaçlıdır. Sağlık durumunuzla ilgili kararlar için bir sağlık uzmanına danışın.
+                  {t('health.health_calculation_note')}
                 </div>
               </div>
             )}
@@ -525,7 +527,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
               <>
                 {/* Ödenen Tutar */}
                 <div className="flex justify-between items-center mb-2 bg-gray-100 dark:bg-gray-800/80 p-2 rounded">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Ödenen Tutar:</span>
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.paid_amount')}:</span>
                   <span className="text-green-600 dark:text-green-400 font-bold">
                     {typeof paidAmount === 'number' && result && typeof result.discount === 'number' 
                       ? (paidAmount - result.discount).toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
@@ -541,7 +543,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                   <div className="mb-3 space-y-1.5">
                     {result.tax !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">KDV:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.tax')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {result.isJoker 
                             ? result.tax.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
@@ -554,7 +556,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     )}
                     {result.commission !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">Komisyon:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.commission')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {result.isJoker 
                             ? result.commission.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
@@ -567,7 +569,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     )}
                     {result.communicationCommission !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">İletişim Komisyonu:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.communication_commission')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {result.isJoker 
                             ? result.communicationCommission.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
@@ -580,19 +582,19 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     )}
                     {result.discount !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">İndirim:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.discount')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">-{result.discount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                       </div>
                     )}
                     {result.isJoker && result.discountCommission !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">İndirim Komisyonu:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.discount_commission')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">{result.discountCommission.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                       </div>
                     )}
                     {result.profit !== undefined && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">Restoran Kârı:</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('health.restaurant_profit')}:</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {(() => {
                             // Kâr = (Ödenen Tutar) - KDV - Komisyon - İletişim Komisyonu - (varsa indirim komisyonu)
@@ -621,7 +623,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Evde Yapım Maliyeti */}
                 {typeof homemadeTotal === 'number' && (
                   <div className="flex justify-between items-center mb-2 bg-blue-50 dark:bg-blue-900/30 p-2 rounded">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Evde Yapım Maliyeti:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{t('health.homemade_cost')}:</span>
                     <span className="text-blue-600 dark:text-blue-400 font-bold">{homemadeTotal.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                   </div>
                 )}
@@ -629,21 +631,21 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Fiyat Karşılaştırması */}
                 {typeof homemadeTotal === 'number' && typeof result?.netTotal === 'number' && (
                   <div className="my-4">
-                    <h3 className="text-center text-gray-700 dark:text-gray-300 font-medium mb-2">Fiyat Karşılaştırması</h3>
+                    <h3 className="text-center text-gray-700 dark:text-gray-300 font-medium mb-2">{t('health.price_comparison')}</h3>
                     <div className="flex items-center justify-center gap-4">
                       <div className="text-center">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Ödenen Tutar</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{t('health.paid_amount')}</div>
                         <div className="font-bold text-red-500">{result.netTotal.toLocaleString('tr-TR')}₺</div>
                       </div>
                       <div className="text-2xl text-gray-400">VS</div>
                       <div className="text-center">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Evde Yapım</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{t('health.homemade')}</div>
                         <div className="font-bold text-green-500">{homemadeTotal.toLocaleString('tr-TR')}₺</div>
                         <CheckCircle className="inline-block text-green-500 ml-1" size={16} />
                       </div>
                     </div>
                     <div className="text-center mt-2">
-                      <span className="text-sm font-medium">Fark: </span>
+                      <span className="text-sm font-medium">{t('health.difference')}:</span>
                       <span className="text-sm font-bold text-green-500">-{(result.netTotal - homemadeTotal).toLocaleString('tr-TR')}₺</span>
                     </div>
                   </div>
@@ -652,7 +654,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 {/* Seçilen Ürünler */}
                 {selectedRecipes && selectedRecipes.length > 0 && (
                   <div className="mt-4 border-t border-green-200 dark:border-green-800 pt-4">
-                    <h3 className="font-bold text-green-700 dark:text-green-300 mb-3 text-base text-center">Seçilen Ürünler</h3>
+                    <h3 className="font-bold text-green-700 dark:text-green-300 mb-3 text-base text-center">{t('health.selected_products')}</h3>
                     <ul className="space-y-2 mb-4">
                       {selectedRecipes.map(item => (
                         <li key={item.nameTR || item.nameEN} className="flex justify-between items-center text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-800 p-2 rounded-lg">
@@ -672,7 +674,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                       ))}
                     </ul>
                     <div className="text-right font-bold text-green-600 dark:text-green-400 pr-2">
-                      Toplam: {homemadeTotal?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺
+                      {t('health.total')}: {homemadeTotal?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺
                     </div>
                   </div>
                 )}
@@ -682,7 +684,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
             {!isHealthCalculation && (
               <div className="pt-4">
                 <div className="flex flex-col items-center gap-3 mb-4">
-                  <span className="font-bold text-xl text-gray-800 dark:text-white">Fiyat Karşılaştırması</span>
+                  <span className="font-bold text-xl text-gray-800 dark:text-white">{t('health.price_comparison')}</span>
                   <div className="h-1 w-20 bg-green-500 rounded-full"></div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 items-center max-w-md mx-auto">
@@ -691,7 +693,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     ${((paidAmount ?? 0) - (result?.discount ?? 0)) < (homemadeTotal ?? 0)
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Ödenen Tutar</span>
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('health.paid_amount')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">
                       {typeof paidAmount === 'number' && result && typeof result.discount === 'number'
                         ? ((paidAmount - result.discount).toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})) 
@@ -712,7 +714,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     ${((paidAmount ?? 0) - (result?.discount ?? 0)) >= (homemadeTotal ?? 0)
                       ? 'bg-green-50 dark:bg-green-900/50 ring-2 ring-green-500 dark:ring-green-400'
                       : 'bg-gray-50 dark:bg-gray-800'}`}>
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Evde Yapsan</span>
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('health.homemade')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">{typeof homemadeTotal === 'number' ? homemadeTotal.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}₺</span>
                     {((paidAmount ?? 0) - (result?.discount ?? 0)) >= (homemadeTotal ?? 0) && (
                       <CheckCircle size={32}
@@ -722,7 +724,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                 </div>
                 {/* Fark kutusu */}
                 <div className="flex items-center justify-center gap-2 mt-4">
-                  <span className="text-sm font-medium">Fark:</span>
+                  <span className="text-sm font-medium">{t('health.difference')}:</span>
                   <div className="px-3 py-1 rounded-lg font-bold text-base bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
                     {typeof paidAmount === 'number' && typeof result?.discount === 'number' && typeof homemadeTotal === 'number'
                       ? Math.abs((paidAmount - result.discount) - homemadeTotal).toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}₺
@@ -731,16 +733,16 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
               </div>
             )}
             <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">
-              ParamCebimde ile hesaplandı • {new Date().toLocaleTimeString('tr-TR')}
+              {t('health.powered_by')} ParamCebimde • {new Date().toLocaleTimeString('tr-TR')}
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full mt-4">
             <div className="flex gap-2 w-full">
               <button onClick={() => shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'))} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
-                <Share2 size={18}/> Hızlı Paylaş
+                <Share2 size={18}/> {t('health.quick_share')}
               </button>
               <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
-                <Download size={18}/> Resim Olarak İndir
+                <Download size={18}/> {t('health.download_as_image')}
               </button>
             </div>
             

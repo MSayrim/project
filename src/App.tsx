@@ -41,96 +41,96 @@ function App() {
     switch (selectedCalculationType) {
       case 'food':
         return {
-          title: 'ParamCebimde - Gıda Maliyeti Hesaplama | Akıllı Hesaplama Platformu',
-          description: 'Gıda maliyetlerinizi kolayca hesaplayın ve bütçenizi kontrol altında tutun. ParamCebimde ile yemek maliyetlerinizi optimize edin.',
-          path: '/food-calculator',
+          title: t('seo.food.title'),
+          description: t('seo.food.description'),
+          path: t('seo.food.path'),
           structuredData: {
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            'name': 'ParamCebimde Gıda Hesaplama',
-            'applicationCategory': 'FinanceApplication',
-            'operatingSystem': 'Web',
+            '@context': t('seo.context'),
+            '@type': t('seo.softwareApplication'),
+            'name': t('seo.food.name'),
+            'applicationCategory': t('seo.financeApplication'),
+            'operatingSystem': t('seo.web'),
             'offers': {
-              '@type': 'Offer',
+              '@type': t('seo.offer'),
               'price': '0',
-              'priceCurrency': 'TRY'
+              'priceCurrency': t('seo.try')
             }
           }
         };
       case 'finance':
         return {
-          title: 'ParamCebimde - Finans Hesaplama | Akıllı Hesaplama Platformu',
-          description: 'Finansal hesaplamalarınızı kolayca yapın ve bütçenizi planlayın. ParamCebimde ile finansal geleceğinizi kontrol altına alın.',
-          path: '/finance-calculator',
+          title: t('seo.finance.title'),
+          description: t('seo.finance.description'),
+          path: t('seo.finance.path'),
           structuredData: {
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            'name': 'ParamCebimde Finans Hesaplama',
-            'applicationCategory': 'FinanceApplication',
-            'operatingSystem': 'Web',
+            '@context': t('seo.context'),
+            '@type': t('seo.softwareApplication'),
+            'name': t('seo.finance.name'),
+            'applicationCategory': t('seo.financeApplication'),
+            'operatingSystem': t('seo.web'),
             'offers': {
-              '@type': 'Offer',
+              '@type': t('seo.offer'),
               'price': '0',
-              'priceCurrency': 'TRY'
+              'priceCurrency': t('seo.try')
             }
           }
         };
       case 'online-subscription':
         return {
-          title: 'ParamCebimde - Online Abonelik Hesaplama | Abonelik Takip Aracı',
-          description: 'Tüm online aboneliklerinizin toplam maliyetini hesaplayın ve bütçenizi kontrol altında tutun.',
-          path: '/online-subscription-calculator',
+          title: t('seo.subscription.title'),
+          description: t('seo.subscription.description'),
+          path: t('seo.subscription.path'),
           structuredData: {
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            'name': 'ParamCebimde Online Abonelik Hesaplama',
-            'applicationCategory': 'FinanceApplication',
+            '@context': t('seo.context'),
+            '@type': t('seo.softwareApplication'),
+            'name': t('seo.subscription.name'),
+            'applicationCategory': t('seo.financeApplication'),
             'offers': {
-              '@type': 'Offer',
+              '@type': t('seo.offer'),
               'price': '0',
-              'priceCurrency': 'TRY'
+              'priceCurrency': t('seo.try')
             }
           }
         };
       case 'health-calculator':
         return {
-          title: 'ParamCebimde - Sağlık Hesaplayıcı | BMI ve Kalori İhtiyacı',
-          description: 'Vücut kitle indeksinizi (BMI) ve günlük kalori ihtiyacınızı hesaplayın. Sağlıklı yaşam için kişisel değerlerinizi takip edin.',
-          path: '/health-calculator',
+          title: t('seo.health.title'),
+          description: t('seo.health.description'),
+          path: t('seo.health.path'),
           structuredData: {
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            'name': 'ParamCebimde Sağlık Hesaplayıcı',
-            'applicationCategory': 'HealthApplication',
+            '@context': t('seo.context'),
+            '@type': t('seo.softwareApplication'),
+            'name': t('seo.health.name'),
+            'applicationCategory': t('seo.healthApplication'),
             'offers': {
-              '@type': 'Offer',
+              '@type': t('seo.offer'),
               'price': '0',
-              'priceCurrency': 'TRY'
+              'priceCurrency': t('seo.try')
             }
           }
         };
       case 'vehicle-fuel-comparison':
         return {
-          title: 'ParamCebimde - Araç Yakıt Karşılaştırma | Araç Maliyeti Hesaplama',
-          description: 'Araç yakıt maliyetlerinizi karşılaştırın ve bütçenizi kontrol altında tutun.',
-          path: '/arac-yakit-karsilastirma',
+          title: t('seo.vehicleFuel.title'),
+          description: t('seo.vehicleFuel.description'),
+          path: t('seo.vehicleFuel.path'),
           structuredData: {
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            'name': 'ParamCebimde Araç Yakıt Karşılaştırma',
-            'applicationCategory': 'FinanceApplication',
+            '@context': t('seo.context'),
+            '@type': t('seo.softwareApplication'),
+            'name': t('seo.vehicleFuel.name'),
+            'applicationCategory': t('seo.financeApplication'),
             'offers': {
-              '@type': 'Offer',
+              '@type': t('seo.offer'),
               'price': '0',
-              'priceCurrency': 'TRY'
+              'priceCurrency': t('seo.try')
             }
           }
         };
       default:
         return {
-          title: 'ParamCebimde - Akıllı Hesaplama Platformu | Gıda, Finans ve Daha Fazlası',
-          description: 'ParamCebimde ile gıda, finans ve seyahat maliyetlerinizi kolayca hesaplayın. Kullanıcı dostu arayüzümüzle bütçenizi kontrol altında tutun.',
-          path: '/',
+          title: t('seo.default.title'),
+          description: t('seo.default.description'),
+          path: t('seo.default.path'),
         };
     }
   };

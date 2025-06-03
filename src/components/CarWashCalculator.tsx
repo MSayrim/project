@@ -442,7 +442,7 @@ const CarWashCalculator: React.FC = () => {
           style={{ minWidth: 0 }}
           onClick={() => console.log('Hesapla butonuna basıldı')}
         >
-          Hesapla
+          {t('common.calculate')}
         </button>
         <button
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-r-lg flex-1 flex items-center justify-center gap-2 text-base"
@@ -450,7 +450,7 @@ const CarWashCalculator: React.FC = () => {
           onClick={() => setShowShareModal(true)}
         >
           <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-share"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-          Sonucumu Paylaş
+          {t('common.shareResult')}
         </button>
       </div>
       
@@ -551,7 +551,7 @@ const CarWashCalculator: React.FC = () => {
           open={showShareModal}
           onClose={() => setShowShareModal(false)}
           result={shareResult}
-          slipTitle={washType === 'automatic' ? 'Otomatik Yıkama' : 'Jetonlu Yıkama'}
+          slipTitle={washType === 'automatic' ? t('carwash.automatic') : t('carwash.token')}
           selectedServices={shareResult.selectedServices}
           paidAmount={shareResult.paidAmount}
           homemadeTotal={ownCost()}

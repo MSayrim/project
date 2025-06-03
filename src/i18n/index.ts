@@ -70,6 +70,16 @@ const resources = {
         waterUsage: "Water Usage",
         liter: "Liter",
         electricityUsage: "Electricity Usage",
+        share: {
+          mostEconomical: "Most economical: {{type}}",
+          priceComparison: "Price Comparison",
+          difference: "Difference",
+          disclaimer: "Default values are based on typical vehicle data. Adjust as needed.",
+          shareWithFriends: "Share with Friends",
+          shareEasily: "Share Result",
+          quickShare: "Quick Share",
+          downloadAsImage: "Download as Image"
+        }
       },
       food: {
         title: "Food Prices and Calculator",
@@ -461,6 +471,16 @@ const resources = {
         waterUsage: "Su Tüketimi",
         liter: "Litre",
         electricityUsage: "Elektrik Tüketimi",
+        share: {
+          mostEconomical: "En ekonomik: {{type}}",
+          priceComparison: "Fiyat Karşılaştırması",
+          difference: "Fark",
+          disclaimer: "Varsayılan değerler tipik araç verilerine dayalıdır. Gerekirse düzenleyin.",
+          shareWithFriends: "Arkadaşlarınla Paylaş",
+          shareEasily: "Sonucu Paylaş",
+          quickShare: "Hızlı Paylaş",
+          downloadAsImage: "Görsel Olarak İndir"
+        }
       },
       food: {
         title: "Yemek Fiyatları ve Hesaplama",
@@ -661,15 +681,15 @@ const resources = {
         body_fat_percentage: "Vücut Yağ Oranı",
         body_fat_description: "Bu değer ABD Donanması formülü ile hesaplanmış yaklaşık bir tahmindir.",
         age: "Yaş",
-        age_placeholder: "Örn: 30",
-        height_placeholder: "Örn: 175",
-        weight_placeholder: "Örn: 70",
+        age_placeholder: "Örn. 30",
+        height_placeholder: "Örn. 175",
+        weight_placeholder: "Örn. 70",
         neck: "Boyun Çevresi (cm)",
         waist: "Bel Çevresi (cm)",
         hip: "Kalça Çevresi (cm)",
-        neck_placeholder: "Örn: 35",
-        waist_placeholder: "Örn: 85",
-        hip_placeholder: "Örn: 95",
+        neck_placeholder: "Örn. 35",
+        waist_placeholder: "Örn. 85",
+        hip_placeholder: "Örn. 95",
         invalid_height_weight: "Lütfen geçerli boy ve kilo değerleri girin.",
         invalid_measurements: "Lütfen tüm ölçümleri doğru girin.",
         invalid_hip_measurement: "Lütfen geçerli bir kalça ölçüsü girin.",

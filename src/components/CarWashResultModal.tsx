@@ -243,19 +243,19 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
                 <span className="font-medium text-gray-700 dark:text-gray-300">{t('common.paidAmount')}:</span>
                 <span className="font-bold text-green-600 dark:text-green-400">{paidAmount?.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
               </div>
-              {result?.discount !== undefined && (
+              {result?.discount !== undefined && result.discount !== 0 && (
                 <div className="flex justify-between mb-1 text-sm">
                   <span className="text-gray-600 dark:text-gray-400">{t('common.discount')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">-{result.discount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
               )}
-              {result?.tax !== undefined && (
+              {result?.tax !== undefined && result.tax !== 0 && (
                 <div className="flex justify-between mb-1 text-sm">
                   <span className="text-gray-600 dark:text-gray-400">{t('common.tax')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">{result.tax.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                 </div>
               )}
-              {result?.commission !== undefined && (
+              {result?.commission !== undefined && result.commission !== 0 && (
                 <div className="flex justify-between mb-1 text-sm">
                   <span className="text-gray-600 dark:text-gray-400">{t('common.commission')}:</span>
                   <span className="text-gray-700 dark:text-gray-300">{result.commission.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
@@ -344,10 +344,10 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
           <div className="flex flex-col gap-2 w-full mt-4">
             <div className="flex gap-2 w-full">
               <button onClick={shareAsImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
-                <Share2 size={18}/> {t('share.quickShare')}
+                <Share2 size={18}/> {t('carwash.share.quickShare')}
               </button>
               <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
-                <Download size={18}/> {t('share.downloadAsImage')}
+                <Download size={18}/> {t('carwash.share.downloadAsImage')}
               </button>
             </div>
             <div className="flex gap-3 justify-center w-full mt-2">

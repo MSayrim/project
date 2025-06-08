@@ -446,7 +446,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
         <div className="px-6 pb-6 pt-2">
           <button 
             onClick={downloadAsImage}
-            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-800 transition flex items-center justify-center gap-2"
           >
             <Download className="h-5 w-5" />
             {t('common.buttons.downloadAsImage')}

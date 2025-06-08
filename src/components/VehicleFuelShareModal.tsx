@@ -263,7 +263,7 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-xl relative animate-fadeInUp border-2 border-violet-200 dark:border-violet-900/30">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-xl relative animate-fadeInUp border-2 border-violet-200 dark:border-violet-800">
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-400 hover:text-red-500 rounded-lg"><X size={22} /></button>
         <div className="flex flex-col items-center pt-6">
           <h3 className="text-lg font-extrabold text-violet-700 dark:text-violet-400 text-center mb-1">{slipTitle || t('vehicle.comparison.resultTitle')}</h3>
@@ -336,7 +336,7 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
         <div className="px-6 pb-6 pt-2">
           <button 
             onClick={handleDownload}
-            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-800 transition flex items-center justify-center gap-2"
           >
             <Download className="h-5 w-5" />
             {t('common.buttons.downloadAsImage')}

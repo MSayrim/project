@@ -21,17 +21,13 @@ const SubscriptionShareModal = forwardRef(({
     if (!cardRef.current) return null;
     try {
       const isDark = document.documentElement.classList.contains('dark');
-      const originalStyle = cardRef.current.getAttribute('style');
-      cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+        backgroundColor: isDark ? '#111827' : '#ffffff',
         scale: 2,
         useCORS: true,
         allowTaint: true
       });
-      if (originalStyle) cardRef.current.setAttribute('style', originalStyle);
-      else cardRef.current.removeAttribute('style');
       
       const image = canvas.toDataURL('image/png');
       const blob = await (await fetch(image)).blob();
@@ -178,24 +174,23 @@ const SubscriptionShareModal = forwardRef(({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-md relative animate-fadeInUp border-2 border-indigo-200 dark:border-indigo-800">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-md relative animate-fadeInUp border-2 border-violet-200 dark:border-violet-800">
         <button onClick={onClose} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl font-bold"><X size={22} /></button>
         <div className="flex flex-col items-center pt-6 px-6 pb-2">
           {/* Kart */}
           <div
             ref={cardRef}
-            className="w-full rounded-xl p-6 mb-4 border border-indigo-200 dark:border-indigo-800 shadow-lg bg-gradient-to-br from-indigo-100 via-white to-indigo-50 dark:from-indigo-950 dark:via-gray-900 dark:to-indigo-900"
-            style={{ backgroundColor: document.documentElement.classList.contains('dark') ? '#181c27' : '#f6f8ff' }}
+            className="w-full rounded-xl p-6 mb-4 bg-white dark:bg-gray-900"
           >
             {/* Başlık ve Tarih */}
             <div className="flex flex-col items-center mb-2">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-extrabold text-lg shadow">PC</div>
-                <h3 className="text-xl font-extrabold text-indigo-700 dark:text-indigo-200">ParamCebimde</h3>
+                <div className="w-10 h-10 bg-violet-600 rounded-full flex items-center justify-center text-white font-extrabold text-lg shadow">PC</div>
+                <h3 className="text-xl font-extrabold text-violet-700 dark:text-violet-300">ParamCebimde</h3>
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('tr-TR')}</div>
             </div>
-            <h2 className="text-center text-indigo-700 dark:text-indigo-300 font-extrabold text-2xl mb-5 border-b border-gray-200 dark:border-gray-700 pb-2 bg-indigo-50 dark:bg-indigo-900 -mx-6 px-6 py-2 rounded-t-xl">
+            <h2 className="text-center text-violet-700 dark:text-violet-400 font-extrabold text-2xl mb-5 border-b border-gray-200 dark:border-gray-700 pb-2">
               {t('subscription.share.summary')}
             </h2>
             {/* Abonelikler */}
@@ -209,16 +204,16 @@ const SubscriptionShareModal = forwardRef(({
                       <span className="font-semibold text-gray-800 dark:text-gray-100">{sub.name}</span>
                       <span className="text-xs text-gray-500">({sub.type})</span>
                     </div>
-                    <span className="font-bold text-indigo-700 text-lg">{sub.price.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</span>
+                    <span className="font-bold text-violet-700 text-lg">{sub.price.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</span>
                   </li>
                 ))}
               </ul>
             </div>
             {/* Toplamlar */}
-            <div className="rounded-xl p-5 text-center mb-2 bg-indigo-50 dark:bg-indigo-900 border border-indigo-200 dark:border-indigo-800">
+            <div className="p-5 text-center mb-2">
               <div className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{t('subscription.monthly')}</div>
-              <div className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-300 mb-1 tracking-tight drop-shadow">{totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
-              <div className="text-lg font-bold text-indigo-600 mb-1">{t('subscription.yearly')}: {totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
+              <div className="text-3xl font-extrabold text-violet-700 dark:text-violet-400 mb-1 tracking-tight drop-shadow">{totalMonthly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
+              <div className="text-lg font-bold text-violet-600 dark:text-violet-500 mb-1">{t('subscription.yearly')}: {totalYearly.toLocaleString('tr-TR', {minimumFractionDigits:2})}₺</div>
             </div>
             <div className="text-center text-xs text-gray-400 mt-2">
               {t('subscription.calculatedWith')} • {new Date().toLocaleTimeString('tr-TR')}
@@ -230,7 +225,7 @@ const SubscriptionShareModal = forwardRef(({
             {/* Primary download button - full width */}
             <button 
               onClick={onDownloadImage}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-medium shadow-md border border-violet-500 transition-all duration-200"
+              className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-800 transition flex items-center justify-center gap-2"
             >
               <Download size={20} />
               {t('common.buttons.downloadAsImage')}
@@ -240,34 +235,34 @@ const SubscriptionShareModal = forwardRef(({
             <div className="flex justify-center gap-3 mt-1">
               <button 
                 onClick={handleWhatsAppShare}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] hover:bg-[#1DA851] text-white shadow-md border border-[#20BD5F] hover:shadow-lg transition-all duration-200"
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
                 title={t('common.buttons.shareWhatsApp')}
                 aria-label={t('common.buttons.shareWhatsApp')}
               >
-                <FaWhatsapp size={22} />
+                <FaWhatsapp className="w-6 h-6 text-green-500" />
               </button>
               
               <button 
                 onClick={handleTwitterShare}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-800 text-white shadow-md border border-gray-700 hover:shadow-lg transition-all duration-200"
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
                 title={t('common.buttons.shareTwitter')}
                 aria-label={t('common.buttons.shareTwitter')}
               >
-                <FaXTwitter size={20} />
+                <FaXTwitter className="w-6 h-6 text-gray-800 dark:text-gray-200" />
               </button>
               
               <button 
                 onClick={handleFacebookShare}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1877F2] hover:bg-[#166FE5] text-white shadow-md border border-[#166FE5] hover:shadow-lg transition-all duration-200"
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
                 title={t('common.buttons.shareFacebook')}
                 aria-label={t('common.buttons.shareFacebook')}
               >
-                <FaFacebook size={22} />
+                <FaFacebook className="w-6 h-6 text-blue-500" />
               </button>
               
               <button 
                 onClick={handleCopy}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-300 hover:shadow-lg transition-all duration-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:border-gray-600"
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
                 title={t('common.buttons.copyToClipboard')}
                 aria-label={t('common.buttons.copyToClipboard')}
               >

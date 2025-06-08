@@ -8,21 +8,21 @@ import { FaWhatsapp, FaTwitter as FaXTwitter, FaFacebook } from 'react-icons/fa6
 
 // BMI kategorileri ve açıklamaları
 const BMI_CATEGORIES = [
-  { range: [0, 18.5], name: 'Zayıf', color: 'text-blue-500', description: 'İdeal kilonun altında. Sağlıklı beslenme ve uygun egzersizle kilo almanız önerilir.' },
-  { range: [18.5, 24.9], name: 'Normal', color: 'text-green-500', description: 'İdeal kilo aralığındasınız. Bu kiloyu korumak için dengeli beslenmeye ve düzenli egzersize devam edin.' },
-  { range: [25, 29.9], name: 'Fazla Kilolu', color: 'text-yellow-500', description: 'İdeal kilonun üzerindesiniz. Dengeli beslenme ve düzenli egzersizle kilo vermeniz önerilir.' },
-  { range: [30, 34.9], name: 'Obez (Sınıf I)', color: 'text-orange-500', description: 'Sağlık riskleri artmaktadır. Bir sağlık uzmanı eşliğinde kilo vermeniz önerilir.' },
-  { range: [35, 39.9], name: 'Obez (Sınıf II)', color: 'text-red-500', description: 'Ciddi sağlık riskleri bulunmaktadır. Bir sağlık uzmanına başvurmanız önemlidir.' },
-  { range: [40, Infinity], name: 'Aşırı Obez (Sınıf III)', color: 'text-red-700', description: 'Çok yüksek sağlık riskleri. Acilen bir sağlık uzmanına başvurmanız gerekir.' }
+  { range: [0, 18.5], name: 'health.bmi_categories.underweight', color: 'text-blue-500', description: 'health.bmi_categories.underweight_desc' },
+  { range: [18.5, 25], name: 'health.bmi_categories.normal', color: 'text-green-500', description: 'health.bmi_categories.normal_desc' },
+  { range: [25, 30], name: 'health.bmi_categories.overweight', color: 'text-yellow-500', description: 'health.bmi_categories.overweight_desc' },
+  { range: [30, 35], name: 'health.bmi_categories.obese1', color: 'text-orange-500', description: 'health.bmi_categories.obese1_desc' },
+  { range: [35, 40], name: 'health.bmi_categories.obese2', color: 'text-red-500', description: 'health.bmi_categories.obese2_desc' },
+  { range: [40, Infinity], name: 'health.bmi_categories.obese3', color: 'text-red-700', description: 'health.bmi_categories.obese3_desc' }
 ];
 
 // Aktivite seviyeleri
 const ACTIVITY_LEVELS = [
-  { id: 'sedentary', name: 'Hareketsiz', factor: 1.2, description: 'Masa başı iş, minimal fiziksel aktivite' },
-  { id: 'light', name: 'Az Hareketli', factor: 1.375, description: 'Haftada 1-3 gün hafif egzersiz' },
-  { id: 'moderate', name: 'Orta Hareketli', factor: 1.55, description: 'Haftada 3-5 gün orta yoğunlukta egzersiz' },
-  { id: 'active', name: 'Çok Hareketli', factor: 1.725, description: 'Haftada 6-7 gün yoğun egzersiz' },
-  { id: 'veryActive', name: 'Aşırı Hareketli', factor: 1.9, description: 'Günde iki kez antrenman veya fiziksel iş' }
+  { id: 'sedentary', nameKey: 'health.activity_levels.sedentary_name', factor: 1.2, descriptionKey: 'health.activity_levels.sedentary_desc' },
+  { id: 'light', nameKey: 'health.activity_levels.light_name', factor: 1.375, descriptionKey: 'health.activity_levels.light_desc' },
+  { id: 'moderate', nameKey: 'health.activity_levels.moderate_name', factor: 1.55, descriptionKey: 'health.activity_levels.moderate_desc' },
+  { id: 'active', nameKey: 'health.activity_levels.active_name', factor: 1.725, descriptionKey: 'health.activity_levels.active_desc' },
+  { id: 'veryActive', nameKey: 'health.activity_levels.veryActive_name', factor: 1.9, descriptionKey: 'health.activity_levels.veryActive_desc' }
 ];
 
 const HealthCalculator: React.FC = () => {
@@ -118,17 +118,17 @@ const HealthCalculator: React.FC = () => {
 
     // Vücut yağ oranı kategorisini belirle
     if (gender === 'male') {
-      if (bodyFat < 6) setBodyFatCategory(t('health.essential_fat'));
-      else if (bodyFat < 14) setBodyFatCategory(t('health.athletic'));
-      else if (bodyFat < 18) setBodyFatCategory(t('health.fitness'));
-      else if (bodyFat < 25) setBodyFatCategory(t('health.normal'));
-      else setBodyFatCategory(t('health.overweight'));
+      if (bodyFat < 6) setBodyFatCategory(t('health.body_fat_categories.essential_fat'));
+      else if (bodyFat < 14) setBodyFatCategory(t('health.body_fat_categories.athletic'));
+      else if (bodyFat < 18) setBodyFatCategory(t('health.body_fat_categories.fitness'));
+      else if (bodyFat < 25) setBodyFatCategory(t('health.body_fat_categories.normal'));
+      else setBodyFatCategory(t('health.body_fat_categories.overweight'));
     } else {
-      if (bodyFat < 16) setBodyFatCategory(t('health.essential_fat'));
-      else if (bodyFat < 24) setBodyFatCategory(t('health.athletic'));
-      else if (bodyFat < 31) setBodyFatCategory(t('health.fitness'));
-      else if (bodyFat < 36) setBodyFatCategory(t('health.normal'));
-      else setBodyFatCategory(t('health.overweight'));
+      if (bodyFat < 16) setBodyFatCategory(t('health.body_fat_categories.essential_fat'));
+      else if (bodyFat < 24) setBodyFatCategory(t('health.body_fat_categories.athletic'));
+      else if (bodyFat < 31) setBodyFatCategory(t('health.body_fat_categories.fitness'));
+      else if (bodyFat < 36) setBodyFatCategory(t('health.body_fat_categories.normal'));
+      else setBodyFatCategory(t('health.body_fat_categories.overweight'));
     }
   };
 
@@ -235,10 +235,11 @@ const HealthCalculator: React.FC = () => {
                     </div>
 
                     <button
-                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
-                        onClick={calculateBMI}
+                        onClick={showAdvancedBmi ? calculateAdvancedBMI : calculateBMI}
+                        className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition-colors duration-200 flex items-center justify-center gap-3"
                     >
-                      {t('health.calculate_bmi')}
+                      <BarChart3 className="h-5 w-5" />
+                      {showAdvancedBmi ? t('health.calculate_advanced_bmi') : t('health.calculate_bmi')}
                     </button>
                   </>
               ) : (
@@ -339,26 +340,23 @@ const HealthCalculator: React.FC = () => {
                     </div>
 
                     <button
-                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
-                        onClick={calculateAdvancedBMI}
+                        onClick={showAdvancedBmi ? calculateAdvancedBMI : calculateBMI}
+                        className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition-colors duration-200 flex items-center justify-center gap-3"
                     >
-                      {t('health.calculate_body_fat')}
+                      <BarChart3 className="h-5 w-5" />
+                      {showAdvancedBmi ? t('health.calculate_advanced_bmi') : t('health.calculate_bmi')}
                     </button>
                   </>
               )}
 
               {/* BMI Sonucu */}
-              {bmi !== null && bmiCategory && !showAdvancedBmi && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                >
-                  <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
+              {bmi && bmiCategory && !bodyFatPercentage && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mt-8 p-6 bg-gray-50 dark:bg-gray-700 rounded-xl shadow-md">
+                  <h3 className="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">{t('health.result')}</h3>
                   <div className="flex flex-col items-center">
-                    <div className="text-5xl font-bold mb-2">{bmi}</div>
-                    <div className={`text-xl font-semibold ${bmiCategory.color}`}>{bmiCategory.name}</div>
-                    <p className="text-gray-600 dark:text-gray-300 text-center mt-4">{bmiCategory.description}</p>
+                    <div className="text-5xl font-bold mb-2 text-gray-800 dark:text-white">{bmi}</div>
+                    <div className={`text-xl font-semibold ${bmiCategory.color}`}>{t(bmiCategory.name)}</div>
+                    <p className="text-gray-600 dark:text-gray-400 text-center mt-4">{t(bmiCategory.description)}</p>
 
                     {/* BMI Çizelgesi/Barı */}
                     <div className="w-full mt-6">
@@ -409,30 +407,26 @@ const HealthCalculator: React.FC = () => {
                       className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
                     >
                       <Share2 className="h-5 w-5" />
-                      <span>{t('common.shareResult')}</span>
+                      {t('common.shareResult')}
                     </button>
                   </div>
                 </motion.div>
               )}
-              {bmi !== null && bmiCategory && showAdvancedBmi && bodyFatPercentage !== null && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                >
-                  <h3 className="text-xl font-bold text-center mb-4">Sonuç</h3>
+              {bmi && bmiCategory && showAdvancedBmi && bodyFatPercentage && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mt-8 p-6 bg-gray-50 dark:bg-gray-700 rounded-xl shadow-md">
+                  <h3 className="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">{t('health.result')}</h3>
                   <div className="flex flex-col items-center">
                     <div className="mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg w-full">
-                      <h4 className="text-lg font-semibold text-center mb-2">Vücut Yağ Oranı</h4>
+                      <h4 className="text-lg font-semibold text-center mb-2 text-gray-800 dark:text-white">{t('health.body_fat_percentage_title')}</h4>
                       <div className="flex flex-col items-center">
                         <div className="text-5xl font-bold mb-1 text-indigo-600 dark:text-indigo-400">
                           %{bodyFatPercentage}
                         </div>
                         <div className="text-xl font-medium text-indigo-700 dark:text-indigo-300">
-                          {bodyFatCategory}
+                          {bodyFatCategory} {/* This is already translated via setBodyFatCategory */}
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-4">
-                          Bu değer, ABD Donanması formülü kullanılarak hesaplanmıştır ve yaklaşık bir tahmindir.
+                          {t('health.body_fat_disclaimer')}
                         </p>
                       </div>
                     </div>
@@ -486,7 +480,7 @@ const HealthCalculator: React.FC = () => {
                       className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
                     >
                       <Share2 className="h-5 w-5" />
-                      <span>{t('common.shareResult')}</span>
+                      {t('common.shareResult')}
                     </button>
                   </div>
                 </motion.div>
@@ -569,39 +563,51 @@ const HealthCalculator: React.FC = () => {
                 >
                   {ACTIVITY_LEVELS.map((level) => (
                       <option key={level.id} value={level.id}>
-                        {level.name} - {level.description}
+                        {t(level.nameKey)}
                       </option>
                   ))}
                 </select>
+                {activityLevel && (
+                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                     {t(ACTIVITY_LEVELS.find(level => level.id === activityLevel)?.descriptionKey || '')}
+                   </p>
+                )}
               </div>
 
               <button
-                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition duration-200"
-                  onClick={calculateCalories}
+                onClick={calculateCalories}
+                className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition-colors duration-200 flex items-center justify-center gap-3"
               >
-                {t('health.calculate_calories')}
+                <BarChart3 className="h-5 w-5" />
+                {t('health.calculate_calorie_need')}
               </button>
 
               {/* Kalori Sonucu */}
-              {calories !== null && (
+              {calories && (
                 <div className="mt-6 max-w-2xl mx-auto">
+                  <h3 className="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">{t('health.daily_calorie_need_result_title')}</h3>
+                  <div className="text-center mb-4">
+                    <span className="text-gray-700 dark:text-gray-300">{t('health.estimated_daily_calories')} </span>
+                    <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{calories} kcal</span>
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="p-4 rounded-lg bg-red-100 dark:bg-red-900/30 text-center">
-                      <div className="text-xs font-medium text-red-700 dark:text-red-300 mb-1">Kilo Ver</div>
-                      <div className="text-lg font-bold text-red-600 dark:text-red-400">2165 kcal</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilo vermek için önerilen kalori</div>
+                      <div className="text-xs font-medium text-red-700 dark:text-red-300 mb-1">{t('health.calorie_options.lose_weight_short')}</div>
+                      <div className="text-lg font-bold text-red-600 dark:text-red-400">{calories - 500} kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('health.calorie_options.lose_weight_desc_short')}</div>
                     </div>
-                    <div className="p-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-center">
-                      <div className="text-xs font-medium text-green-700 dark:text-green-300 mb-1">Koru</div>
-                      <div className="text-lg font-bold text-green-600 dark:text-green-400">2706 kcal</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilonuzu korumak için önerilen kalori</div>
+                    <div className="p-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-center ring-2 ring-green-500 dark:ring-green-400">
+                      <div className="text-xs font-medium text-green-700 dark:text-green-300 mb-1">{t('health.calorie_options.maintain_weight_short')}</div>
+                      <div className="text-lg font-bold text-green-600 dark:text-green-400">{calories} kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('health.calorie_options.maintain_weight_desc_short')}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-center">
-                      <div className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">Kilo Al</div>
-                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400">3247 kcal</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilo almak için önerilen kalori</div>
+                      <div className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">{t('health.calorie_options.gain_weight_short')}</div>
+                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{calories + 500} kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('health.calorie_options.gain_weight_desc_short')}</div>
                     </div>
                   </div>
+                  {/* Sonucu Paylaş Butonu */} 
                   <button
                     onClick={() => setShowShareModal(true)}
                     className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
@@ -622,8 +628,8 @@ const HealthCalculator: React.FC = () => {
             bmi={bmi ?? 0}
             height={parseFloat(height) || 0}
             weight={parseFloat(weight) || 0}
-            resultText={bmiCategory ? `${bmiCategory.name} - ${bmiCategory.description}` : ''}
-            suggestion={bmiCategory ? bmiCategory.description : ''}
+            resultText={bmiCategory ? `${t(bmiCategory.name)} - ${t(bmiCategory.description)}` : ''}
+            suggestion={bmiCategory ? t(bmiCategory.description) : ''}
           />
         ) : (
           <CalorieResultModal
@@ -634,7 +640,8 @@ const HealthCalculator: React.FC = () => {
             gender={gender}
             height={parseFloat(height) || 0}
             weight={parseFloat(weight) || 0}
-            activityLevel={ACTIVITY_LEVELS.find(l=>l.id===activityLevel)?.name || activityLevel}
+            activityLevel={activityLevel} // Corrected: Pass the ID directly
+            activityLevels={ACTIVITY_LEVELS}
           />
         )}
       </div>

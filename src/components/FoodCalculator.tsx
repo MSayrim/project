@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import QuantitySelector from './QuantitySelector';
-import { ShoppingCart, ChevronDown, ChevronUp, Info, CreditCard, DollarSign, Tag, CheckCircle, Utensils } from 'lucide-react';
+import { ShoppingCart, ChevronDown, ChevronUp, Info, CreditCard, DollarSign, Tag, CheckCircle, Utensils, Share2 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../store/store';
 import { setSelectedFirm, setFirms, calculatePrices, fetchFirms } from '../store/priceSlice';
@@ -684,7 +684,8 @@ const FoodCalculator: React.FC = () => {
           {/* Hesaplama sonrası butonu göster */}
           {calculatedResult && (
             <div className="flex justify-end mt-2">
-              <button onClick={handleShowSlip} className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-bold shadow">
+              <button onClick={handleShowSlip} className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-3">
+                <Share2 className="h-5 w-5" />
                 {t('food.calculation.viewShare')}
               </button>
             </div>

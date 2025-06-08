@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef } from 'react';
-import { X, Download, Share2, CheckCircle } from 'lucide-react';
+import { X, Download, Share2, Copy } from 'lucide-react';
 import { FaWhatsapp, FaXTwitter, FaFacebook } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
 
@@ -224,23 +224,58 @@ const SubscriptionShareModal = forwardRef(({
               {t('subscription.calculatedWith')} • {new Date().toLocaleTimeString('tr-TR')}
             </div>
           </div>
-          {/* Paylaşım ve indirme butonları */}
-          <div className="flex flex-col gap-2 w-full">
-            <button
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 text-lg shadow"
+          
+          {/* Standardized social media sharing and download UI */}
+          <div className="flex flex-col gap-3 w-full mt-2 mb-2">
+            {/* Primary download button - full width */}
+            <button 
               onClick={onDownloadImage}
-              type="button"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-medium shadow-md border border-violet-500 transition-all duration-200"
             >
-              <Download size={20}/> {t('subscription.share.downloadAsImage')}
+              <Download size={20} />
+              {t('common.buttons.downloadAsImage')}
             </button>
-            <div className="flex flex-row gap-3 justify-center mt-1">
-              <button onClick={handleWebShare} className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareAsImage')}><Share2 size={20}/></button>
-              <button onClick={handleWhatsAppShare} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnWhatsapp')}><FaWhatsapp/></button>
-              <button onClick={handleTwitterShare} className="bg-black hover:bg-gray-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnTwitter')}><FaXTwitter/></button>
-              <button onClick={handleFacebookShare} className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-full flex items-center justify-center text-xl" title={t('subscription.share.shareOnFacebook')}><FaFacebook/></button>
-              <button onClick={handleCopy} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-full flex items-center justify-center text-xl" title={t('common.copy')}><CheckCircle size={20}/></button>
+            
+            {/* Social media share buttons in a row */}
+            <div className="flex justify-center gap-3 mt-1">
+              <button 
+                onClick={handleWhatsAppShare}
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] hover:bg-[#1DA851] text-white shadow-md border border-[#20BD5F] hover:shadow-lg transition-all duration-200"
+                title={t('common.buttons.shareWhatsApp')}
+                aria-label={t('common.buttons.shareWhatsApp')}
+              >
+                <FaWhatsapp size={22} />
+              </button>
+              
+              <button 
+                onClick={handleTwitterShare}
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-800 text-white shadow-md border border-gray-700 hover:shadow-lg transition-all duration-200"
+                title={t('common.buttons.shareTwitter')}
+                aria-label={t('common.buttons.shareTwitter')}
+              >
+                <FaXTwitter size={20} />
+              </button>
+              
+              <button 
+                onClick={handleFacebookShare}
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1877F2] hover:bg-[#166FE5] text-white shadow-md border border-[#166FE5] hover:shadow-lg transition-all duration-200"
+                title={t('common.buttons.shareFacebook')}
+                aria-label={t('common.buttons.shareFacebook')}
+              >
+                <FaFacebook size={22} />
+              </button>
+              
+              <button 
+                onClick={handleCopy}
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-300 hover:shadow-lg transition-all duration-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:border-gray-600"
+                title={t('common.buttons.copyToClipboard')}
+                aria-label={t('common.buttons.copyToClipboard')}
+              >
+                <Copy size={20} />
+              </button>
             </div>
-            <div className="text-xs text-center text-gray-400 mt-2">{t('subscription.share.socialMediaNote')}</div>
+            
+            <div className="text-xs text-center text-gray-400 mt-1">{t('subscription.share.socialMediaNote')}</div>
           </div>
         </div>
       </div>

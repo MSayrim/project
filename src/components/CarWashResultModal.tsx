@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { X, Share2, Download, Copy } from 'lucide-react';
+import { X, Share2, Download, Copy, CheckCircle } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { FaFacebook, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
@@ -25,12 +25,32 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     const isDark = document.documentElement.classList.contains('dark');
     const originalStyle = slipCardRef.current.getAttribute('style');
     slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+    
+    // Tick işaretlerinin görünürlüğünü düzelt
+    const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
+    tickMarkers.forEach(marker => {
+      (marker as HTMLElement).style.position = 'absolute';
+      (marker as HTMLElement).style.left = '-12px';
+      (marker as HTMLElement).style.bottom = '-12px';
+      (marker as HTMLElement).style.zIndex = '50';
+    });
+    
     const canvas = await html2canvas(slipCardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
       scale: 2,
       logging: false,
       useCORS: true,
-      allowTaint: true
+      allowTaint: true,
+      onclone: (clonedDoc, clonedElement) => {
+        // Klonlanmış dokümandaki tick işaretlerini düzelt
+        const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
+        clonedTicks.forEach(marker => {
+          (marker as HTMLElement).style.position = 'absolute';
+          (marker as HTMLElement).style.left = '-12px';
+          (marker as HTMLElement).style.bottom = '-12px';
+          (marker as HTMLElement).style.zIndex = '50';
+        });
+      }
     });
     if (originalStyle) {
       slipCardRef.current.setAttribute('style', originalStyle);
@@ -50,12 +70,32 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     const isDark = document.documentElement.classList.contains('dark');
     const originalStyle = slipCardRef.current.getAttribute('style');
     slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+    
+    // Tick işaretlerinin görünürlüğünü düzelt
+    const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
+    tickMarkers.forEach(marker => {
+      (marker as HTMLElement).style.position = 'absolute';
+      (marker as HTMLElement).style.left = '-12px';
+      (marker as HTMLElement).style.bottom = '-12px';
+      (marker as HTMLElement).style.zIndex = '50';
+    });
+    
     const canvas = await html2canvas(slipCardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
       scale: 2,
       logging: false,
       useCORS: true,
-      allowTaint: true
+      allowTaint: true,
+      onclone: (clonedDoc, clonedElement) => {
+        // Klonlanmış dokümandaki tick işaretlerini düzelt
+        const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
+        clonedTicks.forEach(marker => {
+          (marker as HTMLElement).style.position = 'absolute';
+          (marker as HTMLElement).style.left = '-12px';
+          (marker as HTMLElement).style.bottom = '-12px';
+          (marker as HTMLElement).style.zIndex = '50';
+        });
+      }
     });
     if (originalStyle) {
       slipCardRef.current.setAttribute('style', originalStyle);
@@ -193,7 +233,7 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     }
   };
 
-  // Resim olarak indirme fonksiyonu
+  // Resmi indirme fonksiyonu
   const downloadAsImage = async () => {
     if (!slipCardRef.current) return;
     try {
@@ -201,11 +241,31 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const originalStyle = slipCardRef.current.getAttribute('style');
       slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
       
+      // Tick işaretlerinin görünürlüğünü düzelt
+      const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
+      tickMarkers.forEach(marker => {
+        (marker as HTMLElement).style.position = 'absolute';
+        (marker as HTMLElement).style.left = '-12px';
+        (marker as HTMLElement).style.bottom = '-12px';
+        (marker as HTMLElement).style.zIndex = '50';
+      });
+      
       const canvas = await html2canvas(slipCardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         scale: 2,
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        logging: false,
+        onclone: (clonedDoc, clonedElement) => {
+          // Klonlanmış dokümandaki tick işaretlerini düzelt
+          const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
+          clonedTicks.forEach(marker => {
+            (marker as HTMLElement).style.position = 'absolute';
+            (marker as HTMLElement).style.left = '-12px';
+            (marker as HTMLElement).style.bottom = '-12px';
+            (marker as HTMLElement).style.zIndex = '50';
+          });
+        }
       });
       
       if (originalStyle) {
@@ -214,30 +274,67 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
         slipCardRef.current.removeAttribute('style');
       }
       
-      const image = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = 'ParamCebimde-Hesaplama.png';
-      link.click();
+      // Canvas'ı blob'a dönüştür
+      if (canvas.toBlob) {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            alert(t('share.imageCreationError', 'Resim oluşturulurken bir hata oluştu.'));
+            return;
+          }
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'ParamCebimde-Hesaplama.png';
+          document.body.appendChild(link);
+          link.click();
+          setTimeout(() => {
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          }, 100);
+        }, 'image/png', 1.0);
+      } else {
+        // Fallback for browsers that do not support toBlob
+        const image = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'ParamCebimde-Hesaplama.png';
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          document.body.removeChild(link);
+        }, 100);
+      }
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
-      alert(t('share.imageCreationError'));
+      alert(t('share.imageCreationError', 'Resim oluşturulurken bir hata oluştu.'));
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full p-0 relative">
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-400 hover:text-red-500">
-          <X size={24}/>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full relative border-2 border-violet-200 dark:border-violet-800">
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-sm font-bold text-violet-600 dark:text-violet-400">ParamCebimde</span>
+            <span className="text-xs text-gray-500">{new Date().toLocaleDateString('tr-TR')}</span>
+          </div>
+          <h2 className="text-center text-xl font-extrabold text-gray-800 dark:text-white">
+            {t('carwash.resultTitle')}
+          </h2>
+        </div>
+
+        {/* Close Button */}
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+        >
+          <X size={24} />
         </button>
-        <div className="flex flex-col items-center pt-6 pb-2 px-5">
-          <div className="w-full" ref={slipCardRef} style={{ background: 'inherit' }}>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-base font-bold text-indigo-600">ParamCebimde</span>
-              <span className="text-xs text-gray-400">{new Date().toLocaleDateString('tr-TR')}</span>
-            </div>
-            <h2 className="text-center text-lg font-bold text-gray-800 dark:text-white mb-2">{t('carwash.resultTitle')}</h2>
+
+        {/* Content */}
+        <div className="p-6 pt-4">
+          <div ref={slipCardRef} style={{ background: 'inherit' }}>
             <div className="bg-gray-100 dark:bg-gray-800/80 rounded p-3 mb-3">
               <div className="flex justify-between mb-1">
                 <span className="font-medium text-gray-700 dark:text-gray-300">{t('common.paidAmount')}:</span>
@@ -306,9 +403,10 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
                     <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('common.paidAmount')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">{paidAmount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                     {paidAmount < homemadeTotal && (
-                      <span className="absolute -left-3 -bottom-3">
-                        <svg className="rounded-full ring-2 ring-green-500 bg-white dark:bg-green-900 shadow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                      </span>
+                      <div className="tick-marker absolute -left-3 -bottom-3 z-50">
+                        <CheckCircle size={32}
+                          className="text-green-500 bg-white dark:bg-green-900 rounded-full shadow border-2 border-white dark:border-green-900"/>
+                      </div>
                     )}
                   </div>
                   <div className="flex flex-col items-center z-20">
@@ -323,9 +421,10 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
                     <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('carwash.diySection')}</span>
                     <span className="text-lg font-bold text-green-600 dark:text-green-400">{homemadeTotal.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</span>
                     {homemadeTotal < paidAmount && (
-                      <span className="absolute -left-3 -bottom-3">
-                        <svg className="rounded-full ring-2 ring-green-500 bg-white dark:bg-green-900 shadow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                      </span>
+                      <div className="tick-marker absolute -left-3 -bottom-3 z-50">
+                        <CheckCircle size={32}
+                          className="text-green-500 bg-white dark:bg-green-900 rounded-full shadow border-2 border-white dark:border-green-900"/>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -341,29 +440,51 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-2 w-full mt-4">
-            <div className="flex gap-2 w-full">
-              <button onClick={shareAsImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-blue-900">
-                <Share2 size={18}/> {t('carwash.share.quickShare')}
-              </button>
-              <button onClick={downloadAsImage} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 shadow-lg border-2 border-white dark:border-purple-900">
-                <Download size={18}/> {t('carwash.share.downloadAsImage')}
-              </button>
-            </div>
-            <div className="flex gap-3 justify-center w-full mt-2">
-              <button onClick={shareToWhatsApp} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-green-900" title={t('share.shareOnWhatsapp')}>
-                <FaWhatsapp/>
-              </button>
-              <button onClick={shareToFacebook} className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-blue-900" title={t('share.shareOnFacebook')}>
-                <FaFacebook/>
-              </button>
-              <button onClick={shareToTwitter} className="bg-black hover:bg-gray-800 text-white p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title={t('share.shareOnTwitter')}>
-                <FaXTwitter/>
-              </button>
-              <button onClick={copyImageToClipboard} className="bg-gray-300 hover:bg-gray-400 text-gray-700 p-2 rounded-lg flex items-center justify-center text-xl shadow-lg border-2 border-white dark:border-gray-900" title={t('common.copy')}>
-                <Copy size={20}/>
-              </button>
-            </div>
+        </div>
+        
+        {/* Download Button */}
+        <div className="px-6 pb-6 pt-2">
+          <button 
+            onClick={downloadAsImage}
+            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-2"
+          >
+            <Download className="h-5 w-5" />
+            {t('common.buttons.downloadAsImage')}
+          </button>
+          
+          {/* Social Share Buttons */}
+          <div className="flex justify-center gap-3 mt-4">
+            <button 
+              onClick={shareToWhatsApp}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareWhatsApp')}
+            >
+              <FaWhatsapp className="w-6 h-6 text-green-500" />
+            </button>
+            <button 
+              onClick={shareToTwitter}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareTwitter')}
+            >
+              <FaXTwitter className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+            </button>
+            <button 
+              onClick={shareToFacebook}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareFacebook')}
+            >
+              <FaFacebook className="w-6 h-6 text-blue-500" />
+            </button>
+            <button 
+              onClick={copyImageToClipboard}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.copyToClipboard')}
+            >
+              <Copy className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+            </button>
+          </div>
+          <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
+            {t('share.platformsNote', 'Bazı platformlar doğrudan resim paylaşımını desteklemeyebilir. Bu durumda, resmi indirip manuel olarak paylaşabilirsiniz.')}
           </div>
         </div>
       </div>

@@ -194,6 +194,19 @@ const resources = {
         totalCost: "Total Cost",
         priceComparison: "Price Comparison",
         difference: "Difference",
+        downloadAsImage: "Download as Image",
+        buttons: {
+          downloadAsImage: "Download as Image",
+          shareWhatsApp: "Share on WhatsApp",
+          shareTwitter: "Share on Twitter",
+          shareFacebook: "Share on Facebook",
+          copyToClipboard: "Copy to Clipboard"
+        },
+        errors: {
+          downloadFailed: "Download failed",
+          shareFailed: "Sharing failed",
+          imageCreationFailed: "Image creation failed"
+        }
       },
       clothing: {
         title: "Clothing Comparator",
@@ -424,9 +437,9 @@ const resources = {
           carwash: "Araç Yıkama Hesaplayıcı",
           clothing: "Kıyafet Karşılaştırıcı",
           subscription: "Online Abonelik Hesaplama",
-          subscriptionDesc: "Tüm online aboneliklerinin toplam aylık ve yıllık maliyetini kolayca hesapla.",
+          subscriptionDesc: "Tüm online aboneliklerinizi kolayca hesaplayın.",
           health: "Sağlık Hesaplayıcı",
-          healthDesc: "Vücut kitle indeksi (BMI) ve günlük kalori ihtiyacını hesapla.",
+          healthDesc: "Vücut kitle indeksi (BMI) ve günlük kalori ihtiyacını hesaplayın.",
           vehicle_fuel: "Araç Yakıt Karşılaştırma",
           vehicle_fuelDesc: "Elektrikli, benzinli ve dizel araçların kilometre başına yakıt maliyetini karşılaştırın.",
           finance: "Finans",
@@ -604,6 +617,19 @@ const resources = {
         totalCost: "Toplam Maliyet",
         priceComparison: "Fiyat Karşılaştırması",
         difference: "Fark",
+        downloadAsImage: "Görsel Olarak İndir",
+        buttons: {
+          downloadAsImage: "Görsel Olarak İndir",
+          shareWhatsApp: "WhatsApp'ta Paylaş",
+          shareTwitter: "Twitter'da Paylaş",
+          shareFacebook: "Facebook'ta Paylaş",
+          copyToClipboard: "Panoya Kopyala"
+        },
+        errors: {
+          downloadFailed: "İndirme başarısız oldu",
+          shareFailed: "Paylaşım başarısız oldu",
+          imageCreationFailed: "Görsel oluşturma başarısız oldu"
+        }
       },
       clothing: {
         title: "Kıyafet Karşılaştırıcı",
@@ -625,7 +651,7 @@ const resources = {
       },
       subscription: {
         title: "Online Abonelik Hesaplayıcı",
-        description: "Tüm online aboneliklerinizin toplam aylık ve yıllık maliyetini kolayca hesaplayın.",
+        description: "Tüm online aboneliklerinizi kolayca hesaplayın.",
         selectSubscription: "Abonelik Seçin",
         membershipType: "Üyelik Tipi",
         amount: "Tutar",

@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import html2canvas from 'html2canvas';
-import { X, Download, Copy } from 'lucide-react';
+import { X, Download, Copy, CheckCircle } from 'lucide-react';
 import { FaWhatsapp, FaXTwitter, FaFacebook } from 'react-icons/fa6';
-import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface VehicleFuelShareModalProps {
@@ -267,8 +266,7 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-xl relative animate-fadeInUp border-2 border-violet-200 dark:border-violet-900/30">
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-400 hover:text-red-500 rounded-lg"><X size={22} /></button>
         <div className="flex flex-col items-center pt-6">
-          <h3 className="text-lg font-extrabold text-violet-700 dark:text-violet-400 text-center mb-1">{t('vehicle.share.shareWithFriends')}</h3>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">{t('vehicle.share.shareEasily')}</p>
+          <h3 className="text-lg font-extrabold text-violet-700 dark:text-violet-400 text-center mb-1">{slipTitle || t('vehicle.comparison.resultTitle')}</h3>
         </div>
         <div ref={slipRef} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 shadow-inner mb-4 mx-4 mt-2">
           <div className="flex items-center gap-2 mb-3">
@@ -277,7 +275,7 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
             <div className="ml-auto text-xs text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('tr-TR')}</div>
           </div>
           <h2 className="text-center text-violet-600 dark:text-violet-400 font-bold text-xl mb-2 border-b border-gray-200 dark:border-gray-700 pb-2 bg-gray-100 dark:bg-gray-800/80 -mx-5 px-5 py-2">
-            {slipTitle || t('vehicle.comparison.resultTitle')}
+            {t('vehicle.comparison.resultTitle')}
           </h2>
           <div className="text-center text-gray-700 dark:text-gray-300 text-sm mb-2">{t('vehicle.comparison.totalDistance')}: <b>{result.km} km</b></div>
 
@@ -295,9 +293,9 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
               <span className="text-2xl font-bold mt-1 text-blue-700 dark:text-blue-400">{result.electricity.cost.toLocaleString('tr-TR', { maximumFractionDigits: 2 })} TL</span>
               <span className="text-xs mt-1 text-gray-500 dark:text-gray-400">{result.electricity.total.toFixed(2)} kWh</span>
               {cheapest.key === 'electricity' && (
-                <span className="absolute -left-3 -bottom-3 flex items-center gap-1 text-green-600 dark:text-green-400 font-bold z-10">
-                  <svg className="rounded-full ring-2 ring-green-500 bg-white dark:bg-green-900 shadow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                </span>
+                <div className="tick-marker absolute -left-3 -bottom-3 z-50">
+                  <CheckCircle size={32} className="text-green-500 bg-white dark:bg-green-900 rounded-full shadow border-2 border-white dark:border-green-900" />
+                </div>
               )}
             </div>
             {/* Benzinli */}
@@ -306,9 +304,9 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
               <span className="text-2xl font-bold mt-1 text-red-600 dark:text-red-400">{result.gasoline.cost.toLocaleString('tr-TR', { maximumFractionDigits: 2 })} TL</span>
               <span className="text-xs mt-1 text-gray-500 dark:text-gray-400">{result.gasoline.total.toFixed(2)} L</span>
               {cheapest.key === 'gasoline' && (
-                <span className="absolute -left-3 -bottom-3 flex items-center gap-1 text-green-600 dark:text-green-400 font-bold z-10">
-                  <svg className="rounded-full ring-2 ring-green-500 bg-white dark:bg-green-900 shadow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                </span>
+                <div className="tick-marker absolute -left-3 -bottom-3 z-50">
+                  <CheckCircle size={32} className="text-green-500 bg-white dark:bg-green-900 rounded-full shadow border-2 border-white dark:border-green-900" />
+                </div>
               )}
             </div>
             {/* Dizel */}
@@ -317,9 +315,9 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
               <span className="text-2xl font-bold mt-1 text-gray-700 dark:text-gray-300">{result.diesel.cost.toLocaleString('tr-TR', { maximumFractionDigits: 2 })} TL</span>
               <span className="text-xs mt-1 text-gray-500 dark:text-gray-400">{result.diesel.total.toFixed(2)} L</span>
               {cheapest.key === 'diesel' && (
-                <span className="absolute -left-3 -bottom-3 flex items-center gap-1 text-green-600 dark:text-green-400 font-bold z-10">
-                  <svg className="rounded-full ring-2 ring-green-500 bg-white dark:bg-green-900 shadow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                </span>
+                <div className="tick-marker absolute -left-3 -bottom-3 z-50">
+                  <CheckCircle size={32} className="text-green-500 bg-white dark:bg-green-900 rounded-full shadow border-2 border-white dark:border-green-900" />
+                </div>
               )}
             </div>
           </div>
@@ -335,22 +333,48 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
           </div>
         </div>
         {/* Alt paylaşım butonları bloğu */}
-        <div className="flex flex-col items-center gap-2 pb-4">
-          <div className="flex gap-2 w-full px-4">
-            <button onClick={shareAsImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg border-2 border-white dark:border-blue-900 font-semibold justify-center flex items-center gap-2">
-              <Download size={18}/> {t('vehicle.share.quickShare')}
+        <div className="px-6 pb-6 pt-2">
+          <button 
+            onClick={handleDownload}
+            className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-base font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-2"
+          >
+            <Download className="h-5 w-5" />
+            {t('common.buttons.downloadAsImage')}
+          </button>
+          
+          {/* Social Share Buttons */}
+          <div className="flex justify-center gap-3 mt-4">
+            <button 
+              onClick={shareToWhatsApp}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareWhatsApp')}
+            >
+              <FaWhatsapp className="w-6 h-6 text-green-500" />
             </button>
-            <button onClick={handleDownload} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg border-2 border-white dark:border-purple-900 font-semibold justify-center flex items-center gap-2">
-              <Download size={18}/> {t('vehicle.share.downloadAsImage')}
+            <button 
+              onClick={shareToTwitter}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareTwitter')}
+            >
+              <FaXTwitter className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+            </button>
+            <button 
+              onClick={shareToFacebook}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.shareFacebook')}
+            >
+              <FaFacebook className="w-6 h-6 text-blue-500" />
+            </button>
+            <button 
+              onClick={copyImageToClipboard}
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-md border border-gray-200 dark:border-gray-700"
+              title={t('common.buttons.copyToClipboard')}
+            >
+              <Copy className="w-6 h-6 text-violet-600 dark:text-violet-400" />
             </button>
           </div>
-          <div className="flex justify-center gap-3 mt-2">
-            <button onClick={shareToWhatsApp} className="rounded-lg bg-green-500 hover:bg-green-600 w-9 h-9 flex items-center justify-center text-white shadow-lg border-2 border-white dark:border-green-900"><FaWhatsapp size={18}/></button>
-            <button onClick={shareToTwitter} className="rounded-lg bg-black hover:bg-gray-800 w-9 h-9 flex items-center justify-center text-white shadow-lg border-2 border-white dark:border-gray-900"><FaXTwitter size={18}/></button>
-            <button onClick={shareToFacebook} className="rounded-lg bg-blue-600 hover:bg-blue-700 w-9 h-9 flex items-center justify-center text-white shadow-lg border-2 border-white dark:border-blue-900"><FaFacebook size={18}/></button>
-            <button onClick={copyImageToClipboard} className="rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-700 w-9 h-9 flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-900" title={t('vehicle.share.copy')}>
-              <Copy size={18}/>
-            </button>
+          <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
+            {t('share.platformsNote', 'Bazı platformlar doğrudan resim paylaşımını desteklemeyebilir. Bu durumda, resmi indirip manuel olarak paylaşabilirsiniz.')}
           </div>
         </div>
       </div>

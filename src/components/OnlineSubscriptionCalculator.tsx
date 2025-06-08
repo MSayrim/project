@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import SubscriptionShareModal from './SubscriptionShareModal';
 import { useTranslation } from 'react-i18next';
+import { Share2 } from 'lucide-react';
 
 const POPULAR = [
   {
@@ -228,14 +229,13 @@ export default function OnlineSubscriptionCalculator() {
         <div className="text-xs text-gray-400">({t('subscription.autoCalculatedByPeople')})</div>
         <div className="text-sm text-gray-500 mt-2 italic">{t('subscription.reviewTip')}</div>
       </div>
-      <div className="flex justify-end mt-4">
-        <button
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-lg border-2 border-indigo-200 dark:border-indigo-900/40 transition"
-          onClick={() => setShowShare(true)}
-        >
-          {t('common.share')}
-        </button>
-      </div>
+      <button
+        className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-3 mt-6"
+        onClick={() => setShowShare(true)}
+      >
+        <Share2 className="h-5 w-5" />
+        {t('common.share')}
+      </button>
       {showShare && (
         <SubscriptionShareModal
           ref={shareRef}

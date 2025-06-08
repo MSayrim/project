@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3 } from 'lucide-react';
-import CalculationResultModal from './CalculationResultModal';
+import { BarChart3, Share2, Download, Copy } from 'lucide-react';
+import HealthResultModal from './HealthResultModal';
+import CalorieResultModal from './CalorieResultModal';
 import { useTranslation } from 'react-i18next';
+import { FaWhatsapp, FaTwitter as FaXTwitter, FaFacebook } from 'react-icons/fa6';
 
 // BMI kategorileri ve açıklamaları
 const BMI_CATEGORIES = [
@@ -404,10 +406,10 @@ const HealthCalculator: React.FC = () => {
                     {/* Sonucu Paylaş Butonu */}
                     <button
                       onClick={() => setShowShareModal(true)}
-                      className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
+                      className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
                     >
-                      <span className="mr-2">Sonucumu Paylaş</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                      <Share2 className="h-5 w-5" />
+                      <span>{t('common.shareResult')}</span>
                     </button>
                   </div>
                 </motion.div>
@@ -481,10 +483,10 @@ const HealthCalculator: React.FC = () => {
                     {/* Sonucu Paylaş Butonu */}
                     <button
                       onClick={() => setShowShareModal(true)}
-                      className="mt-6 w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center"
+                      className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
                     >
-                      <span className="mr-2">Sonucumu Paylaş</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                      <Share2 className="h-5 w-5" />
+                      <span>{t('common.shareResult')}</span>
                     </button>
                   </div>
                 </motion.div>
@@ -582,60 +584,59 @@ const HealthCalculator: React.FC = () => {
 
               {/* Kalori Sonucu */}
               {calories !== null && (
-                  <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow"
+                <div className="mt-6 max-w-2xl mx-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-lg bg-red-100 dark:bg-red-900/30 text-center">
+                      <div className="text-xs font-medium text-red-700 dark:text-red-300 mb-1">Kilo Ver</div>
+                      <div className="text-lg font-bold text-red-600 dark:text-red-400">2165 kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilo vermek için önerilen kalori</div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-center">
+                      <div className="text-xs font-medium text-green-700 dark:text-green-300 mb-1">Koru</div>
+                      <div className="text-lg font-bold text-green-600 dark:text-green-400">2706 kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilonuzu korumak için önerilen kalori</div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-center">
+                      <div className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">Kilo Al</div>
+                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400">3247 kcal</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Kilo almak için önerilen kalori</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowShareModal(true)}
+                    className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition-colors duration-200 flex items-center justify-center gap-3 mt-6"
                   >
-                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">{t('health.daily_calorie_need')}</h3>
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                      <div>
-                        <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                          {calories} kcal
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
-                          {t('health.calorie_need_description')}
-                        </p>
-
-                        <div className="mt-4 grid grid-cols-3 gap-2">
-                          <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded text-center">
-                            <p className="text-sm font-medium text-green-800 dark:text-green-300">{t('health.lose_weight')}</p>
-                            <p className="text-lg font-bold text-green-600 dark:text-green-400">{Math.round(calories * 0.8)} kcal</p>
-                          </div>
-                          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded text-center">
-                            <p className="text-sm font-medium text-blue-800 dark:text-blue-300">{t('health.maintain_weight')}</p>
-                            <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{calories} kcal</p>
-                          </div>
-                          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded text-center">
-                            <p className="text-sm font-medium text-purple-800 dark:text-purple-300">{t('health.gain_weight')}</p>
-                            <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{Math.round(calories * 1.2)} kcal</p>
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                          className="mt-4 md:mt-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center"
-                          onClick={() => setShowShareModal(true)}
-                      >
-                        <BarChart3 className="mr-2 h-4 w-4" />
-                        {t('health.share_result')}
-                      </button>
-                    </div>
-                    <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
-                      <p>{t('health.disclaimer')}</p>
-                      <p>{t('health.consult_doctor')}</p>
-                    </div>
-                  </motion.div>
+                    <Share2 className="h-5 w-5" />
+                    {t('common.shareResult')}
+                  </button>
+                </div>
               )}
             </div>
         )}
 
         {/* Paylaşım Modalı */}
-        <CalculationResultModal
+        {activeTab === 'bmi' ? (
+          <HealthResultModal
             open={showShareModal}
             onClose={() => setShowShareModal(false)}
-            result={activeTab === 'bmi' ? { bmi, category: bmiCategory?.name, bodyFatPercentage, bodyFatCategory } : { calories }}
-            slipTitle={activeTab === 'bmi' ? (bodyFatPercentage ? 'Vücut Yağ Oranı Hesaplama' : 'BMI Hesaplama') : 'Kalori İhtiyacı Hesaplama'}
-        />
+            bmi={bmi ?? 0}
+            height={parseFloat(height) || 0}
+            weight={parseFloat(weight) || 0}
+            resultText={bmiCategory ? `${bmiCategory.name} - ${bmiCategory.description}` : ''}
+            suggestion={bmiCategory ? bmiCategory.description : ''}
+          />
+        ) : (
+          <CalorieResultModal
+            open={showShareModal}
+            onClose={() => setShowShareModal(false)}
+            calories={calories ?? 0}
+            age={parseInt(age) || 0}
+            gender={gender}
+            height={parseFloat(height) || 0}
+            weight={parseFloat(weight) || 0}
+            activityLevel={ACTIVITY_LEVELS.find(l=>l.id===activityLevel)?.name || activityLevel}
+          />
+        )}
       </div>
   );
 };

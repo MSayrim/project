@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import VehicleFuelShareModal from './VehicleFuelShareModal';
 import { useTranslation } from 'react-i18next';
+import { Share2 } from 'lucide-react';
 
 const DEFAULTS = {
   km: 100,
@@ -93,14 +94,13 @@ const VehicleFuelComparison: React.FC = () => {
             <div className="text-xl font-bold mt-1">{dieselTotalCost.toLocaleString('tr-TR', {maximumFractionDigits: 2})} TL</div>
           </div>
         </div>
-        <div className="flex justify-center mt-6">
-          <button
-              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-6 rounded-lg shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition"
-              onClick={() => setShowShareModal(true)}
-          >
-            {t('common.shareResult')}
-          </button>
-        </div>
+        <button
+          className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-3 mt-6"
+          onClick={() => setShowShareModal(true)}
+        >
+          <Share2 className="h-5 w-5" />
+          {t('common.shareResult')}
+        </button>
         <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 text-center">
           <p>{t('vehicle.comparison.defaultConsumptionNote')}</p>
         </div>

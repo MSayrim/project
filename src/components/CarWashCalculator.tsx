@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Droplets, Zap, FlaskConical, User, Coins, Settings2, Loader2, Car } from 'lucide-react';
+import { Droplets, Zap, FlaskConical, User, Coins, Settings2, Loader2, Car, Share2 } from 'lucide-react';
 import CarWashResultModal from './CarWashResultModal';
 
 const CarWashCalculator: React.FC = () => {
@@ -436,20 +436,12 @@ const CarWashCalculator: React.FC = () => {
       </div>
       
       {/* Calculate Button - Interactive */}
-      <div className="flex justify-end mt-4 gap-2 w-full">
+      <div className="flex space-x-2 mt-4">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-l-lg flex-1 flex items-center justify-center gap-2 text-base"
-          style={{ minWidth: 0 }}
-          onClick={() => console.log('Hesapla butonuna basıldı')}
-        >
-          {t('common.calculate')}
-        </button>
-        <button
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-r-lg flex-1 flex items-center justify-center gap-2 text-base"
-          style={{ minWidth: 0 }}
+          className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-lg font-medium rounded-xl shadow-lg border-2 border-violet-200 dark:border-violet-900/40 transition flex items-center justify-center gap-3"
           onClick={() => setShowShareModal(true)}
         >
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-share"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+          <Share2 className="h-5 w-5" />
           {t('common.shareResult')}
         </button>
       </div>

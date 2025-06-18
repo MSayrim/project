@@ -16,11 +16,28 @@ import HealthCalculator from './components/HealthCalculator';
 import VehicleFuelComparison from './components/VehicleFuelComparison';
 import { Capacitor } from '@capacitor/core';
 const OnlineSubscriptionCalculator = React.lazy(() => import('./components/OnlineSubscriptionCalculator'));
+const AdminPage = React.lazy(() => import('./components/admin/AdminPage'));
 
 function App() {
   const [selectedCalculationType, setSelectedCalculationType] = useState('food');
   const [isMobile, setIsMobile] = useState(false);
   const { t } = useTranslation();
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
+  // Check if current path is admin route
+  useEffect(() => {
+    const checkRoute = () => {
+      const path = window.location.pathname;
+      setIsAdminRoute(path === '/admin');
+    };
+    
+    checkRoute();
+    window.addEventListener('popstate', checkRoute);
+    
+    return () => {
+      window.removeEventListener('popstate', checkRoute);
+    };
+  }, []);
 
   // Check if running on mobile device
   useEffect(() => {
@@ -136,6 +153,22 @@ function App() {
   };
 
   const seoConfig = getSeoConfig();
+
+  // If we're on the admin route, render the admin page
+  if (isAdminRoute) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <Header />
+        <Suspense fallback={
+          <div className="flex justify-center p-12">
+            <div className="animate-spin h-8 w-8 border-4 border-violet-500 rounded-full border-t-transparent"></div>
+          </div>
+        }>
+          <AdminPage />
+        </Suspense>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">

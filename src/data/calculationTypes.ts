@@ -32,7 +32,7 @@ export const calculationTypes: CalculationType[] = [
   {
     id: 'health-calculator',
     name: t => t('calculator.types.health'),
-    icon: 'Heart',
+    icon: 'HeartPulse',
     available: true,
     description: t => t('health.calculator'),
   },
@@ -47,20 +47,7 @@ export const calculationTypes: CalculationType[] = [
     isActive: true,
     available: true
   },
-  {
-    id: 'finance',
-    name: 'calculator.types.finance',
-    icon: 'Calculator',
-    available: false,
-    description: 'Coming soon - Price and commission calculations'
-  },
-  {
-    id: 'travel',
-    name: 'calculator.types.travel',
-    icon: 'Plane',
-    available: false,
-    description: 'Coming soon - Travel cost estimations'
-  },
+  // Çok yakında olanlar kaldırıldı
   {
     id: 'credit',
     name: 'Kredi Hesaplama',

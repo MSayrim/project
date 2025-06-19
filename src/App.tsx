@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
-import CalculationTypesGrid from './components/CalculationTypesGrid';
+import CalculationTypesSlider from './components/CalculationTypesSlider';
 import FoodCalculator from './components/FoodCalculator';
 import PriceCalculator from './components/PriceCalculator';
 import CreditCalculator from './components/CreditCalculator';
@@ -208,7 +208,7 @@ function App() {
             </div>
           </div>
           
-          <CalculationTypesGrid
+          <CalculationTypesSlider
             selectedType={selectedCalculationType}
             onSelectType={setSelectedCalculationType}
           />

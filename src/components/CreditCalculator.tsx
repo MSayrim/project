@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Share2, ExternalLink } from 'lucide-react';
+import CalculationResultModal from './CalculationResultModal';
 
 interface CreditCalculatorProps {
   // Gerekirse prop'lar eklenebilir
@@ -41,6 +42,8 @@ const CreditCalculator: React.FC<CreditCalculatorProps> = () => {
   const [targetMonthlyPayment, setTargetMonthlyPayment] = useState<number>(17170.80);
   const [targetLoanAmount, setTargetLoanAmount] = useState<number>(200000);
   const [targetLoanTerm, setTargetLoanTerm] = useState<number>(24);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const resultRef = React.useRef<HTMLDivElement>(null);
 
   // Kredi hesaplama fonksiyonu
   const calculateLoan = () => {
@@ -387,6 +390,14 @@ const CreditCalculator: React.FC<CreditCalculatorProps> = () => {
             >
               Sıfırla
             </button>
+            <button
+              type="button"
+              onClick={() => setShareModalOpen(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <Share2 size={18} />
+              Paylaş
+            </button>
           </div>
         </div>
       </div>
@@ -394,88 +405,93 @@ const CreditCalculator: React.FC<CreditCalculatorProps> = () => {
       {/* Sonuçlar */}
       {showResults && (
         <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4 dark:text-white border-b pb-2">{loanType}</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Faiz Oranı:</span>
-                <span>% {interestRate}</span>
-              </p>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Yıllık Maliyet Oranı:</span>
-                <span>% {annualEffectiveRate.toLocaleString('tr-TR')}</span>
-              </p>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Kredi Tutarı:</span>
-                <span>{loanAmount.toLocaleString('tr-TR')} TL</span>
-              </p>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Taksit Sayısı:</span>
-                <span>{loanTerm} Ay</span>
-              </p>
+          <div ref={resultRef} id="credit-share-result">
+            <h3 className="text-xl font-bold mb-4 dark:text-white border-b pb-2">{loanType}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Faiz Oranı:</span>
+                  <span>% {interestRate}</span>
+                </p>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Yıllık Maliyet Oranı:</span>
+                  <span>% {annualEffectiveRate.toLocaleString('tr-TR')}</span>
+                </p>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Kredi Tutarı:</span>
+                  <span>{loanAmount.toLocaleString('tr-TR')} TL</span>
+                </p>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Taksit Sayısı:</span>
+                  <span>{loanTerm} Ay</span>
+                </p>
+              </div>
+              <div>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Vade Sayısı:</span>
+                  <span>{loanTerm} Ay</span>
+                </p>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Aylık Ödeme:</span>
+                  <span>{installment.toLocaleString('tr-TR')} TL</span>
+                </p>
+                <p className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Geri Ödeme:</span>
+                  <span>{totalPayment.toLocaleString('tr-TR')} TL</span>
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Vade Sayısı:</span>
-                <span>{loanTerm} Ay</span>
-              </p>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Aylık Ödeme:</span>
-                <span>{installment.toLocaleString('tr-TR')} TL</span>
-              </p>
-              <p className="flex justify-between py-2 border-b">
-                <span className="font-medium">Geri Ödeme:</span>
-                <span>{totalPayment.toLocaleString('tr-TR')} TL</span>
-              </p>
-            </div>
-          </div>
-          
-          {/* Ödeme Planı Tablosu */}
-          <div className="mt-6 overflow-x-auto">
-            <h4 className="text-lg font-semibold mb-3 dark:text-white">Ödeme Planı Tablosu</h4>
-            <table className="min-w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <thead>
-                <tr className="bg-gray-100 dark:bg-gray-800">
-                  <th className="py-2 px-3 border text-left">Taksit Sayısı</th>
-                  <th className="py-2 px-3 border text-right">Taksit Tutarı</th>
-                  <th className="py-2 px-3 border text-right">Faiz</th>
-                  <th className="py-2 px-3 border text-right">KKDF</th>
-                  <th className="py-2 px-3 border text-right">BSMV</th>
-                  <th className="py-2 px-3 border text-right">Taksit Anapara</th>
-                  <th className="py-2 px-3 border text-right">Kalan Anapara</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paymentSchedule.map((item) => (
-                  <tr key={item.no} className={item.no % 2 === 0 ? 'bg-gray-50 dark:bg-gray-600' : ''}>
-                    <td className="py-2 px-3 border">{item.no}</td>
-                    <td className="py-2 px-3 border text-right">{item.payment.toLocaleString('tr-TR')}</td>
-                    <td className="py-2 px-3 border text-right">{item.interest.toLocaleString('tr-TR')}</td>
-                    <td className="py-2 px-3 border text-right">{item.kkdf.toLocaleString('tr-TR')}</td>
-                    <td className="py-2 px-3 border text-right">{item.bsmv.toLocaleString('tr-TR')}</td>
-                    <td className="py-2 px-3 border text-right">{item.principal.toLocaleString('tr-TR')}</td>
-                    <td className="py-2 px-3 border text-right">{item.remainingPrincipal.toLocaleString('tr-TR')}</td>
+            {/* Ödeme Planı Tablosu */}
+            <div className="mt-6 overflow-x-auto">
+              <h4 className="text-lg font-semibold mb-3 dark:text-white">Ödeme Planı Tablosu</h4>
+              <table className="min-w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-800">
+                    <th className="py-2 px-3 border text-left">Taksit Sayısı</th>
+                    <th className="py-2 px-3 border text-right">Taksit Tutarı</th>
+                    <th className="py-2 px-3 border text-right">Faiz</th>
+                    <th className="py-2 px-3 border text-right">KKDF</th>
+                    <th className="py-2 px-3 border text-right">BSMV</th>
+                    <th className="py-2 px-3 border text-right">Taksit Anapara</th>
+                    <th className="py-2 px-3 border text-right">Kalan Anapara</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            
-            <p className="text-sm text-gray-600 mt-2">Ödeme Planınıza tahsis ücreti ve sigorta prim bedeli dahil değildir.</p>
-            <p className="text-sm text-gray-600">Örnek Ödeme Planınız; {calculationDate} tarihinde oluşturulmuştur.</p>
+                </thead>
+                <tbody>
+                  {paymentSchedule.map((item) => (
+                    <tr key={item.no} className={item.no % 2 === 0 ? 'bg-gray-50 dark:bg-gray-600' : ''}>
+                      <td className="py-2 px-3 border">{item.no}</td>
+                      <td className="py-2 px-3 border text-right">{item.payment.toLocaleString('tr-TR')}</td>
+                      <td className="py-2 px-3 border text-right">{item.interest.toLocaleString('tr-TR')}</td>
+                      <td className="py-2 px-3 border text-right">{item.kkdf.toLocaleString('tr-TR')}</td>
+                      <td className="py-2 px-3 border text-right">{item.bsmv.toLocaleString('tr-TR')}</td>
+                      <td className="py-2 px-3 border text-right">{item.principal.toLocaleString('tr-TR')}</td>
+                      <td className="py-2 px-3 border text-right">{item.remainingPrincipal.toLocaleString('tr-TR')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="text-sm text-gray-600 mt-2">Ödeme Planınıza tahsis ücreti ve sigorta prim bedeli dahil değildir.</p>
+              <p className="text-sm text-gray-600">Örnek Ödeme Planınız; {calculationDate} tarihinde oluşturulmuştur.</p>
+            </div>
           </div>
-          
-          {/* Paylaşım Butonları */}
-          <div className="mt-6 flex justify-end space-x-2">
-            <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-              <Share2 size={16} className="mr-1" />
-              Paylaş
-            </button>
-            <button className="flex items-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded">
-              <ExternalLink size={16} className="mr-1" />
-              Siteye Ekle
-            </button>
-          </div>
+          {/* Paylaşım Modalı */}
+          <CalculationResultModal
+            open={shareModalOpen}
+            onClose={() => setShareModalOpen(false)}
+            result={{
+              type: 'credit',
+              interestRate,
+              annualEffectiveRate,
+              loanAmount,
+              loanTerm,
+              installment,
+              totalPayment,
+              paymentSchedule,
+              calculationDate,
+              loanType
+            }}
+            slipTitle={loanType}
+          />
         </div>
       )}
     </div>

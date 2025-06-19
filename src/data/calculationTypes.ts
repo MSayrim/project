@@ -61,4 +61,11 @@ export const calculationTypes: CalculationType[] = [
     available: false,
     description: 'Coming soon - Travel cost estimations'
   },
+  {
+    id: 'credit',
+    name: 'Kredi Hesaplama',
+    icon: 'CreditCard',
+    available: true,
+    description: 'Kredi tutarı, vade ve faiz oranına göre aylık taksit ve toplam geri ödeme hesaplama'
+  },
 ];

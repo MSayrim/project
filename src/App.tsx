@@ -4,6 +4,7 @@ import Header from './components/Header';
 import CalculationTypesGrid from './components/CalculationTypesGrid';
 import FoodCalculator from './components/FoodCalculator';
 import PriceCalculator from './components/PriceCalculator';
+import CreditCalculator from './components/CreditCalculator';
 import Footer from './components/Footer';
 import Advertisement from './components/Advertisement';
 import SEO from './components/SEO';
@@ -214,6 +215,7 @@ function App() {
           
           {selectedCalculationType === 'food' && <FoodCalculator/>}
           {selectedCalculationType === 'finance' && <PriceCalculator/>}
+          {selectedCalculationType === 'credit' && <CreditCalculator/>}
           {selectedCalculationType === 'carwash' && <CarWashCalculator/>}
           {selectedCalculationType === 'clothing' && <ClothingComparator/>}
           {selectedCalculationType === 'online-subscription' && (
@@ -229,7 +231,7 @@ function App() {
           {selectedCalculationType === 'vehicle-fuel-comparison' && (
             <VehicleFuelComparison />
           )}
-          {!['food', 'finance', 'carwash', 'clothing', 'online-subscription', 'health-calculator', 'vehicle-fuel-comparison'].includes(selectedCalculationType) && (
+          {!['food', 'finance', 'carwash', 'clothing', 'online-subscription', 'health-calculator', 'vehicle-fuel-comparison', 'credit'].includes(selectedCalculationType) && (
             <div className={`bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md ${isMobile ? 'p-4' : 'p-8'} mt-6 text-center`}>
               <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold mb-4`}>{t('app.comingSoon')}</h2>
               <p className="text-gray-600 dark:text-gray-400">

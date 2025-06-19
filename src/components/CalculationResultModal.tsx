@@ -26,6 +26,29 @@ const shareAsImage = async (cardRef: React.RefObject<HTMLDivElement>, isDark = f
     const originalStyle = cardRef.current.getAttribute('style');
     cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
     
+    // Paylaşım butonları bölümünü geçici olarak gizle
+    const shareButtons = cardRef.current?.querySelectorAll('.social-share-buttons');
+    const originalDisplayValues: string[] = [];
+    shareButtons?.forEach((btn) => {
+      originalDisplayValues.push((btn as HTMLElement).style.display);
+      (btn as HTMLElement).style.display = 'none';
+    });
+
+    // Metin hizalama ve padding sorununu çözmek için tablo hücrelerine stil uygula
+    const tableCells = cardRef.current.querySelectorAll('th, td');
+    const originalStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    tableCells.forEach(cell => {
+      const htmlCell = cell as HTMLElement;
+      originalStyles.push({
+          paddingTop: htmlCell.style.paddingTop,
+          paddingBottom: htmlCell.style.paddingBottom,
+          verticalAlign: htmlCell.style.verticalAlign,
+      });
+      htmlCell.style.paddingTop = '8px';
+      htmlCell.style.paddingBottom = '8px';
+      htmlCell.style.verticalAlign = 'middle';
+    });
+
     // Tick işaretlerinin görünürlüğünü düzelt
     const tickMarkers = cardRef.current.querySelectorAll('.tick-marker');
     tickMarkers.forEach(marker => {
@@ -37,20 +60,27 @@ const shareAsImage = async (cardRef: React.RefObject<HTMLDivElement>, isDark = f
     
     const canvas = await html2canvas(cardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-      scale: 2,
+      scale: 2.5,
       useCORS: true,
       allowTaint: true,
       logging: false,
-      onclone: (clonedDoc, clonedElement) => {
-        // Klonlanmış dokümandaki tick işaretlerini düzelt
-        const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
-        clonedTicks.forEach(marker => {
-          (marker as HTMLElement).style.position = 'absolute';
-          (marker as HTMLElement).style.left = '-12px';
-          (marker as HTMLElement).style.bottom = '-12px';
-          (marker as HTMLElement).style.zIndex = '50';
-        });
-      }
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: cardRef.current.scrollWidth,
+      windowHeight: cardRef.current.scrollHeight,
+    });
+
+    // Geçici stilleri geri al
+    tableCells.forEach((cell, index) => {
+      const htmlCell = cell as HTMLElement;
+      htmlCell.style.paddingTop = originalStyles[index].paddingTop;
+      htmlCell.style.paddingBottom = originalStyles[index].paddingBottom;
+      htmlCell.style.verticalAlign = originalStyles[index].verticalAlign;
+    });
+
+    // Paylaşım butonlarını geri göster
+    shareButtons?.forEach((btn, idx) => {
+      (btn as HTMLElement).style.display = originalDisplayValues[idx] || '';
     });
     
     // Orijinal stili geri yükle
@@ -117,6 +147,29 @@ const copyImageToClipboard = async (cardRef: React.RefObject<HTMLDivElement>, is
     const originalStyle = cardRef.current.getAttribute('style');
     cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
     
+    // Paylaşım butonları bölümünü geçici olarak gizle
+    const shareButtons = cardRef.current?.querySelectorAll('.social-share-buttons');
+    const originalDisplayValues: string[] = [];
+    shareButtons?.forEach((btn) => {
+      originalDisplayValues.push((btn as HTMLElement).style.display);
+      (btn as HTMLElement).style.display = 'none';
+    });
+
+    // Metin hizalama ve padding sorununu çözmek için tablo hücrelerine stil uygula
+    const tableCells = cardRef.current.querySelectorAll('th, td');
+    const originalStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    tableCells.forEach(cell => {
+      const htmlCell = cell as HTMLElement;
+      originalStyles.push({
+          paddingTop: htmlCell.style.paddingTop,
+          paddingBottom: htmlCell.style.paddingBottom,
+          verticalAlign: htmlCell.style.verticalAlign,
+      });
+      htmlCell.style.paddingTop = '8px';
+      htmlCell.style.paddingBottom = '8px';
+      htmlCell.style.verticalAlign = 'middle';
+    });
+
     // Tick işaretlerinin görünürlüğünü düzelt
     const tickMarkers = cardRef.current.querySelectorAll('.tick-marker');
     tickMarkers.forEach(marker => {
@@ -126,22 +179,29 @@ const copyImageToClipboard = async (cardRef: React.RefObject<HTMLDivElement>, is
       (marker as HTMLElement).style.zIndex = '50';
     });
     
-    const canvas = await html2canvas(cardRef.current, { 
-      backgroundColor: isDark ? '#181c27' : '#f6f8ff', 
-      scale: 2,
+    const canvas = await html2canvas(cardRef.current, {
+      backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+      scale: 2.5,
       useCORS: true,
       allowTaint: true,
       logging: false,
-      onclone: (clonedDoc, clonedElement) => {
-        // Klonlanmış dokümandaki tick işaretlerini düzelt
-        const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
-        clonedTicks.forEach(marker => {
-          (marker as HTMLElement).style.position = 'absolute';
-          (marker as HTMLElement).style.left = '-12px';
-          (marker as HTMLElement).style.bottom = '-12px';
-          (marker as HTMLElement).style.zIndex = '50';
-        });
-      }
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: cardRef.current.scrollWidth,
+      windowHeight: cardRef.current.scrollHeight,
+    });
+
+    // Geçici stilleri geri al
+    tableCells.forEach((cell, index) => {
+      const htmlCell = cell as HTMLElement;
+      htmlCell.style.paddingTop = originalStyles[index].paddingTop;
+      htmlCell.style.paddingBottom = originalStyles[index].paddingBottom;
+      htmlCell.style.verticalAlign = originalStyles[index].verticalAlign;
+    });
+
+    // Paylaşım butonlarını geri göster
+    shareButtons?.forEach((btn, idx) => {
+      (btn as HTMLElement).style.display = originalDisplayValues[idx] || '';
     });
     
     // Orijinal stili geri yükle
@@ -188,12 +248,26 @@ const downloadAsImageOnly = async (cardRef: React.RefObject<HTMLDivElement>, isD
     // Paylaşım butonları bölümünü geçici olarak gizle
     const shareButtons = cardRef.current?.querySelectorAll('.social-share-buttons');
     const originalDisplayValues: string[] = [];
-    
     shareButtons?.forEach((btn) => {
       originalDisplayValues.push((btn as HTMLElement).style.display);
       (btn as HTMLElement).style.display = 'none';
     });
-    
+
+    // Metin hizalama ve padding sorununu çözmek için tablo hücrelerine stil uygula
+    const tableCells = cardRef.current.querySelectorAll('th, td');
+    const originalStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    tableCells.forEach(cell => {
+      const htmlCell = cell as HTMLElement;
+      originalStyles.push({
+          paddingTop: htmlCell.style.paddingTop,
+          paddingBottom: htmlCell.style.paddingBottom,
+          verticalAlign: htmlCell.style.verticalAlign,
+      });
+      htmlCell.style.paddingTop = '8px';
+      htmlCell.style.paddingBottom = '8px';
+      htmlCell.style.verticalAlign = 'middle';
+    });
+
     // Tick işaretlerinin görünürlüğünü düzelt
     const tickMarkers = cardRef.current.querySelectorAll('.tick-marker');
     tickMarkers.forEach(marker => {
@@ -205,12 +279,24 @@ const downloadAsImageOnly = async (cardRef: React.RefObject<HTMLDivElement>, isD
     
     const canvas = await html2canvas(cardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-      scale: 2,
+      scale: 2.5,
       useCORS: true,
       allowTaint: true,
-      logging: false
+      logging: false,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: cardRef.current.scrollWidth,
+      windowHeight: cardRef.current.scrollHeight,
     });
-    
+
+    // Geçici stilleri geri al
+    tableCells.forEach((cell, index) => {
+      const htmlCell = cell as HTMLElement;
+      htmlCell.style.paddingTop = originalStyles[index].paddingTop;
+      htmlCell.style.paddingBottom = originalStyles[index].paddingBottom;
+      htmlCell.style.verticalAlign = originalStyles[index].verticalAlign;
+    });
+
     // Paylaşım butonlarını geri göster
     shareButtons?.forEach((btn, idx) => {
       (btn as HTMLElement).style.display = originalDisplayValues[idx] || '';
@@ -415,8 +501,8 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     </tr>
                   </thead>
                   <tbody>
-                    {result.paymentSchedule.map((item: any, idx: number) => (
-                      <tr key={item?.no ?? idx} className={item?.no % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : ''}>
+                    {result.paymentSchedule.map((item: any) => (
+                      <tr key={item?.no ?? item.id} className={item?.no % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : ''}>
                         <td className="py-1 px-2 border text-center">{item?.no ?? '-'}</td>
                         <td className="py-1 px-2 border text-right">{item?.payment != null ? item.payment.toLocaleString('tr-TR') : '-'}</td>
                         <td className="py-1 px-2 border text-right">{item?.interest != null ? item.interest.toLocaleString('tr-TR') : '-'}</td>

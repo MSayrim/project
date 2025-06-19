@@ -176,6 +176,69 @@ const copyImageToClipboard = async (cardRef: React.RefObject<HTMLDivElement>, is
   }
 };
 
+// Sadece indirme yapan fonksiyon (paylaşım yapmadan)
+const downloadAsImageOnly = async (cardRef: React.RefObject<HTMLDivElement>, isDark = false, brandName = 'ParamCebimde') => {
+  if (!cardRef.current) return;
+  
+  try {
+    // Geçici olarak slip kartının arka planını düz renge çevirelim
+    const originalStyle = cardRef.current.getAttribute('style');
+    cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+    
+    // Paylaşım butonları bölümünü geçici olarak gizle
+    const shareButtons = cardRef.current?.querySelectorAll('.social-share-buttons');
+    const originalDisplayValues: string[] = [];
+    
+    shareButtons?.forEach((btn) => {
+      originalDisplayValues.push((btn as HTMLElement).style.display);
+      (btn as HTMLElement).style.display = 'none';
+    });
+    
+    // Tick işaretlerinin görünürlüğünü düzelt
+    const tickMarkers = cardRef.current.querySelectorAll('.tick-marker');
+    tickMarkers.forEach(marker => {
+      (marker as HTMLElement).style.position = 'absolute';
+      (marker as HTMLElement).style.left = '-12px';
+      (marker as HTMLElement).style.bottom = '-12px';
+      (marker as HTMLElement).style.zIndex = '50';
+    });
+    
+    const canvas = await html2canvas(cardRef.current, {
+      backgroundColor: isDark ? '#181c27' : '#f6f8ff',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false
+    });
+    
+    // Paylaşım butonlarını geri göster
+    shareButtons?.forEach((btn, idx) => {
+      (btn as HTMLElement).style.display = originalDisplayValues[idx] || '';
+    });
+    
+    // Orijinal stili geri yükle
+    if (originalStyle) {
+      cardRef.current.setAttribute('style', originalStyle);
+    } else {
+      cardRef.current.removeAttribute('style');
+    }
+    
+    const image = canvas.toDataURL('image/png');
+    
+    // Doğrudan indirme
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = brandName + '-Hesaplama.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    console.log('indirme işlemi başlatıldı');
+  } catch (error) {
+    console.error('Resim oluşturulurken bir hata oluştu:', error);
+    alert('Resim oluşturulurken bir hata oluştu.');
+  }
+};
+
 // Slip metni oluşturucu
 function formatFoodSlip(result: any, slipTitle?: string, homemadeTotal?: number, selectedRecipes?: any[], quantities?: Record<string, number> = {}, paidAmount?: number) {
   if (!result) return '';
@@ -254,10 +317,9 @@ function formatCreditSlip(result: any, slipTitle?: string) {
   lines.push('Ödeme Planı:');
   if (Array.isArray(result.paymentSchedule)) {
     lines.push('Taksit | Taksit Tutarı | Faiz | KKDF | BSMV | Anapara | Kalan Anapara');
-    result.paymentSchedule.slice(0, 6).forEach((item: any) => {
+    result.paymentSchedule.forEach((item: any) => {
       lines.push(`${item.no} | ${item.payment.toLocaleString('tr-TR')} | ${item.interest.toLocaleString('tr-TR')} | ${item.kkdf.toLocaleString('tr-TR')} | ${item.bsmv.toLocaleString('tr-TR')} | ${item.principal.toLocaleString('tr-TR')} | ${item.remainingPrincipal.toLocaleString('tr-TR')}`);
     });
-    if (result.paymentSchedule.length > 6) lines.push(`... (${result.paymentSchedule.length} taksit)`);
   }
   lines.push('------------------------');
   lines.push(`Tarih: ${new Date().toLocaleString('tr-TR')}`);
@@ -269,6 +331,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
   
   const { t } = useTranslation('translation');
   const slipCardRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const isHealthCalculation = result?.type === 'health' || result?.type === 'bmi' || result?.type === 'calorie';
   const isCreditCalculation = result?.type === 'credit';
   const [isCopied, setIsCopied] = useState(false);
@@ -282,6 +345,11 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
 
   // Görsel indirme fonksiyonu
   const downloadAsImage = () => {
+    downloadAsImageOnly(slipCardRef, document.documentElement.classList.contains('dark'), t('app.brand'));
+  };
+
+  // Görsel paylaşım fonksiyonu
+  const shareAsImageFunction = () => {
     shareAsImage(slipCardRef, document.documentElement.classList.contains('dark'), t('app.brand'));
   };
 
@@ -332,7 +400,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
               <div className="flex justify-between"><span>Toplam Geri Ödeme:</span><span className="font-semibold">{result?.totalPayment != null ? result.totalPayment.toLocaleString('tr-TR') : '-'} TL</span></div>
             </div>
             <div className="w-full mt-2 mb-3">
-              <div className="font-semibold mb-2 text-center text-base text-gray-800 dark:text-white">Ödeme Planı (İlk 6 Taksit)</div>
+              <div className="font-semibold mb-2 text-center text-base text-gray-800 dark:text-white">Ödeme Planı</div>
               {Array.isArray(result?.paymentSchedule) && result.paymentSchedule.length > 0 ? (
                 <table className="w-full text-xs border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                   <thead>
@@ -347,7 +415,7 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
                     </tr>
                   </thead>
                   <tbody>
-                    {result.paymentSchedule.slice(0, 6).map((item: any, idx: number) => (
+                    {result.paymentSchedule.map((item: any, idx: number) => (
                       <tr key={item?.no ?? idx} className={item?.no % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : ''}>
                         <td className="py-1 px-2 border text-center">{item?.no ?? '-'}</td>
                         <td className="py-1 px-2 border text-right">{item?.payment != null ? item.payment.toLocaleString('tr-TR') : '-'}</td>
@@ -363,29 +431,144 @@ const CalculationResultModal: React.FC<CalculationResultModalProps> = ({ open, o
               ) : (
                 <div className="text-center text-xs text-gray-500 mt-1">Ödeme planı bulunamadı.</div>
               )}
-              {Array.isArray(result?.paymentSchedule) && result.paymentSchedule.length > 6 && (
-                <div className="text-center text-xs text-gray-500 mt-1">... {result.paymentSchedule.length} taksit toplam</div>
-              )}
             </div>
-            <div className="w-full flex flex-col items-center mt-4">
+            <div className="w-full flex flex-col items-center mt-4 buttons-container">
               <button
-                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 rounded-lg shadow border border-violet-200 dark:border-violet-800 mb-3"
+                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 rounded-lg shadow border border-violet-200 dark:border-violet-800 mb-3 social-share-buttons"
                 onClick={downloadAsImage}
               >
                 <Download size={18} className="inline mr-1" /> Görsel Olarak İndir
               </button>
-              <div className="flex gap-3 justify-center mb-2">
+              <div className="flex gap-3 justify-center mb-2 social-share-buttons">
                 <button onClick={shareToWhatsApp} className="rounded-full bg-green-500 hover:bg-green-600 p-2 shadow text-white"><FaWhatsapp size={20} /></button>
                 <button onClick={shareToFacebook} className="rounded-full bg-blue-600 hover:bg-blue-700 p-2 shadow text-white"><FaFacebook size={20} /></button>
                 <button onClick={shareToTwitter} className="rounded-full bg-black hover:bg-gray-800 p-2 shadow text-white"><FaXTwitter size={20} /></button>
+                <button onClick={shareAsImageFunction} className="rounded-full bg-violet-600 hover:bg-violet-700 p-2 shadow text-white"><Share2 size={18} className="text-white" /></button>
                 <button onClick={() => copyImageToClipboard(slipCardRef, document.documentElement.classList.contains('dark'), t('app.brand'))} className="rounded-full bg-gray-200 dark:bg-gray-800 p-2 shadow"><Copy size={18} className="text-violet-600" /></button>
               </div>
-              <div className="text-xs text-gray-400 text-center">Bazı platformlar doğrudan resim paylaşımını desteklemeyebilir. Bu durumda, resmi indirip manuel olarak paylaşabilirsiniz.</div>
+              <div className="text-xs text-gray-400 text-center social-share-buttons">Bazı platformlar doğrudan resim paylaşımını desteklemeyebilir. Bu durumda, resmi indirip manuel olarak paylaşabilirsiniz.</div>
             </div>
           </div>
         ) : (
-          // Diğer hesaplama türleri için mevcut içerik
-          <div>{/* ...orijinal içerik... */}</div>
+          <div className="px-6 py-7 flex flex-col items-center" ref={slipCardRef}>
+            {/* Health calculation content */}
+            {isHealthCalculation && (
+              <div className="flex flex-col items-center mb-4">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">{slipTitle || 'Sağlık Hesaplama Sonucu'}</h3>
+                
+                <div className="text-sm text-gray-600 dark:text-gray-300 w-full whitespace-pre-wrap mt-4">
+                  {slipText.split('\n').map((line, idx) => (
+                    <React.Fragment key={idx}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Food calculation content */}
+            {!isHealthCalculation && !isCreditCalculation && (
+              <>
+                <div className="flex flex-col items-center mb-4">
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">{slipTitle || 'Hesaplama Sonucu'}</h3>
+                  
+                  {homemadeTotal !== undefined && selectedRecipes?.length && (
+                    <div className="flex flex-col w-full mt-4 mb-2">
+                      <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Fiyat Karşılaştırması</h4>
+                      
+                      <div className="flex flex-col gap-2">
+                        {/* Market */}
+                        <div className={`relative border p-3 rounded-lg ${result?.marketTotal <= homemadeTotal ? 'border-green-500 dark:border-green-600' : 'border-gray-200 dark:border-gray-700'}`}>
+                          <div className="font-medium flex justify-between items-center">
+                            <div className="flex items-center">
+                              <span>Marketten Hazır Alma</span>
+                              {result?.marketTotal <= homemadeTotal && (
+                                <span className="tick-marker">
+                                  <CheckCircle size={24} className="text-green-500 ml-2" />
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-lg font-bold">{result?.marketTotal?.toLocaleString('tr-TR')} TL</span>
+                          </div>
+                          {paidAmount !== undefined && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Ödenen: {paidAmount?.toLocaleString('tr-TR')} TL
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Homemade */}
+                        <div className={`relative border p-3 rounded-lg ${homemadeTotal <= (result?.marketTotal || Infinity) ? 'border-green-500 dark:border-green-600' : 'border-gray-200 dark:border-gray-700'}`}>
+                          <div className="font-medium flex justify-between items-center">
+                            <div className="flex items-center">
+                              <span>Evde Hazırlama</span>
+                              {homemadeTotal <= (result?.marketTotal || Infinity) && (
+                                <span className="tick-marker">
+                                  <CheckCircle size={24} className="text-green-500 ml-2" />
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-lg font-bold">{homemadeTotal?.toLocaleString('tr-TR')} TL</span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            {selectedRecipes?.length} tarif seçildi - 
+                            {Object.values(quantities || {}).reduce((sum, q) => sum + q, 0)} porsiyon
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="text-sm text-gray-600 dark:text-gray-300 w-full whitespace-pre-wrap mt-4">
+                    {slipText.split('\n').map((line, idx) => (
+                      <React.Fragment key={idx}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+                
+                {selectedRecipes?.length > 0 && (
+                  <div className="w-full mt-3">
+                    <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                      <Users size={20} className="inline mr-2" /> Seçilen Tarifler
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {selectedRecipes.map((recipe: any) => (
+                        <div key={recipe.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                          <div className="font-medium text-gray-800 dark:text-gray-200">{recipe.name}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 flex justify-between">
+                            <span>{(quantities && quantities[recipe.id]) || 1} adet</span>
+                            <span>{recipe.price?.toLocaleString('tr-TR')} TL</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            
+            {/* Paylaşım butonları - tüm modallar için standardize edilmiş */}
+            <div className="w-full flex flex-col items-center mt-4 buttons-container">
+              <button
+                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 rounded-lg shadow border border-violet-200 dark:border-violet-800 mb-3 social-share-buttons"
+                onClick={downloadAsImage}
+              >
+                <Download size={18} className="inline mr-1" /> Görsel Olarak İndir
+              </button>
+              <div className="flex gap-3 justify-center mb-2 social-share-buttons">
+                <button onClick={shareToWhatsApp} className="rounded-full bg-green-500 hover:bg-green-600 p-2 shadow text-white"><FaWhatsapp size={20} /></button>
+                <button onClick={shareToFacebook} className="rounded-full bg-blue-600 hover:bg-blue-700 p-2 shadow text-white"><FaFacebook size={20} /></button>
+                <button onClick={shareToTwitter} className="rounded-full bg-black hover:bg-gray-800 p-2 shadow text-white"><FaXTwitter size={20} /></button>
+                <button onClick={shareAsImageFunction} className="rounded-full bg-violet-600 hover:bg-violet-700 p-2 shadow text-white"><Share2 size={18} className="text-white" /></button>
+                <button onClick={() => copyImageToClipboard(slipCardRef, document.documentElement.classList.contains('dark'), t('app.brand'))} className="rounded-full bg-gray-200 dark:bg-gray-800 p-2 shadow"><Copy size={18} className="text-violet-600" /></button>
+              </div>
+              <div className="text-xs text-gray-400 text-center social-share-buttons">Bazı platformlar doğrudan resim paylaşımını desteklemeyebilir. Bu durumda, resmi indirip manuel olarak paylaşabilirsiniz.</div>
+            </div>
+          </div>
         )}
       </div>
     </div>

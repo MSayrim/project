@@ -32,7 +32,7 @@ const RecipesTab: React.FC<RecipesTabProps> = ({ isFormOpen, setIsFormOpen }) =>
   const [currentRecipe, setCurrentRecipe] = useState<RecipeDto>({
     name: '',
     description: '',
-    foodType: FoodType.MAIN,
+    foodType: 'MAIN',
     imageUrl: '',
     recipeIngredients: [],
   });
@@ -133,7 +133,7 @@ const RecipesTab: React.FC<RecipesTabProps> = ({ isFormOpen, setIsFormOpen }) =>
           name: '',
           description: '',
           imageUrl: '',
-          foodType: FoodType.MAIN,
+          foodType: 'MAIN',
           recipeIngredients: []
         });
         setCurrentSearch('');
@@ -162,7 +162,7 @@ const RecipesTab: React.FC<RecipesTabProps> = ({ isFormOpen, setIsFormOpen }) =>
     setCurrentRecipe({
       name: '',
       description: '',
-      foodType: FoodType.MAIN,
+      foodType: 'MAIN',
       imageUrl: '',
       recipeIngredients: [],
     });
@@ -249,8 +249,8 @@ const RecipesTab: React.FC<RecipesTabProps> = ({ isFormOpen, setIsFormOpen }) =>
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 >
-                  {Object.entries(FoodType).map(([key, value]) => (
-                    <option key={key} value={key}>{value}</option>
+                  {Object.keys(FoodType).map((key) => (
+                    <option key={key} value={key}>{FoodType[key as keyof typeof FoodType]}</option>
                   ))}
                 </select>
               </div>
@@ -425,8 +425,8 @@ const RecipesTab: React.FC<RecipesTabProps> = ({ isFormOpen, setIsFormOpen }) =>
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800"
             >
               <option value="">Tümü</option>
-              {Object.entries(FoodType).map(([key, value]) => (
-                <option key={key} value={value}>{value}</option>
+              {Object.keys(FoodType).map((key) => (
+                <option key={key} value={key}>{FoodType[key as keyof typeof FoodType]}</option>
               ))}
             </select>
           </div>

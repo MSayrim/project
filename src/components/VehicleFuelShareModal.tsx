@@ -34,14 +34,41 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
     const isDark = document.documentElement.classList.contains('dark');
     const originalStyle = slipRef.current.getAttribute('style');
     slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+    // Metin hizalama için geçici stiller uygula
+    const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+    const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    dataRows.forEach(row => {
+      const htmlRow = row as HTMLElement;
+      originalRowStyles.push({
+        paddingTop: htmlRow.style.paddingTop,
+        paddingBottom: htmlRow.style.paddingBottom,
+        verticalAlign: htmlRow.style.verticalAlign,
+      });
+      htmlRow.style.paddingTop = '8px';
+      htmlRow.style.paddingBottom = '8px';
+      htmlRow.style.verticalAlign = 'middle';
+    });
     
     const canvas = await html2canvas(slipRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-      scale: 2,
+      scale: 2.5, // Scale artırıldı
       useCORS: true,
-      allowTaint: true
+      allowTaint: true,
+      scrollX: 0, // scrollX eklendi
+      scrollY: 0, // scrollY eklendi
+      windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+      windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
     });
     
+    // Geçici stilleri geri al
+    dataRows.forEach((row, index) => {
+      const htmlRow = row as HTMLElement;
+      htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+      htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+      htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
+    });
+
     // Orijinal stili geri yükle
     if (originalStyle) {
       slipRef.current.setAttribute('style', originalStyle);
@@ -72,15 +99,41 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipRef.current.getAttribute('style');
       slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipRef.current, { 
         backgroundColor: isDark ? '#181c27' : '#f6f8ff', 
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
       });
       
-      // Orijinal stili geri yükle
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
+      });
+
       if (originalStyle) {
         slipRef.current.setAttribute('style', originalStyle);
       } else {
@@ -117,12 +170,39 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipRef.current.getAttribute('style');
       slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -157,12 +237,39 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipRef.current.getAttribute('style');
       slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -197,12 +304,39 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipRef.current.getAttribute('style');
       slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -236,12 +370,39 @@ const VehicleFuelShareModal: React.FC<VehicleFuelShareModalProps> = ({ open, onC
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipRef.current.getAttribute('style');
       slipRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipRef.current.querySelectorAll('.flex.justify-between');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {

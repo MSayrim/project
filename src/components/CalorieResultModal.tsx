@@ -39,18 +39,45 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       canvas.toBlob((blob) => {
         if (!blob) return alert(t('common.errors.imageCreationFailed'));
         const blobUrl = URL.createObjectURL(blob);
@@ -71,20 +98,47 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       const image = canvas.toDataURL('image/png');
-      
+
       // Try to use Web Share API if available
       if (navigator.share) {
         try {
@@ -100,7 +154,7 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
           console.error('Error sharing:', error);
         }
       }
-      
+
       // Fallback for WhatsApp
       const encodedImage = encodeURIComponent(image);
       window.open(`https://wa.me/?text=${t('share.text.calorie')}%20${encodedImage}`);
@@ -114,18 +168,45 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       const image = canvas.toDataURL('image/png');
       const text = encodeURIComponent(t('share.text.calorie'));
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(image)}`);
@@ -139,18 +220,45 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       const image = canvas.toDataURL('image/png');
       window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(image)}`);
     } catch (error) {
@@ -163,24 +271,51 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       canvas.toBlob(async (blob) => {
         if (!blob) {
           alert(t('common.errors.imageCreationFailed'));
           return;
         }
-        
+
         try {
           const clipboardItem = new ClipboardItem({ 'image/png': blob });
           await navigator.clipboard.write([clipboardItem]);
@@ -200,22 +335,49 @@ const CalorieResultModal: React.FC<CalorieResultModalProps> = ({ open, onClose, 
     if (!cardRef.current) return;
     try {
       const isDark = document.documentElement.classList.contains('dark');
+      const originalCardStyle = cardRef.current.style.background;
       cardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
-      
+
+      // Metin hizalama için geçici stiller uygula
+      const textElements = cardRef.current.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, div.flex.justify-between > span:last-child, div[role="group"] div > p, div[role="group"] div > span, strong');
+      const originalElementStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        originalElementStyles.push({
+          paddingTop: htmlEl.style.paddingTop,
+          paddingBottom: htmlEl.style.paddingBottom,
+          verticalAlign: htmlEl.style.verticalAlign,
+        });
+        htmlEl.style.paddingTop = '8px';
+        htmlEl.style.paddingBottom = '8px';
+        htmlEl.style.verticalAlign = 'middle';
+      });
+
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
         useCORS: true,
-        scale: 2,
-        allowTaint: true
+        scale: 2.5, // Scale artırıldı
+        allowTaint: true,
+        logging: false, // Logging eklendi
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: cardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: cardRef.current.scrollHeight, // windowHeight eklendi
       });
-      
-      // Restore original background
-      cardRef.current.style.background = '';
-      
+
+      // Restore original background and element styles
+      cardRef.current.style.background = originalCardStyle;
+      textElements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.paddingTop = originalElementStyles[index].paddingTop;
+        htmlEl.style.paddingBottom = originalElementStyles[index].paddingBottom;
+        htmlEl.style.verticalAlign = originalElementStyles[index].verticalAlign;
+      });
+
       const image = canvas.toDataURL('image/png');
       const blob = await (await fetch(image)).blob();
       const file = new File([blob], 'ParamCebimde-Kalori.png', { type: 'image/png' });
-      
+
       if (navigator.share) {
         try {
           await navigator.share({

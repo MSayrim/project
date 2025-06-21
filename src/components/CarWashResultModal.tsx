@@ -26,6 +26,21 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     const originalStyle = slipCardRef.current.getAttribute('style');
     slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
     
+    // Metin hizalama için geçici stiller uygula
+    const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+    const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    dataRows.forEach(row => {
+      const htmlRow = row as HTMLElement;
+      originalRowStyles.push({
+        paddingTop: htmlRow.style.paddingTop,
+        paddingBottom: htmlRow.style.paddingBottom,
+        verticalAlign: htmlRow.style.verticalAlign,
+      });
+      htmlRow.style.paddingTop = '8px';
+      htmlRow.style.paddingBottom = '8px';
+      htmlRow.style.verticalAlign = 'middle';
+    });
+
     // Tick işaretlerinin görünürlüğünü düzelt
     const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
     tickMarkers.forEach(marker => {
@@ -37,10 +52,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     
     const canvas = await html2canvas(slipCardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-      scale: 2,
+      scale: 2.5, // Scale artırıldı
       logging: false,
       useCORS: true,
       allowTaint: true,
+      scrollX: 0, // scrollX eklendi
+      scrollY: 0, // scrollY eklendi
+      windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+      windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
       onclone: (clonedDoc, clonedElement) => {
         // Klonlanmış dokümandaki tick işaretlerini düzelt
         const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
@@ -62,6 +81,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     link.href = dataUrl;
     link.download = 'carwash-slip.png';
     link.click();
+
+    // Geçici stilleri geri al
+    dataRows.forEach((row, index) => {
+      const htmlRow = row as HTMLElement;
+      htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+      htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+      htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
+    });
   };
 
   // Panoya kopyala
@@ -70,6 +97,21 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     const isDark = document.documentElement.classList.contains('dark');
     const originalStyle = slipCardRef.current.getAttribute('style');
     slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+    // Metin hizalama için geçici stiller uygula
+    const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+    const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+    dataRows.forEach(row => {
+      const htmlRow = row as HTMLElement;
+      originalRowStyles.push({
+        paddingTop: htmlRow.style.paddingTop,
+        paddingBottom: htmlRow.style.paddingBottom,
+        verticalAlign: htmlRow.style.verticalAlign,
+      });
+      htmlRow.style.paddingTop = '8px';
+      htmlRow.style.paddingBottom = '8px';
+      htmlRow.style.verticalAlign = 'middle';
+    });
     
     // Tick işaretlerinin görünürlüğünü düzelt
     const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
@@ -82,10 +124,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
     
     const canvas = await html2canvas(slipCardRef.current, {
       backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-      scale: 2,
+      scale: 2.5, // Scale artırıldı
       logging: false,
       useCORS: true,
       allowTaint: true,
+      scrollX: 0, // scrollX eklendi
+      scrollY: 0, // scrollY eklendi
+      windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+      windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
       onclone: (clonedDoc, clonedElement) => {
         // Klonlanmış dokümandaki tick işaretlerini düzelt
         const clonedTicks = clonedElement.querySelectorAll('.tick-marker');
@@ -111,6 +157,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
         } catch {}
       }
     }, 'image/png');
+
+    // Geçici stilleri geri al
+    dataRows.forEach((row, index) => {
+      const htmlRow = row as HTMLElement;
+      htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+      htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+      htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
+    });
   };
 
   // WhatsApp'ta paylaşım fonksiyonu
@@ -120,12 +174,39 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipCardRef.current.getAttribute('style');
       slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipCardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -160,12 +241,39 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipCardRef.current.getAttribute('style');
       slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipCardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -200,12 +308,39 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const isDark = document.documentElement.classList.contains('dark');
       const originalStyle = slipCardRef.current.getAttribute('style');
       slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
+
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
       
       const canvas = await html2canvas(slipCardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
+      });
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
       });
       
       if (originalStyle) {
@@ -241,6 +376,21 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       const originalStyle = slipCardRef.current.getAttribute('style');
       slipCardRef.current.style.background = isDark ? '#181c27' : '#f6f8ff';
       
+      // Metin hizalama için geçici stiller uygula
+      const dataRows = slipCardRef.current.querySelectorAll('div.py-2 > div, .flex.justify-between, .text-sm.text-gray-700, .text-gray-800.dark\:text-gray-200');
+      const originalRowStyles: { paddingTop: string; paddingBottom: string; verticalAlign: string }[] = [];
+      dataRows.forEach(row => {
+        const htmlRow = row as HTMLElement;
+        originalRowStyles.push({
+          paddingTop: htmlRow.style.paddingTop,
+          paddingBottom: htmlRow.style.paddingBottom,
+          verticalAlign: htmlRow.style.verticalAlign,
+        });
+        htmlRow.style.paddingTop = '8px';
+        htmlRow.style.paddingBottom = '8px';
+        htmlRow.style.verticalAlign = 'middle';
+      });
+      
       // Tick işaretlerinin görünürlüğünü düzelt
       const tickMarkers = slipCardRef.current.querySelectorAll('.tick-marker');
       tickMarkers.forEach(marker => {
@@ -252,9 +402,13 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
       
       const canvas = await html2canvas(slipCardRef.current, {
         backgroundColor: isDark ? '#181c27' : '#f6f8ff',
-        scale: 2,
+        scale: 2.5, // Scale artırıldı
         useCORS: true,
         allowTaint: true,
+        scrollX: 0, // scrollX eklendi
+        scrollY: 0, // scrollY eklendi
+        windowWidth: slipCardRef.current.scrollWidth, // windowWidth eklendi
+        windowHeight: slipCardRef.current.scrollHeight, // windowHeight eklendi
         logging: false,
         onclone: (clonedDoc, clonedElement) => {
           // Klonlanmış dokümandaki tick işaretlerini düzelt
@@ -304,6 +458,14 @@ const CarWashResultModal: React.FC<CarWashResultModalProps> = ({ open, onClose, 
           document.body.removeChild(link);
         }, 100);
       }
+
+      // Geçici stilleri geri al
+      dataRows.forEach((row, index) => {
+        const htmlRow = row as HTMLElement;
+        htmlRow.style.paddingTop = originalRowStyles[index].paddingTop;
+        htmlRow.style.paddingBottom = originalRowStyles[index].paddingBottom;
+        htmlRow.style.verticalAlign = originalRowStyles[index].verticalAlign;
+      });
     } catch (error) {
       console.error('Resim oluşturulamadı:', error);
       alert(t('share.imageCreationError', 'Resim oluşturulurken bir hata oluştu.'));

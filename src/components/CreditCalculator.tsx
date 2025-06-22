@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Share2, ExternalLink } from 'lucide-react';
-import CalculationResultModal from './CalculationResultModal';
+import CreditResultModal from './CreditResultModal.tsx';
 
 interface CreditCalculatorProps {
   // Gerekirse prop'lar eklenebilir
@@ -475,7 +475,7 @@ const CreditCalculator: React.FC<CreditCalculatorProps> = () => {
             </div>
           </div>
           {/* Paylaşım Modalı */}
-          <CalculationResultModal
+          <CreditResultModal
             open={shareModalOpen}
             onClose={() => setShareModalOpen(false)}
             result={{

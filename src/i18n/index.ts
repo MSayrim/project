@@ -160,7 +160,8 @@ const resources = {
         selectedItems: "Selected Items",
         searchPlaceholder: "Search food...",
         hideImages: "Hide Images",
-        showImages: "Show Images"
+        showImages: "Show Images",
+        itemsSelected: "items selected"
       },
       footer: {
         rights: "All rights reserved.",
@@ -571,6 +572,7 @@ const resources = {
           selected: "Seçilenler",
           search: "Ürün ara..."
         },
+        itemsSelected: "ürün seçildi",
         calculation: {
           title: "Hesaplamanız",
           empty: "Hesaplamanız boş",

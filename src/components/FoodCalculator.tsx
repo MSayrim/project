@@ -8,7 +8,7 @@ import { setSelectedFirm, setFirms, calculatePrices, fetchFirms } from '../store
 import Advertisement from "./Advertisement.tsx";
 import advertisementImage2 from '../assets/images.png';
 import { API_ROOT, API_URLS } from '../api/config';
-import CalculationResultModal from './CalculationResultModal';
+import FoodCalculationResultModal from './FoodCalculationResultModal.tsx';
 
 const PAGE_SIZE = 10;
 
@@ -56,6 +56,7 @@ const FoodCalculator: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [foodType, setFoodType] = useState<string>('');
   const [quantities, setQuantities] = useState<{ [name: string]: number }>({});
+  const [selectedRecipes, setSelectedRecipes] = useState<any[]>([]); // Seçilen tüm tarifleri tutar
   const [page, setPage] = useState<number>(0);
   const [size, setSize] = useState<number>(9);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -122,15 +123,33 @@ const FoodCalculator: React.FC = () => {
     porsionCost: number;
   };
 
-  const selectedItems = recipes.filter(item => (quantities[item.nameTR || item.nameEN] || 0) > 0);
-  const totalAmount = selectedItems.reduce((sum, item) => sum + (item.porsionCost * (quantities[item.nameTR || item.nameEN] || 0)), 0);
+  const totalItemCount = selectedRecipes.reduce((acc, recipe) => acc + (quantities[recipe.nameTR || recipe.nameEN] || 0), 0);
+  const totalAmount = selectedRecipes.reduce((acc, recipe) => {
+    const quantity = quantities[recipe.nameTR || recipe.nameEN] || 0;
+    const cost = typeof recipe.priceTL === 'number' ? recipe.priceTL : 0;
+    return acc + (quantity * cost);
+  }, 0);
 
-  const handleIncreaseQuantity = (name: string) => {
-    setQuantities(prev => ({ ...prev, [name]: (prev[name] || 0) + 1 }));
+  const handleIncreaseQuantity = (recipe: any) => {
+    const name = recipe.nameTR || recipe.nameEN;
+    const newQuantity = (quantities[name] || 0) + 1;
+    setQuantities(prev => ({ ...prev, [name]: newQuantity }));
+
+    // Eğer tarif daha önce eklenmediyse, listeye ekle
+    if (!selectedRecipes.some(r => (r.nameTR || r.nameEN) === name)) {
+      setSelectedRecipes(prev => [...prev, recipe]);
+    }
   };
 
-  const handleDecreaseQuantity = (name: string) => {
-    setQuantities(prev => ({ ...prev, [name]: Math.max((prev[name] || 0) - 1, 0) }));
+  const handleDecreaseQuantity = (recipe: any) => {
+    const name = recipe.nameTR || recipe.nameEN;
+    const newQuantity = Math.max((quantities[name] || 0) - 1, 0);
+    setQuantities(prev => ({ ...prev, [name]: newQuantity }));
+
+    // Eğer miktar 0'a düşerse, listeden kaldır
+    if (newQuantity === 0) {
+      setSelectedRecipes(prev => prev.filter(r => (r.nameTR || r.nameEN) !== name));
+    }
   };
 
   const handleDiscountChange = (value: string) => {
@@ -213,7 +232,7 @@ const FoodCalculator: React.FC = () => {
   };
 
   const calculateHomemadeCost = () => {
-    return selectedItems.reduce((total, item) => {
+    return selectedRecipes.reduce((total, item) => {
       const quantity = quantities[item.nameTR || item.nameEN] || 0;
       return total + (item.porsionCost || 0) * quantity;
     }, 0);
@@ -230,7 +249,6 @@ const FoodCalculator: React.FC = () => {
   const handleCloseSlip = () => setShowResultModal(false);
 
   // Evde yapılan yemeklerin toplam maliyeti
-  const selectedRecipes = recipes.filter(item => (quantities[item.nameTR || item.nameEN] || 0) > 0);
   const homemadeTotal = selectedRecipes.reduce((total, item) => {
     const quantity = quantities[item.nameTR || item.nameEN] || 0;
     return total + (item.priceTL || 0) * quantity;
@@ -471,7 +489,7 @@ const FoodCalculator: React.FC = () => {
                         )}
                       </div>
                       <div className="flex justify-between items-center mb-4">
-                        <div className={`text-sm font-medium ${!hideImages && item.imageUrl ? 'text-white/90' : 'text-gray-600 dark:text-gray-300'} ${!hideImages && item.imageUrl ? 'drop-shadow-md' : ''}`}>
+                        <div className={`text-sm font-medium ${!hideImages && item.imageUrl ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} ${!hideImages && item.imageUrl ? 'drop-shadow-md' : ''}`}>
                           {item.categoryTR || item.categoryEN}
                         </div>
                         <div className={`font-bold ${!hideImages && item.imageUrl ? 'text-white' : 'text-gray-800 dark:text-white'} ${!hideImages && item.imageUrl ? 'drop-shadow-md' : ''}`}>
@@ -481,8 +499,8 @@ const FoodCalculator: React.FC = () => {
                       <div className="flex justify-between items-center">
                         <QuantitySelector
                           quantity={quantities[item.nameTR || item.nameEN] || 0}
-                          onIncrease={() => handleIncreaseQuantity(item.nameTR || item.nameEN)}
-                          onDecrease={() => handleDecreaseQuantity(item.nameTR || item.nameEN)}
+                          onIncrease={() => handleIncreaseQuantity(item)}
+                          onDecrease={() => handleDecreaseQuantity(item)}
                         />
                       </div>
                     </div>
@@ -655,11 +673,11 @@ const FoodCalculator: React.FC = () => {
                       {typeof ((paidAmount - discount) - homemadeTotal) === 'number' ? Math.abs((paidAmount - discount) - homemadeTotal).toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}{currencySymbol}
                     </div>
                   </div>
-                  {selectedItems.length > 0 && (
+                  {selectedRecipes.length > 0 && (
                     <div className="mt-6 border-t border-green-200 dark:border-green-800 pt-4">
                       <h3 className="font-bold text-green-700 dark:text-green-300 mb-3 text-base text-center">{t('food.selectedItems')}</h3>
                       <ul className="space-y-2 mb-4">
-                        {selectedItems.map(item => (
+                        {selectedRecipes.map(item => (
                           <li key={item.nameTR || item.nameEN} className="flex justify-between items-center text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-800 p-2 rounded-lg">
                             <div className="flex items-center gap-2">
                               <div className="flex items-center justify-center bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-sm font-semibold px-2.5 py-1 rounded-md">
@@ -693,19 +711,18 @@ const FoodCalculator: React.FC = () => {
         </div>
       </div>
 
-      {/* Seçilen ürünlerin toplam fiyatı - sayfanın sağ alt köşesinde sabit pozisyonda */}
-      {Object.values(quantities).some(q => q > 0) && (
-        <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 w-[96vw] max-w-xs sm:max-w-sm">
-          <div className="bg-green-600/90 text-white px-2 py-2 sm:px-4 sm:py-3 rounded-xl shadow-lg flex items-center gap-2 w-full text-sm">
-            <ShoppingCart size={20} />
-            <div>
-              <div className="font-bold">{Object.values(quantities).reduce((sum, q) => sum + q, 0)} {t('common.selectedProducts')}</div>
-              <div className="text-sm">{t('common.total')}: {calculateNetTotal().toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}₺</div>
-            </div>
+      {/* Floating Cart Summary */}
+      {totalItemCount > 0 && (
+        <div className="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-lg shadow-lg flex items-center space-x-3 z-50 animate-fade-in-up">
+          <ShoppingCart size={24} />
+          <div>
+            <p className="font-bold">{totalItemCount} {t('food.itemsSelected')}</p>
+            <p className="text-sm">{t('food.total')}: {totalAmount.toFixed(2)} {currencySymbol}</p>
           </div>
         </div>
       )}
-      <CalculationResultModal
+
+      <FoodCalculationResultModal
         open={showResultModal}
         onClose={handleCloseSlip}
         result={calculatedResult}

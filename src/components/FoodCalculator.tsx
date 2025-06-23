@@ -54,6 +54,7 @@ const FoodCalculator: React.FC = () => {
   const [calculationError, setCalculationError] = useState<string | null>(null);
   const [joker, setJoker] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [effectiveSearchQuery, setEffectiveSearchQuery] = useState<string>('');
   const [foodType, setFoodType] = useState<string>('');
   const [quantities, setQuantities] = useState<{ [name: string]: number }>({});
   const [selectedRecipes, setSelectedRecipes] = useState<any[]>([]); // Seçilen tüm tarifleri tutar
@@ -71,7 +72,7 @@ const FoodCalculator: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     const params = [];
-    if (searchQuery) params.push(`keyword=${encodeURIComponent(searchQuery)}`);
+    if (effectiveSearchQuery && effectiveSearchQuery.length >= 4) params.push(`keyword=${encodeURIComponent(effectiveSearchQuery)}`);
     if (foodType) params.push(`foodType=${encodeURIComponent(foodType)}`);
     params.push(`page=${page}`);
     params.push(`size=${size}`);
@@ -94,7 +95,7 @@ const FoodCalculator: React.FC = () => {
       dispatch(fetchFirms());
       mountedFirms.current = true;
     }
-  }, [dispatch, searchQuery, foodType, page, size]);
+  }, [dispatch, effectiveSearchQuery, foodType, page, size]);
 
   useEffect(() => {
     console.log('Redux firms state:', firms);
@@ -104,7 +105,7 @@ const FoodCalculator: React.FC = () => {
   useEffect(() => {
     setPage(0);
     setRecipes([]);
-  }, [searchQuery, foodType]);
+  }, [effectiveSearchQuery, foodType]);
 
   // Currency symbol based on language
   const currencySymbol = i18n.language === 'tr' ? '\u20ba' : '$';
@@ -214,9 +215,13 @@ const FoodCalculator: React.FC = () => {
     setPage(newPage);
   };
 
-  const handleSearch = (newSearchQuery: string) => {
-    setSearchQuery(newSearchQuery);
-    setPage(0);
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (value.length >= 4 || value.length === 0) {
+      setEffectiveSearchQuery(value); // Sadece 4+ karakterde veya temizlendiğinde API'ye çık
+      setPage(0);
+    }
   };
 
   const handleFoodTypeChange = (newFoodType: string) => {
@@ -372,7 +377,7 @@ const FoodCalculator: React.FC = () => {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={handleSearchInputChange}
                 placeholder={t('food.searchPlaceholder')}
                 className="min-w-[120px] px-2 py-1 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 shadow transition placeholder-gray-400 text-sm font-medium flex-shrink-0"
               />

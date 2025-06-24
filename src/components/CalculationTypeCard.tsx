@@ -52,24 +52,29 @@ const CalculationTypeCard: React.FC<CalculationTypeCardProps> = ({
       <div 
         onClick={calcType.available ? onClick : undefined}
         className={`
-          relative rounded-lg p-4 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center
-          min-h-[88px] h-full
+          group relative rounded-lg p-4 transition-all duration-300 cursor-pointer
+          h-[120px] w-[202px] flex flex-col items-center justify-center
           ${calcType.available 
             ? (isSelected 
-              ? `bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg 
-                 ${mounted ? 'animate-[float_3s_ease-in-out_infinite] animate-[pulse_2s_infinite]' : 'scale-105'}`
-              : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 hover:-translate-y-1 hover:shadow-md')
+              ? `bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg`
+              : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md')
             : 'bg-gray-300 dark:bg-gray-900 opacity-50 select-none'}
         `}
       >
-        {IconComponent && (
-          <div className={`${isSelected && mounted ? 'animate-bounce' : ''}`}>
-            <IconComponent size={isSelected ? 28 : 24} className={isSelected ? 'text-white' : ''} />
-          </div>
-        )}
-        <p className={`font-medium text-center mt-2 ${isSelected ? 'font-bold' : ''}`}>
-          {typeof calcType.name === 'function' ? calcType.name(t) : t(calcType.name)}
-        </p>
+        <div className={`
+          transition-transform duration-300 flex flex-col items-center justify-center
+          ${calcType.available && !isSelected ? 'group-hover:-translate-y-1' : ''}
+          ${isSelected ? (mounted ? 'animate-[float_3s_ease-in-out_infinite] scale-105' : 'scale-105') : ''}
+        `}>
+          {IconComponent && (
+            <div className={`${isSelected && mounted ? 'animate-bounce' : ''}`}>
+              <IconComponent size={isSelected ? 28 : 24} className={isSelected ? 'text-white' : ''} />
+            </div>
+          )}
+          <p className={`font-medium text-center mt-2 ${isSelected ? 'font-bold' : ''}`}>
+            {typeof calcType.name === 'function' ? calcType.name(t) : t(calcType.name)}
+          </p>
+        </div>
         
         {/* Seçili kartta parıltı efekti */}
         {isSelected && (

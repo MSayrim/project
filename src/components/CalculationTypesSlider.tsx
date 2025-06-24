@@ -1,119 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { calculationTypes } from '../data/calculationTypes';
-import CalculationTypeCard from './CalculationTypeCard';
 import { useTranslation } from 'react-i18next';
+import { calculationTypes } from '../data/calculationTypes';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import CalculationTypeCard from './CalculationTypeCard';
 
 interface CalculationTypesSliderProps {
   selectedType: string;
-  onSelectType: (typeId: string) => void;
+  onSelectType: (type: string) => void;
 }
 
 const CalculationTypesSlider: React.FC<CalculationTypesSliderProps> = ({
   selectedType,
-  onSelectType
+  onSelectType,
 }) => {
   const { t } = useTranslation();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const totalTypes = calculationTypes.length;
   
-  // Ekran boyutu değişikliğini izle
+  // Current position in the carousel rotation
+  const [rotationIndex, setRotationIndex] = useState(0);
+  
+  // Get the active index
+  const activeIndex = calculationTypes.findIndex(c => c.id === selectedType);
+  
+  // Reset rotation when the selected type changes
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+    setRotationIndex(0);
+  }, [selectedType]);
+  
+  // Generate the 5 positions array with active always in the middle
+  const getDisplayCards = () => {
+    // Handle edge case where there are fewer than 5 calculation types
+    if (totalTypes <= 5) {
+      return calculationTypes.map((type, index) => ({
+        type,
+        isActive: type.id === selectedType
+      }));
+    }
+    
+    // Calculate the indices for the 5 visible cards with active in the middle
+    const result = [];
+    
+    // Always place the active card in the middle (position 2)
+    result[2] = {
+      type: calculationTypes[activeIndex],
+      isActive: true
     };
     
-    handleResize();
-    window.addEventListener('resize', handleResize);
+    // Calculate the left side cards (positions 0 and 1)
+    for (let i = 0; i < 2; i++) {
+      const offset = (i + 1 + rotationIndex);
+      const index = (activeIndex - offset + totalTypes) % totalTypes;
+      result[i] = {
+        type: calculationTypes[index],
+        isActive: false
+      };
+    }
     
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-  
-  // Görüntülenecek kart sayısı
-  const visibleCount = isMobile ? 1 : 5;
-  
-  // Önceki kartlara git
-  const goToPrev = () => {
-    setCurrentIndex(prev => Math.max(0, prev - 1));
+    // Calculate the right side cards (positions 3 and 4)
+    for (let i = 0; i < 2; i++) {
+      const offset = (i + 1 + rotationIndex);
+      const index = (activeIndex + offset) % totalTypes;
+      result[i + 3] = {
+        type: calculationTypes[index],
+        isActive: false
+      };
+    }
+    
+    return result;
   };
-  
-  // Sonraki kartlara git
-  const goToNext = () => {
-    setCurrentIndex(prev => Math.min(calculationTypes.length - visibleCount, prev + 1));
+
+  const handleCardClick = (typeId: string) => {
+    if (typeId !== selectedType) {
+      onSelectType(typeId);
+    }
   };
-  
-  // Görünür kartları al
-  const visibleTypes = calculationTypes.slice(currentIndex, currentIndex + visibleCount);
-  
-  const dotCount = Math.ceil(calculationTypes.length / visibleCount);
-  
+
+  const moveLeft = () => {
+    setRotationIndex((prev) => (prev + 1) % (totalTypes - 1));
+  };
+
+  const moveRight = () => {
+    setRotationIndex((prev) => (prev - 1 + totalTypes - 1) % (totalTypes - 1));
+  };
+
+  const displayCards = getDisplayCards();
+
   return (
-    <div className="mt-8 w-full">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+    <div className="w-full max-w-5xl mx-auto mb-6 relative">
+      <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 text-center">
         {t('calculator.types.title', 'Hesaplama Türleri')}
       </h2>
-      
-      <div className="flex items-center justify-center w-full">
-        <button 
-          onClick={goToPrev} 
-          disabled={currentIndex <= 0}
-          className={`p-2 mr-1 rounded-full ${currentIndex <= 0 ? 'invisible' : 'visible'}`}
-          aria-label="Önceki"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        
-        <div 
-          className="flex flex-row gap-2 justify-center"
-          style={{
-            maxWidth: isMobile ? '300px' : '1000px',
-            margin: '0 auto'
-          }}
-        >
-          {visibleTypes.map(calcType => (
+
+      <div className="overflow-hidden py-4">
+        <div className="flex items-center justify-center gap-8" style={{ height: '160px' }}>
+          {displayCards.map((card, position) => (
             <div 
-              key={calcType.id}
+              className={`
+                flex-[0_0_auto] flex items-center justify-center transition-all duration-300
+                ${card.isActive ? 'z-10 scale-110' : 'opacity-70'}
+              `}
               style={{ 
-                flex: `0 0 ${100/visibleCount}%`,
-                maxWidth: `${100/visibleCount}%`,
-                padding: '0 4px' 
+                height: '120px', 
+                width: '202px',
+                transform: card.isActive ? 'translateY(-5px)' : 'none'
               }}
+              key={`${card.type.id}-${position}`}
             >
               <CalculationTypeCard
-                calcType={calcType}
-                isSelected={selectedType === calcType.id}
-                onClick={() => onSelectType(calcType.id)}
+                calcType={card.type}
+                isSelected={card.isActive}
+                onClick={() => handleCardClick(card.type.id)}
               />
             </div>
           ))}
         </div>
-        
-        <button 
-          onClick={goToNext} 
-          disabled={currentIndex >= calculationTypes.length - visibleCount}
-          className={`p-2 ml-1 rounded-full ${currentIndex >= calculationTypes.length - visibleCount ? 'invisible' : 'visible'}`}
-          aria-label="Sonraki"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
-      
-      {/* İlerleme göstergesi */}
-      <div className="flex justify-center mt-2 gap-1">
-        {Array.from({ length: dotCount }).map((_, idx) => (
-          <button 
-            key={idx}
-            className={`w-2 h-2 rounded-full ${Math.floor(currentIndex / visibleCount) === idx ? 'bg-blue-600' : 'bg-gray-300'}`}
-            onClick={() => setCurrentIndex(idx * visibleCount)}
-            aria-label={`Sayfa ${idx + 1}`}
-          />
-        ))}
-      </div>
+
+      <button 
+        onClick={moveLeft} 
+        className="absolute top-1/2 -translate-y-1/2 left-0 md:-left-4 bg-gray-800/50 hover:bg-gray-900/70 p-2 rounded-full z-10 text-white transition-all duration-300"
+        aria-label={t('common.previous')}
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button 
+        onClick={moveRight} 
+        className="absolute top-1/2 -translate-y-1/2 right-0 md:-right-4 bg-gray-800/50 hover:bg-gray-900/70 p-2 rounded-full z-10 text-white transition-all duration-300"
+        aria-label={t('common.next')}
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
     </div>
   );
 };

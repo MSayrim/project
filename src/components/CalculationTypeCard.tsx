@@ -53,7 +53,7 @@ const CalculationTypeCard: React.FC<CalculationTypeCardProps> = ({
         onClick={calcType.available ? onClick : undefined}
         className={`
           group relative rounded-lg p-4 transition-all duration-300 cursor-pointer
-          h-[120px] w-[202px] flex flex-col items-center justify-center
+          h-[120px] w-[190px] flex flex-col items-center justify-center
           ${calcType.available 
             ? (isSelected 
               ? `bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg`

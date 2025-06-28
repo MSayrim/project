@@ -430,31 +430,34 @@ const resources = {
       vehicle: {
         comparison: {
           title: "Vehicle Fuel Comparison",
-          totalDistance: "Total Distance (km)",
-          electric: "Electric",
-          gasoline: "Gasoline",
-          diesel: "Diesel",
           electricVehicle: "Electric Vehicle",
           gasolineVehicle: "Gasoline Vehicle",
           dieselVehicle: "Diesel Vehicle",
+          totalDistance: "Total Distance",
           consumption: "Consumption",
-          electricityPrice: "Electricity Price (TL/kWh)",
-          gasolinePrice: "Gasoline Price (TL/L)",
-          dieselPrice: "Diesel Price (TL/L)",
+          electricityPrice: "Electricity Price",
+          gasolinePrice: "Gasoline Price",
+          dieselPrice: "Diesel Price",
           totalConsumptionAndCost: "Total Consumption and Cost",
-          shareResult: "Share Result",
+          electric: "Electric",
+          gasoline: "Gasoline",
+          diesel: "Diesel",
           resultTitle: "Vehicle Fuel Comparison Result",
-          defaultConsumptionNote: "Default values are based on typical vehicle data. Adjust as needed."
+          defaultConsumptionNote: "Default consumption values are based on average vehicle data. Adjust as needed for your specific vehicle.",
+          distanceSection: "Travel Distance"
         },
-        share: {
-          mostEconomical: "Most economical: {{type}}",
-          priceComparison: "Price Comparison",
-          difference: "Difference",
-          disclaimer: "Default values are based on typical vehicle data. Adjust as needed.",
-          shareWithFriends: "Share with Friends",
-          shareEasily: "Share Result",
-          quickShare: "Quick Share",
-          downloadAsImage: "Download as Image"
+        maps: {
+          title: "Calculate Distance with Google Maps",
+          startLocation: "Start Location",
+          endLocation: "End Location",
+          calculate: "Calculate Route",
+          calculating: "Calculating...",
+          distance: "Distance",
+          routeError: "Could not calculate route. Please check locations and try again.",
+          bothLocationsRequired: "Both start and end locations are required",
+          swapLocations: "Swap Locations",
+          useGoogleMaps: "Use Google Maps",
+          useManualEntry: "Manual Distance Entry"
         }
       }
     }
@@ -895,31 +898,34 @@ const resources = {
       vehicle: {
         comparison: {
           title: "Araç Yakıt Karşılaştırma",
-          totalDistance: "Toplam Mesafe (km)",
-          electric: "Elektrikli",
-          gasoline: "Benzinli",
-          diesel: "Dizel",
           electricVehicle: "Elektrikli Araç",
           gasolineVehicle: "Benzinli Araç",
           dieselVehicle: "Dizel Araç",
+          totalDistance: "Toplam Mesafe",
           consumption: "Tüketim",
-          electricityPrice: "Elektrik Fiyatı (TL/kWh)",
-          gasolinePrice: "Benzin Fiyatı (TL/L)",
-          dieselPrice: "Dizel Fiyatı (TL/L)",
+          electricityPrice: "Elektrik Fiyatı",
+          gasolinePrice: "Benzin Fiyatı",
+          dieselPrice: "Dizel Fiyatı",
           totalConsumptionAndCost: "Toplam Tüketim ve Maliyet",
-          shareResult: "Sonucu Paylaş",
+          electric: "Elektrik",
+          gasoline: "Benzin",
+          diesel: "Dizel",
           resultTitle: "Araç Yakıt Karşılaştırma Sonucu",
-          defaultConsumptionNote: "Varsayılan değerler tipik araç verilerine dayanmaktadır. İhtiyaca göre düzenleyin."
+          defaultConsumptionNote: "Varsayılan tüketim değerleri ortalama araç verilerine dayanmaktadır. İhtiyaca göre düzenleyin.",
+          distanceSection: "Seyahat Mesafesi"
         },
-        share: {
-          mostEconomical: "En ekonomik: {{type}}",
-          priceComparison: "Fiyat Karşılaştırması",
-          difference: "Fark",
-          disclaimer: "Varsayılan değerler tipik araç verilerine dayalıdır. Gerekirse düzenleyin.",
-          shareWithFriends: "Arkadaşlarınla Paylaş",
-          shareEasily: "Sonucu Paylaş",
-          quickShare: "Hızlı Paylaş",
-          downloadAsImage: "Görsel Olarak İndir"
+        maps: {
+          title: "Google Haritalar ile Mesafe Hesapla",
+          startLocation: "Başlangıç Konumu",
+          endLocation: "Bitiş Konumu",
+          calculate: "Rota Hesapla",
+          calculating: "Hesaplanıyor...",
+          distance: "Mesafe",
+          routeError: "Rota hesaplanamadı. Lütfen konumları kontrol edip tekrar deneyin.",
+          bothLocationsRequired: "Başlangıç ve bitiş konumlarının her ikisi de gereklidir",
+          swapLocations: "Konumları Değiştir",
+          useGoogleMaps: "Google Haritaları Kullan",
+          useManualEntry: "Manuel Mesafe Girişi"
         }
       }
     }

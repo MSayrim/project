@@ -74,7 +74,9 @@ const resources = {
         liter: "Liter",
         electricityUsage: "Electricity Usage",
         share: {
-          mostEconomical: "Most economical: {{type}}",
+          title: "Fuel Comparison Results",
+          totalCost: "Total Cost",
+          mostEconomical: "Most Economical: {{vehicle}}",
           priceComparison: "Price Comparison",
           difference: "Difference",
           disclaimer: "Default values are based on typical vehicle data. Adjust as needed.",
@@ -444,7 +446,19 @@ const resources = {
           diesel: "Diesel",
           resultTitle: "Vehicle Fuel Comparison Result",
           defaultConsumptionNote: "Default consumption values are based on average vehicle data. Adjust as needed for your specific vehicle.",
-          distanceSection: "Travel Distance"
+          distanceSection: "Travel Distance",
+          share: {
+            title: "Fuel Comparison Results",
+            totalCost: "Total Cost",
+            mostEconomical: "Most Economical: {{vehicle}}",
+            priceComparison: "Price Comparison",
+            mostEconomicalVehicle: "Most Economical Vehicle: {{vehicle}}",
+            priceComparisonText: "Price Comparison: {{priceComparison}}"
+          },
+          error: {
+            route: "An error occurred while calculating the route. Please try again.",
+            location: "Please enter a valid start and end location.",
+          }
         },
         maps: {
           title: "Calculate Distance with Google Maps",
@@ -458,6 +472,28 @@ const resources = {
           swapLocations: "Swap Locations",
           useGoogleMaps: "Use Google Maps",
           useManualEntry: "Manual Distance Entry"
+        }
+      },
+      vehicle_fuel: {
+        title: "Vehicle Fuel Comparison",
+        distance: "Distance (km)",
+        consumption: "Consumption",
+        price: "Price",
+        electric: "Electric Vehicle",
+        gasoline: "Gasoline Vehicle",
+        diesel: "Diesel Vehicle",
+        resultTitle: "Vehicle Fuel Comparison Result",
+        defaultConsumptionNote: "Default consumption values are based on average vehicle data. Adjust as needed for your specific vehicle.",
+        distanceSection: "Travel Distance",
+        share: {
+          title: "Fuel Comparison Results",
+          totalCost: "Total Cost",
+          mostEconomical: "Most Economical: {{vehicle}}",
+          priceComparison: "Price Comparison"
+        },
+        error: {
+          route: "An error occurred while calculating the route. Please try again.",
+          location: "Please enter a valid start and end location."
         }
       }
     }
@@ -533,7 +569,9 @@ const resources = {
         liter: "Litre",
         electricityUsage: "Elektrik Tüketimi",
         share: {
-          mostEconomical: "En ekonomik: {{type}}",
+          title: "Yakıt Karşılaştırma Sonuçları",
+          totalCost: "Toplam Maliyet",
+          mostEconomical: "En Ekonomik: {{vehicle}}",
           priceComparison: "Fiyat Karşılaştırması",
           difference: "Fark",
           disclaimer: "Varsayılan değerler tipik araç verilerine dayalıdır. Gerekirse düzenleyin.",
@@ -907,12 +945,24 @@ const resources = {
           gasolinePrice: "Benzin Fiyatı",
           dieselPrice: "Dizel Fiyatı",
           totalConsumptionAndCost: "Toplam Tüketim ve Maliyet",
-          electric: "Elektrik",
-          gasoline: "Benzin",
-          diesel: "Dizel",
+          electric: "Elektrikli Araç",
+          gasoline: "Benzinli Araç",
+          diesel: "Dizel Araç",
           resultTitle: "Araç Yakıt Karşılaştırma Sonucu",
           defaultConsumptionNote: "Varsayılan tüketim değerleri ortalama araç verilerine dayanmaktadır. İhtiyaca göre düzenleyin.",
-          distanceSection: "Seyahat Mesafesi"
+          distanceSection: "Seyahat Mesafesi",
+          share: {
+            title: "Yakıt Karşılaştırma Sonuçları",
+            totalCost: "Toplam Maliyet",
+            mostEconomical: "En Ekonomik: {{vehicle}}",
+            priceComparison: "Fiyat Karşılaştırması",
+            mostEconomicalVehicle: "En Ekonomik Araç: {{vehicle}}",
+            priceComparisonText: "Fiyat Karşılaştırması: {{priceComparison}}"
+          },
+          error: {
+            route: "Rota hesaplanırken bir hata oluştu. Lütfen tekrar deneyin.",
+            location: "Lütfen geçerli bir başlangıç ve bitiş konumu girin.",
+          }
         },
         maps: {
           title: "Google Haritalar ile Mesafe Hesapla",
@@ -926,6 +976,28 @@ const resources = {
           swapLocations: "Konumları Değiştir",
           useGoogleMaps: "Google Haritaları Kullan",
           useManualEntry: "Manuel Mesafe Girişi"
+        }
+      },
+      vehicle_fuel: {
+        title: "Araç Yakıt Karşılaştırması",
+        distance: "Mesafe (km)",
+        consumption: "Tüketim",
+        price: "Fiyat",
+        electric: "Elektrikli Araç",
+        gasoline: "Benzinli Araç",
+        diesel: "Dizel Araç",
+        resultTitle: "Araç Yakıt Karşılaştırma Sonucu",
+        defaultConsumptionNote: "Varsayılan tüketim değerleri ortalama araç verilerine dayanmaktadır. İhtiyaca göre düzenleyin.",
+        distanceSection: "Seyahat Mesafesi",
+        share: {
+          title: "Yakıt Karşılaştırma Sonuçları",
+          totalCost: "Toplam Maliyet",
+          mostEconomical: "En Ekonomik: {{vehicle}}",
+          priceComparison: "Fiyat Karşılaştırması"
+        },
+        error: {
+          route: "Rota hesaplanırken bir hata oluştu. Lütfen tekrar deneyin.",
+          location: "Lütfen geçerli bir başlangıç ve bitiş konumu girin."
         }
       }
     }
